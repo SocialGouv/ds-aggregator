@@ -1,7 +1,7 @@
 # Documentation
 
 - [Présentation du projet](https://htmlpreview.github.io/?https://github.com/SocialGouv/ds-aggregator/blob/master/project-presentation.html)
-- [API démarche simlifiée](https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/api)
+- [API démarche simplifiée](https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/api)
 
 ## Procédure de test
  
