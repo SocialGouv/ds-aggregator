@@ -1,7 +1,7 @@
 # Projet
 
-- (Présentation du projet)[./project-presentation.html]
-- (API DS)[https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/api]
+- [Présentation du projet](./project-presentation.html)
+- [API DS](https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/api)
 
 # Développement
 
@@ -13,13 +13,13 @@
 
 ## données de test
 
-- (Exemple de fichier extrait via l’API DS pour une démarche WIF)[./example/example.json]
-- (Example de données pour la validation d'une demande)[./example/validity.json]
-- (Example de données pour les statistiques)[./example/stat.json]
+- [Exemple de fichier extrait via l’API DS pour une démarche WIF](./example/example.json)
+- [Example de données pour la validation d'une demande](./example/validity.json)
+- [Example de données pour les statistiques](./example/stat.json)
 
 # Kinto
 
-(Kinto)[./kinto/kinto.md]
+[Kinto](./kinto/kinto.md)
 
 
 
