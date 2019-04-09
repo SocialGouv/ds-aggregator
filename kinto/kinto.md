@@ -1,0 +1,99 @@
+# Kinto
+
+## basic commands
+
+```bash
+# Stop the containers with
+$ docker-compose stop
+
+# Start the containers with (-d is for background/daemon).
+$ docker-compose up -d
+
+# Connect to PostgreSQL service with
+$ docker-compose exec --user postgres db psql
+
+# Install a plugin into kinto with
+$ docker-compose exec web pip3 install kinto-pusher
+
+# Inspect the kinto config file with
+$ docker-compose exec web cat /etc/kinto/kinto.ini
+```
+
+## configuration
+
+create the admin account
+
+```bash
+curl -X PUT http://localhost:8888/v1/accounts/admin \
+     -d '{"data": {"password": "passw0rd"}}' \
+     -H 'Content-Type:application/json'
+```
+
+create the bucket `ds_collector`
+
+```bash
+curl -u admin:passw0rd  \
+     -X POST http://localhost:8888/v1/buckets \
+     -d '{"data": {"id": "ds_collector"}}' \
+     -H 'Content-Type:application/json' 
+```
+
+
+create the collections `configuration`, `procedure`, `dossier`, `statistic`
+
+```bash
+curl -u admin:passw0rd  \
+     -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
+     -d '{"data": {"id": "configuration"}}' \
+     -H 'Content-Type:application/json' 
+
+curl -u admin:passw0rd  \
+     -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
+     -d '{"data": {"id": "procedure"}}' \
+     -H 'Content-Type:application/json' 
+
+curl -u admin:passw0rd  \
+     -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
+     -d '{"data": {"id": "dossier"}}' \
+     -H 'Content-Type:application/json'
+
+curl -u admin:passw0rd  \
+     -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
+     -d '{"data": {"id": "statistic"}}' \
+     -H 'Content-Type:application/json' 
+```
+
+the group `system` has READ/WRITE permission on `configuration`, `procedure`, `dossier`, `statistic`
+
+```bash
+curl -u admin:passw0rd  \
+     -X POST http://localhost:8888/v1/buckets/ds_collector/groups \
+     -d '{"data": {"id": "system"}}' \
+     -H 'Content-Type:application/json' 
+
+curl -u admin:passw0rd  \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/configuration \
+     -d '{"permissions": {"write": ["group:system"]}}' \
+     -H 'Content-Type:application/json' 
+
+curl -u admin:passw0rd  \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/procedure \
+     -d '{"permissions": {"write": ["group:system"]}}' \
+     -H 'Content-Type:application/json' 
+
+curl -u admin:passw0rd  \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/dossier \
+     -d '{"permissions": {"write": ["group:system"]}}' \
+     -H 'Content-Type:application/json'
+```
+
+anonymous user can READ collection `statistic`
+
+```bash
+curl -u admin:passw0rd  \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/statistic \
+     -d '{"permissions": {"read": ["system.Everyone"]}}' \
+     -H 'Content-Type:application/json' 
+```
+
+
