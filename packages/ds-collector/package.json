@@ -1,0 +1,25 @@
+{
+    "name": "ds-collector",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Incubateur des Ministères Sociaux <dsi-incubateur@sg.social.gouv.fr> (https://incubateur.social.gouv.fr)",
+    "license": "Apache-2.0",
+    "private": true,
+    "scripts": {
+        "dev": "nodemon --watch 'src/**/*' -e ts --exec ts-node src/server.ts",
+        "build": "tsc"
+    },
+    "devDependencies": {
+        "@types/dotenv": "^6.1.1",
+        "@types/node": "^11.13.2",
+        "@types/rx": "^4.1.1",
+        "nodemon": "^1.18.11",
+        "ts-node": "^8.0.3",
+        "typescript": "^3.4.3"
+    },
+    "dependencies": {
+        "dotenv": "^7.0.0",
+        "rxjs": "^6.4.0",
+        "typed-rest-client": "^1.2.0"
+    }
+}
