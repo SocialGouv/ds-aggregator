@@ -1,1 +1,1 @@
-export { default as databaseAPI } from './api/wif.api';
+export { default as databaseAPI } from './repository/wif.repository';
