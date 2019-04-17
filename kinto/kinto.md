@@ -29,6 +29,12 @@ curl -X PUT http://localhost:8888/v1/accounts/admin \
      -H 'Content-Type:application/json'
 ```
 
+```bash
+curl -X PUT http://localhost:8888/v1/accounts/ds-collector \
+     -d '{"data": {"password": "W0rkInFranceND"}}' \
+     -H 'Content-Type:application/json'
+```
+
 create the bucket `ds_collector`
 
 ```bash
@@ -44,22 +50,22 @@ create the collections `configuration`, `procedure`, `dossier`, `statistic`
 ```bash
 curl -u admin:passw0rd  \
      -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
-     -d '{"data": {"id": "configuration"}}' \
+     -d '{"data": {"id": "configurations"}}' \
      -H 'Content-Type:application/json' 
 
 curl -u admin:passw0rd  \
      -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
-     -d '{"data": {"id": "procedure"}}' \
+     -d '{"data": {"id": "procedures"}}' \
      -H 'Content-Type:application/json' 
 
 curl -u admin:passw0rd  \
      -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
-     -d '{"data": {"id": "dossier"}}' \
+     -d '{"data": {"id": "dossiers"}}' \
      -H 'Content-Type:application/json'
 
 curl -u admin:passw0rd  \
      -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
-     -d '{"data": {"id": "statistic"}}' \
+     -d '{"data": {"id": "statistics"}}' \
      -H 'Content-Type:application/json' 
 ```
 
@@ -68,21 +74,21 @@ the group `system` has READ/WRITE permission on `configuration`, `procedure`, `d
 ```bash
 curl -u admin:passw0rd  \
      -X POST http://localhost:8888/v1/buckets/ds_collector/groups \
-     -d '{"data": {"id": "system"}}' \
+     -d '{"data": {"id": "system", "members": ["account:ds-collector"]}}' \
      -H 'Content-Type:application/json' 
 
 curl -u admin:passw0rd  \
-     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/configuration \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/configurations \
      -d '{"permissions": {"write": ["group:system"]}}' \
      -H 'Content-Type:application/json' 
 
 curl -u admin:passw0rd  \
-     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/procedure \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/procedures \
      -d '{"permissions": {"write": ["group:system"]}}' \
      -H 'Content-Type:application/json' 
 
 curl -u admin:passw0rd  \
-     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/dossier \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/dossiers \
      -d '{"permissions": {"write": ["group:system"]}}' \
      -H 'Content-Type:application/json'
 ```
@@ -91,7 +97,7 @@ anonymous user can READ collection `statistic`
 
 ```bash
 curl -u admin:passw0rd  \
-     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/statistic \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/statistics \
      -d '{"permissions": {"read": ["system.Everyone"]}}' \
      -H 'Content-Type:application/json' 
 ```

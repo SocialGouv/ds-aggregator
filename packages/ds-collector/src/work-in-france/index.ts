@@ -1,0 +1,1 @@
+export { default as databaseAPI } from './api/wif.api';

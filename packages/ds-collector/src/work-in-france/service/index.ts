@@ -1,0 +1,1 @@
+export {default as wifProcedureService} from './wif-procedure.service';
