@@ -1,5 +1,7 @@
 export type procedureState = 'publiee';
 
+export type dossierState = 'initiated';
+
 export interface DSData {
     id: string;
 }
@@ -32,6 +34,13 @@ export interface DSTypeChamp {
     type_champ: string;
     order_place: number;
     description: string;
+}
+
+export interface DSDossierItem extends DSData {
+    nom_projet: string;
+    updated_at: Date;
+    initiated_at: Date;
+    state: dossierState;
 }
 
 export interface DSDossier extends DSData {

@@ -7,10 +7,6 @@ import { wifProcedureRepository } from "../repository/wif.repository";
 
 class WIFProcedureService {
 
-    constructor() {
-
-    }
-
     public saveOrCreate(procedure: DSProcedure): Observable<WIFRecord<DSProcedure>> {
         const wifProcedure: WIFRecord<DSProcedure> = {
             ds_key: procedure.id,
@@ -23,8 +19,8 @@ class WIFProcedureService {
                     return wifProcedureRepository.add(wifProcedure);
                 } else {
                     const record: WIFRecord<DSProcedure> = res[0];
-                    logger.info(`[WIFProcedureService.saveOrCreate] record found for ds_key ${wifProcedure.ds_key}`)
                     Object.assign(record, wifProcedure);
+                    logger.info(`[WIFProcedureService.saveOrCreate] record found for ds_key ${wifProcedure.ds_key} id#${record.id}`)
                     return wifProcedureRepository.update(record.id || '', record);
                 }
             })

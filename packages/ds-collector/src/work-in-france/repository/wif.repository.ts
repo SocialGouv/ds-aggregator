@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { DSData, DSProcedure } from "../../demarche-simplifiee";
+import { DSData, DSProcedure, DSDossier } from "../../demarche-simplifiee";
 import { KintoClient, kintoClient } from "../../lib";
 import { configuration } from "../../util";
 import { WIFRecord } from "../model";
@@ -49,3 +49,5 @@ class WorkInFranceRepository<S extends DSData,> implements IWorkInFranceReposito
 }
 
 export const wifProcedureRepository = new WorkInFranceRepository<DSProcedure>('procedures');
+
+export const wifDossierRepository = new WorkInFranceRepository<DSDossier>('dossiers');

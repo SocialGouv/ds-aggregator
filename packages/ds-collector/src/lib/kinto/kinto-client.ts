@@ -4,7 +4,7 @@ import * as handlers from 'typed-rest-client/Handlers';
 import * as rm from 'typed-rest-client/RestClient';
 
 interface KintoResult<T> {
-    data: T[];
+    data: T;
 }
 
 interface KintoCollection<T> {
@@ -45,8 +45,9 @@ export class KintoClient {
                 );
             },
             update: (recordId: string, record: T) => {
-                return from(this.client.update<T>(`${this.url}/${collectionName}/records/${recordId}`, { data: record })).pipe(
-                    map(this.handleResult<T>())
+                return from(this.client.update<KintoResult<T>>(`${this.url}/${collectionName}/records/${recordId}`, { data: record })).pipe(
+                    map(this.handleResult<KintoResult<T>>()),
+                    map((res: KintoResult<T>) => res.data),
                 );
             },
             one: (recordId: string) => {
@@ -60,9 +61,9 @@ export class KintoClient {
                 );
             },
             search: (filter: string) => {
-                return from(this.client.get<KintoResult<T>>(`${this.url}/${collectionName}/records?${filter}`)).pipe(
-                    map(this.handleResult<KintoResult<T>>()),
-                    map((res: KintoResult<T>) => res.data),
+                return from(this.client.get<KintoResult<T[]>>(`${this.url}/${collectionName}/records?${filter}`)).pipe(
+                    map(this.handleResult<KintoResult<T[]>>()),
+                    map((res: KintoResult<T[]>) => res.data),
                 );
             }
         }
