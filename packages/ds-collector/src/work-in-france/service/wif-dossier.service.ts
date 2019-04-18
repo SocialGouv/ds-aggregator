@@ -15,11 +15,11 @@ class WIFDossierService {
         return wifDossierRepository.findByDSKey(wifDossier.ds_key).pipe(
             mergeMap((res: WIFRecord<DSDossier>[]) => {
                 if (res.length === 0) {
-                    logger.info(`[WIFDSDossierService.saveOrUpdate] add dossier for ds_key ${wifDossier.ds_key}`)
+                    logger.debug(`[WIFDSDossierService.saveOrUpdate] add dossier for ds_key ${wifDossier.ds_key}`)
                     return wifDossierRepository.add(wifDossier);
                 } else {
                     const record: WIFRecord<DSDossier> = res[0];
-                    logger.info(`[WIFDossierService.saveOrUpdate] update dossier for ds_key ${wifDossier.ds_key}`)
+                    logger.debug(`[WIFDossierService.saveOrUpdate] update dossier for ds_key ${wifDossier.ds_key}`)
                     Object.assign(record, wifDossier);
                     return wifDossierRepository.update(record.id || '', record);
                 }

@@ -15,12 +15,12 @@ class WIFProcedureService {
         return wifProcedureRepository.findByDSKey(wifProcedure.ds_key).pipe(
             mergeMap((res: WIFRecord<DSProcedure>[]) => {
                 if (res.length === 0) {
-                    logger.info(`[WIFProcedureService.saveOrUpdate] no record for ds_key ${wifProcedure.ds_key}`)
+                    logger.debug(`[WIFProcedureService.saveOrUpdate] no record for ds_key ${wifProcedure.ds_key}`)
                     return wifProcedureRepository.add(wifProcedure);
                 } else {
                     const record: WIFRecord<DSProcedure> = res[0];
                     Object.assign(record, wifProcedure);
-                    logger.info(`[WIFProcedureService.saveOrUpdate] record found for ds_key ${wifProcedure.ds_key} id#${record.id}`)
+                    logger.debug(`[WIFProcedureService.saveOrUpdate] record found for ds_key ${wifProcedure.ds_key} id#${record.id}`)
                     return wifProcedureRepository.update(record.id || '', record);
                 }
             })

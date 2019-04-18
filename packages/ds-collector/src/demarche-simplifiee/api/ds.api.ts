@@ -5,10 +5,27 @@ import * as rm from 'typed-rest-client/RestClient';
 import { configuration } from "../../util";
 import { DSDossier, DSDossierItem, DSProcedure } from "../model";
 
+interface DSDossierListResult {
+    dossiers: DSDossierItem[];
+    pagination: {
+        "page": number,
+        "resultats_par_page": number,
+        "nombre_de_page": number
+    }
+}
+
+interface DSDossierResult {
+    dossier: DSDossier;
+}
+
+interface DSProcedureResult {
+    procedure: DSProcedure;
+}
+
 export interface IDemarcheSimplifieeAPI {
-    getDSProcedure: (DSprocedureId: string | number) => Observable<DSProcedure>;
-    getDSDossiers: (DSprocedureId: string) => Observable<DSDossier[] | null>;
-    getDSDossier: (DSprocedureId: string, DSdossierId: string) => Observable<DSDossier | null>
+    getDSProcedure: (DSprocedureId: string | number) => Observable<DSProcedureResult>;
+    getDSDossiers: (DSprocedureId: string) => Observable<DSDossierListResult>;
+    getDSDossier: (DSprocedureId: string, DSdossierId: string) => Observable<DSDossierResult>
 }
 
 class DemarcheSimplifieeAPI implements IDemarcheSimplifieeAPI {
@@ -22,22 +39,27 @@ class DemarcheSimplifieeAPI implements IDemarcheSimplifieeAPI {
         this.client = new rm.RestClient('ds-api', this.dsAPI, [bearer], undefined);
     }
 
-    public getDSProcedure(procedureId: string | number): Observable<DSProcedure> {
+    public getDSProcedure(procedureId: string | number): Observable<DSProcedureResult> {
         return from(this.client.get<any>(`/api/v1/procedures/${procedureId}`)).pipe(
-            map((res: rm.IRestResponse<any>) => res.result.procedure)
+            map(this.handleResult<DSProcedureResult>('getDSProcedure'))
         );
     }
 
-    public getDSDossiers(procedureId: string | number): Observable<DSDossierItem[]> {
-        return from(this.client.get<DSDossierItem[]>(`/api/v1/procedures/${procedureId}/procedures/${procedureId}/dossiers`)).pipe(
-            map(this.handleResult<DSDossierItem[]>('getDSDossiers', [])),
-
+    public getDSDossiers(procedureId: string | number): Observable<DSDossierListResult> {
+        return from(this.client.get<DSDossierListResult>(`/api/v1/procedures/${procedureId}/dossiers`)).pipe(
+            map(this.handleResult<DSDossierListResult>('getDSDossiers', {
+                dossiers: [], pagination: {
+                    "page": 0,
+                    "resultats_par_page": 0,
+                    "nombre_de_page": 0
+                }
+            })),
         );
     }
 
-    public getDSDossier(procedureId: string | number, DSdossierId: string | number): Observable<DSDossier> {
-        return from(this.client.get<DSDossier>(`/api/v1/procedures/${procedureId}/dossiers/${DSdossierId}`)).pipe(
-            map(this.handleResult<DSDossier>('getDSDossier'))
+    public getDSDossier(procedureId: string | number, DSdossierId: string | number): Observable<DSDossierResult> {
+        return from(this.client.get<DSDossierResult>(`/api/v1/procedures/${procedureId}/dossiers/${DSdossierId}`)).pipe(
+            map(this.handleResult<DSDossierResult>('getDSDossier'))
         );
     }
 

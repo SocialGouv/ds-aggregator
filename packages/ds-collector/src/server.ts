@@ -1,22 +1,30 @@
 import { flatMap, mergeMap, tap } from "rxjs/operators";
-import { demarcheSimplifieeAPI, DSDossierItem, DSProcedure, DSDossier } from "./demarche-simplifiee";
+import { demarcheSimplifieeService, DSDossier, DSDossierItem, DSProcedure } from "./demarche-simplifiee";
 import { logger } from "./util";
 import { WIFRecord } from "./work-in-france/model";
 import { wifProcedureService } from "./work-in-france/service";
 import wifDossierService from "./work-in-france/service/wif-dossier.service";
 
-const procedureId = 9407;
+const procedureId = '9407';
 
-demarcheSimplifieeAPI.getDSProcedure(procedureId).pipe(
-    tap(() => logger.info(`[procedure #${procedureId}] loaded from DS` )),
+logger.info(`[SYNC] START`)
+
+demarcheSimplifieeService.getDSProcedure(procedureId).pipe(
+    tap(() => logger.info(`[PROCEDURE #${procedureId}] loaded from DS`)),
     mergeMap((res: DSProcedure) => wifProcedureService.saveOrUpdate(res)),
-    tap((res: WIFRecord<DSProcedure>) => logger.info(`[procedure #${procedureId}] ${res.id} created / updated into KINTO` )),
-    mergeMap((res: WIFRecord<DSProcedure>) => demarcheSimplifieeAPI.getDSDossiers(res.ds_data.id)),
-    tap((res: DSDossierItem[]) => logger.info(`[procedure #${procedureId}] ${res.length} dossiers` )),
+    tap((res: WIFRecord<DSProcedure>) => logger.info(`[PROCEDURE #${procedureId}] created / updated into KINTO with id ${res.id}`)),
+    mergeMap((res: WIFRecord<DSProcedure>) => demarcheSimplifieeService.getDSDossiers(res.ds_data.id)),
+    tap((res: DSDossierItem[]) => logger.info(`[PROCEDURE #${procedureId}] ${res.length} dossiers`)),
     flatMap(x => x),
-    tap((res: DSDossierItem) => logger.info(`[procedure #${procedureId}] loading dossier ${res.id}` )),
-    mergeMap((res: DSDossierItem) => demarcheSimplifieeAPI.getDSDossier(procedureId, res.id)),
-    tap((res: DSDossier) => logger.info(`[procedure #${procedureId}] saving or updating dossier ${res.id}` )),
-    mergeMap((res: DSDossier) => wifDossierService.saveOrUpdate(procedureId, res))
-).subscribe();
+    mergeMap((res: DSDossierItem) => demarcheSimplifieeService.getDSDossier(procedureId, res.id)),
+    tap((res: DSDossier) => logger.info(`[PROCEDURE #${procedureId} > DOSSIER ${res.id}] loaded from DS`)),
+    mergeMap((res: DSDossier) => wifDossierService.saveOrUpdate(procedureId, res)),
+    tap((res: WIFRecord<DSDossier>) => logger.info(`[PROCEDURE #${procedureId} > DOSSIER ${res.ds_data.id}] created / updated into KINTO with id ${res.id}`)),
+).subscribe(() => {
+
+}, (error: any) => {
+    logger.error(error);
+}, () => {
+    logger.info(`[SYNC] COMPLETE`)
+});
 
