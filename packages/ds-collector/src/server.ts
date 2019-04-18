@@ -9,7 +9,7 @@ const procedureId = 9407;
 
 demarcheSimplifieeAPI.getDSProcedure(procedureId).pipe(
     tap(() => logger.info(`[procedure #${procedureId}] loaded from DS` )),
-    mergeMap((res: DSProcedure) => wifProcedureService.saveOrCreate(res)),
+    mergeMap((res: DSProcedure) => wifProcedureService.saveOrUpdate(res)),
     tap((res: WIFRecord<DSProcedure>) => logger.info(`[procedure #${procedureId}] ${res.id} created / updated into KINTO` )),
     mergeMap((res: WIFRecord<DSProcedure>) => demarcheSimplifieeAPI.getDSDossiers(res.ds_data.id)),
     tap((res: DSDossierItem[]) => logger.info(`[procedure #${procedureId}] ${res.length} dossiers` )),
@@ -17,6 +17,6 @@ demarcheSimplifieeAPI.getDSProcedure(procedureId).pipe(
     tap((res: DSDossierItem) => logger.info(`[procedure #${procedureId}] loading dossier ${res.id}` )),
     mergeMap((res: DSDossierItem) => demarcheSimplifieeAPI.getDSDossier(procedureId, res.id)),
     tap((res: DSDossier) => logger.info(`[procedure #${procedureId}] saving or updating dossier ${res.id}` )),
-    mergeMap((res: DSDossier) => wifDossierService.saveOrCreate(procedureId, res))
+    mergeMap((res: DSDossier) => wifDossierService.saveOrUpdate(procedureId, res))
 ).subscribe();
 
