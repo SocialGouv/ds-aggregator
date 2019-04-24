@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { DSData, DSProcedure, DSDossier } from "../../demarche-simplifiee";
+import { DSData, DSDossier, DSProcedure } from "../../demarche-simplifiee";
 import { KintoClient, kintoClient } from "../../lib";
 import { configuration } from "../../util";
 import { WIFRecord } from "../model";
@@ -9,8 +9,8 @@ import { WIFRecord } from "../model";
 export interface IWorkInFranceRepository<S extends DSData> {
     add: (record: WIFRecord<S>) => Observable<WIFRecord<S>>;
     update: (recordId: string, record: WIFRecord<S>) => Observable<WIFRecord<S>>;
-    findByDSKey: (dsKey: string) => Observable<WIFRecord<S>[]>;
-    all: () => Observable<WIFRecord<S>[]>;
+    findByDSKey: (dsKey: string) => Observable<Array<WIFRecord<S>>>;
+    all: () => Observable<Array<WIFRecord<S>>>;
 }
 
 class WorkInFranceRepository<S extends DSData,> implements IWorkInFranceRepository<S> {
@@ -34,11 +34,11 @@ class WorkInFranceRepository<S extends DSData,> implements IWorkInFranceReposito
         return this.collection().update(recordId, record);
     };
 
-    public findByDSKey(dsKey: string): Observable<WIFRecord<S>[]> {
+    public findByDSKey(dsKey: string): Observable<Array<WIFRecord<S>>> {
         return this.collection().search(`ds_key=${dsKey}`);
     };
 
-    public all(): Observable<WIFRecord<S>[]> {
+    public all(): Observable<Array<WIFRecord<S>>> {
         return this.collection().all();
     };
 

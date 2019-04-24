@@ -38,6 +38,7 @@ const updateProcedure$ = (procedureId: string) => {
 procedureIds$.pipe(
     tap((procedureId) => logger.info(`[COLLECTOR] START procedure #${procedureId}]`)),
     concatMap((procedureId) => updateProcedure$(procedureId))
+// tslint:disable-next-line: no-empty
 ).subscribe(() => {
 
 }, (error: any) => {
