@@ -9,11 +9,11 @@ class WIFProcedureService {
 
     public saveOrUpdate(procedure: DSProcedure): Observable<WIFRecord<DSProcedure>> {
         const wifProcedure: WIFRecord<DSProcedure> = {
-            ds_key: procedure.id,
-            ds_data: procedure
+            ds_data: procedure,
+            ds_key: procedure.id
         }
         return wifProcedureRepository.findByDSKey(wifProcedure.ds_key).pipe(
-            mergeMap((res: WIFRecord<DSProcedure>[]) => {
+            mergeMap((res: Array<WIFRecord<DSProcedure>>) => {
                 if (res.length === 0) {
                     logger.debug(`[WIFProcedureService.saveOrUpdate] no record for ds_key ${wifProcedure.ds_key}`)
                     return wifProcedureRepository.add(wifProcedure);
@@ -27,9 +27,9 @@ class WIFProcedureService {
         )
     }
 
-    public all(): Observable<WIFRecord<DSProcedure>[] | null> {
+    public all(): Observable<Array<WIFRecord<DSProcedure>> | null> {
         return wifProcedureRepository.all();
     }
 }
 
-export default new WIFProcedureService();
+export const wifProcedureService = new WIFProcedureService();

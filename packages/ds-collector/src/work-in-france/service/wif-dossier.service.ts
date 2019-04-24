@@ -9,11 +9,11 @@ class WIFDossierService {
 
     public saveOrUpdate(procedureId: string | number, dossier: DSDossier): Observable<WIFRecord<DSDossier>> {
         const wifDossier: WIFRecord<DSDossier> = {
-            ds_key: `${procedureId}-${dossier.id}`,
-            ds_data: dossier
+            ds_data: dossier,
+            ds_key: `${procedureId}-${dossier.id}`
         }
         return wifDossierRepository.findByDSKey(wifDossier.ds_key).pipe(
-            mergeMap((res: WIFRecord<DSDossier>[]) => {
+            mergeMap((res: Array<WIFRecord<DSDossier>>) => {
                 if (res.length === 0) {
                     logger.debug(`[WIFDSDossierService.saveOrUpdate] add dossier for ds_key ${wifDossier.ds_key}`)
                     return wifDossierRepository.add(wifDossier);
@@ -29,4 +29,4 @@ class WIFDossierService {
 
 }
 
-export default new WIFDossierService();
+export const wifDossierService = new WIFDossierService();

@@ -8,7 +8,7 @@ interface KintoResult<T> {
     data: T;
 }
 
-interface KintoCollection<T> {
+export interface KintoCollection<T> {
 
     add(record: T): Observable<T>;
 
@@ -38,13 +38,25 @@ export class KintoClient {
         this.url = `/v1/buckets/ds_collector/collections`;
     }
 
-    collection<T>(collectionName: string): KintoCollection<T> {
+    public collection<T>(collectionName: string): KintoCollection<T> {
         return {
             add: (record: T) => {
                 return from(this.client.create<KintoResult<T>>(`${this.url}/${collectionName}/records`, { data: record })).pipe(
                     tap((res: any) => logger.debug(`[KintoClient.collection.add] RESULT:`, res)),
                     map(this.handleResult<KintoResult<T>>()),
                     map((res: KintoResult<T>) => res.data),
+                );
+            },
+            all: () => {
+                return from(this.client.get<T[]>(`${this.url}/${collectionName}/records`)).pipe(
+                    tap((res: any) => logger.debug(`[KintoClient.collection.all] RESULT:`, res)),
+                    map(this.handleResult<T[]>())
+                );
+            },
+            one: (recordId: string) => {
+                return from(this.client.get<T>(`${this.url}/${collectionName}/records/${recordId}`)).pipe(
+                    tap((res: any) => logger.debug(`[KintoClient.collection.one] RESULT:`, res)),
+                    map(this.handleResult<T>())
                 );
             },
             update: (recordId: string, record: T) => {
@@ -54,18 +66,8 @@ export class KintoClient {
                     map((res: KintoResult<T>) => res.data),
                 );
             },
-            one: (recordId: string) => {
-                return from(this.client.get<T>(`${this.url}/${collectionName}/records/${recordId}`)).pipe(
-                    tap((res: any) => logger.debug(`[KintoClient.collection.one] RESULT:`, res)),
-                    map(this.handleResult<T>())
-                );
-            },
-            all: () => {
-                return from(this.client.get<T[]>(`${this.url}/${collectionName}/records`)).pipe(
-                    tap((res: any) => logger.debug(`[KintoClient.collection.all] RESULT:`, res)),
-                    map(this.handleResult<T[]>())
-                );
-            },
+
+
             search: (filter: string) => {
                 return from(this.client.get<KintoResult<T[]>>(`${this.url}/${collectionName}/records?${filter}`)).pipe(
                     tap((res: any) => logger.debug(`[KintoClient.collection.all] RESULT:`, res)),

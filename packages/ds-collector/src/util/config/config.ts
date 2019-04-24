@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 config();
 
 const asArray = (args: string) => {
-    if(args == undefined || args == null){
+    if(args === undefined || args == null){
         return [];
     }
     args = args.trim();
@@ -11,9 +11,12 @@ const asArray = (args: string) => {
 }
 
 export const configuration = {
-    dsToken: process.env.DS_TOKEN,
     dsAPI: process.env.DS_API,
     dsProcedureIds: asArray(process.env.DS_PROCEDURE_IDS || ''),
+    dsToken: process.env.DS_TOKEN,
+    dsWebHookKey: process.env.DS_WEBHOOK_KEY,
+
+    apiPort: process.env.API_PORT || 1337,
 
     kintoAPI: process.env.KINTO_API,
     kintoLogin: process.env.KINTO_LOGIN,
