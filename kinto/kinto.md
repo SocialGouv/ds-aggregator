@@ -49,14 +49,9 @@ curl -u admin:passw0rd  \
 ```
 
 
-create the collections `configuration`, `procedure`, `dossier`, `statistic`
+create the collections `procedure`, `dossier`, `statistic`
 
 ```bash
-curl -u admin:passw0rd  \
-     -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
-     -d '{"data": {"id": "configurations"}}' \
-     -H 'Content-Type:application/json' 
-
 curl -u admin:passw0rd  \
      -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
      -d '{"data": {"id": "procedures"}}' \
@@ -73,7 +68,7 @@ curl -u admin:passw0rd  \
      -H 'Content-Type:application/json' 
 ```
 
-the group `system` has READ/WRITE permission on `configuration`, `procedure`, `dossier`, `statistic`
+the group `system` has READ/WRITE permission on `procedure`, `dossier`, `statistic`
 
 ```bash
 curl -u admin:passw0rd  \
@@ -81,10 +76,6 @@ curl -u admin:passw0rd  \
      -d '{"data": {"id": "system", "members": ["account:ds-collector"]}}' \
      -H 'Content-Type:application/json' 
 
-curl -u admin:passw0rd  \
-     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/configurations \
-     -d '{"permissions": {"write": ["/buckets/ds_collector/groups/system"]}}' \
-     -H 'Content-Type:application/json' 
 
 curl -u admin:passw0rd  \
      -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/procedures \

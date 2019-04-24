@@ -1,30 +1,51 @@
-import { flatMap, mergeMap, tap } from "rxjs/operators";
+import { of } from "rxjs";
+import { concatMap, flatMap, mergeMap, tap } from "rxjs/operators";
 import { demarcheSimplifieeService, DSDossier, DSDossierItem, DSProcedure } from "./demarche-simplifiee";
-import { logger } from "./util";
+import { configuration, logger } from "./util";
 import { WIFRecord } from "./work-in-france/model";
 import { wifProcedureService } from "./work-in-france/service";
 import wifDossierService from "./work-in-france/service/wif-dossier.service";
 
-const procedureId = '9407';
-
-logger.info(`[SYNC] START`)
-
-demarcheSimplifieeService.getDSProcedure(procedureId).pipe(
-    tap(() => logger.info(`[PROCEDURE #${procedureId}] loaded from DS`)),
-    mergeMap((res: DSProcedure) => wifProcedureService.saveOrUpdate(res)),
-    tap((res: WIFRecord<DSProcedure>) => logger.info(`[PROCEDURE #${procedureId}] created / updated into KINTO with id ${res.id}`)),
-    mergeMap((res: WIFRecord<DSProcedure>) => demarcheSimplifieeService.getDSDossiers(res.ds_data.id)),
-    tap((res: DSDossierItem[]) => logger.info(`[PROCEDURE #${procedureId}] ${res.length} dossiers`)),
+const procedureIds$ = of(configuration.dsProcedureIds).pipe(
     flatMap(x => x),
-    mergeMap((res: DSDossierItem) => demarcheSimplifieeService.getDSDossier(procedureId, res.id)),
-    tap((res: DSDossier) => logger.info(`[PROCEDURE #${procedureId} > DOSSIER ${res.id}] loaded from DS`)),
-    mergeMap((res: DSDossier) => wifDossierService.saveOrUpdate(procedureId, res)),
-    tap((res: WIFRecord<DSDossier>) => logger.info(`[PROCEDURE #${procedureId} > DOSSIER ${res.ds_data.id}] created / updated into KINTO with id ${res.id}`)),
+);
+
+const updateDossier$ = (procedureId: string, dossierId: string) => {
+    return demarcheSimplifieeService.getDSDossier(procedureId, dossierId).pipe(
+        tap((res: DSDossier) => logger.info(`[COLLECTOR] procedure #${procedureId} > dossier ${res.id} loaded from DS`)),
+        mergeMap((res: DSDossier) => wifDossierService.saveOrUpdate(procedureId, res)),
+        tap((res: WIFRecord<DSDossier>) => logger.info(`[COLLECTOR] procedure #${procedureId} > dossier ${res.ds_data.id} created / updated into KINTO with id ${res.id}`))
+    );
+}
+
+const updateDossiers$ = (procedureId: string) => {
+    return demarcheSimplifieeService.getDSDossiers(procedureId).pipe(
+        tap((res: DSDossierItem[]) => logger.info(`[COLLECTOR] procedure #${procedureId} - ${res.length} dossiers`)),
+        flatMap(x => x),
+        concatMap((res: DSDossierItem) => updateDossier$(procedureId, res.id || ''))
+    );
+}
+
+const updateProcedure$ = (procedureId: string) => {
+    return demarcheSimplifieeService.getDSProcedure(procedureId).pipe(
+        tap(() => logger.info(`[COLLECTOR] procedure #${procedureId} - loaded from DS`)),
+        mergeMap((res: DSProcedure) => wifProcedureService.saveOrUpdate(res)),
+        tap((res: WIFRecord<DSProcedure>) => logger.info(`[COLLECTOR] procedure #${procedureId} - created / updated into KINTO with id ${res.id}`)),
+        concatMap((res: WIFRecord<DSProcedure>) => updateDossiers$(res.ds_data.id))
+    );
+};
+
+procedureIds$.pipe(
+    tap((procedureId) => logger.info(`[COLLECTOR] START procedure #${procedureId}]`)),
+    concatMap((procedureId) => updateProcedure$(procedureId))
 ).subscribe(() => {
 
 }, (error: any) => {
     logger.error(error);
 }, () => {
-    logger.info(`[SYNC] COMPLETE`)
+    logger.info(`[COLLECTOR] END`)
 });
+
+
+
 
