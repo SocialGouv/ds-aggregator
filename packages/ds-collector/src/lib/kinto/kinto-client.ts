@@ -1,7 +1,8 @@
 import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import * as handlers from 'typed-rest-client/Handlers';
 import * as rm from 'typed-rest-client/RestClient';
+import { logger } from '../../util';
 
 interface KintoResult<T> {
     data: T;
@@ -41,28 +42,33 @@ export class KintoClient {
         return {
             add: (record: T) => {
                 return from(this.client.create<KintoResult<T>>(`${this.url}/${collectionName}/records`, { data: record })).pipe(
+                    tap((res: any) => logger.debug(`[KintoClient.collection.add] RESULT:`, res)),
                     map(this.handleResult<KintoResult<T>>()),
                     map((res: KintoResult<T>) => res.data),
                 );
             },
             update: (recordId: string, record: T) => {
                 return from(this.client.update<KintoResult<T>>(`${this.url}/${collectionName}/records/${recordId}`, { data: record })).pipe(
+                    tap((res: any) => logger.debug(`[KintoClient.collection.update] RESULT:`, res)),
                     map(this.handleResult<KintoResult<T>>()),
                     map((res: KintoResult<T>) => res.data),
                 );
             },
             one: (recordId: string) => {
                 return from(this.client.get<T>(`${this.url}/${collectionName}/records/${recordId}`)).pipe(
+                    tap((res: any) => logger.debug(`[KintoClient.collection.one] RESULT:`, res)),
                     map(this.handleResult<T>())
                 );
             },
             all: () => {
                 return from(this.client.get<T[]>(`${this.url}/${collectionName}/records`)).pipe(
+                    tap((res: any) => logger.debug(`[KintoClient.collection.all] RESULT:`, res)),
                     map(this.handleResult<T[]>())
                 );
             },
             search: (filter: string) => {
                 return from(this.client.get<KintoResult<T[]>>(`${this.url}/${collectionName}/records?${filter}`)).pipe(
+                    tap((res: any) => logger.debug(`[KintoClient.collection.all] RESULT:`, res)),
                     map(this.handleResult<KintoResult<T[]>>()),
                     map((res: KintoResult<T[]>) => res.data),
                 );
