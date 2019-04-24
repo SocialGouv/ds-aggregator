@@ -19,6 +19,10 @@ $ docker-compose exec web pip3 install kinto-pusher
 $ docker-compose exec web cat /etc/kinto/kinto.ini
 ```
 
+## Kinto admin
+
+A web UI is accessible: `http://localhost:8888/v1/admin/#/`
+
 ## configuration
 
 create the admin account
@@ -79,17 +83,22 @@ curl -u admin:passw0rd  \
 
 curl -u admin:passw0rd  \
      -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/configurations \
-     -d '{"permissions": {"write": ["group:system"]}}' \
+     -d '{"permissions": {"write": ["/buckets/ds_collector/groups/system"]}}' \
      -H 'Content-Type:application/json' 
 
 curl -u admin:passw0rd  \
      -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/procedures \
-     -d '{"permissions": {"write": ["group:system"]}}' \
+     -d '{"permissions": {"write": ["/buckets/ds_collector/groups/system"]}}' \
      -H 'Content-Type:application/json' 
 
 curl -u admin:passw0rd  \
      -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/dossiers \
-     -d '{"permissions": {"write": ["group:system"]}}' \
+     -d '{"permissions": {"write": ["/buckets/ds_collector/groups/system"]}}' \
+     -H 'Content-Type:application/json'
+
+curl -u admin:passw0rd  \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/statistics \
+     -d '{"permissions": {"write": ["/buckets/ds_collector/groups/system"]}}' \
      -H 'Content-Type:application/json'
 ```
 
