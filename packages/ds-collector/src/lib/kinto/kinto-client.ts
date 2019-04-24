@@ -40,8 +40,9 @@ export class KintoClient {
     collection<T>(collectionName: string): KintoCollection<T> {
         return {
             add: (record: T) => {
-                return from(this.client.create<T>(`${this.url}/${collectionName}/records`, { data: record })).pipe(
-                    map(this.handleResult<T>())
+                return from(this.client.create<KintoResult<T>>(`${this.url}/${collectionName}/records`, { data: record })).pipe(
+                    map(this.handleResult<KintoResult<T>>()),
+                    map((res: KintoResult<T>) => res.data),
                 );
             },
             update: (recordId: string, record: T) => {
