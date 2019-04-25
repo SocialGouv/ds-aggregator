@@ -1,7 +1,6 @@
 import { Observable } from "rxjs";
 import { DSData, DSDossier, DSProcedure } from "../../demarche-simplifiee";
-import { KintoClient, kintoClient } from "../../lib";
-import { configuration } from "../../util";
+import { kintoClient } from "../../lib";
 import { WIFRecord } from "../model";
 
 
@@ -15,14 +14,10 @@ export interface IWorkInFranceRepository<S extends DSData> {
 
 class WorkInFranceRepository<S extends DSData,> implements IWorkInFranceRepository<S> {
 
-    private kintoAPI = configuration.kintoAPI || '';
-    private kintoLogin = configuration.kintoLogin || '';
-    private kintoPassword = configuration.kintoPassword || '';
+
     private collectionName: string;
-    private client: KintoClient;
 
     constructor(collectionName: string) {
-        this.client = kintoClient(this.kintoAPI, this.kintoLogin, this.kintoPassword);
         this.collectionName = collectionName;
     }
 
@@ -43,7 +38,7 @@ class WorkInFranceRepository<S extends DSData,> implements IWorkInFranceReposito
     };
 
     private collection() {
-        return this.client.collection<WIFRecord<S>>(this.collectionName);
+        return kintoClient.collection<WIFRecord<S>>(this.collectionName);
     }
 
 }

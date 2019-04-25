@@ -2,7 +2,7 @@ import { from, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import * as handlers from 'typed-rest-client/Handlers';
 import * as rm from 'typed-rest-client/RestClient';
-import { logger } from '../../util';
+import { configuration, logger } from '../../util';
 
 interface KintoResult<T> {
     data: T;
@@ -22,45 +22,40 @@ export interface KintoCollection<T> {
 }
 
 
-export class KintoClient {
+class KintoClient {
 
-    private url: string;
-    private login: string;
-    private password: string;
+    private apiPath: string;
     private client: rm.RestClient;
 
     constructor(url: string, login: string, password: string) {
-        this.url = url;
-        this.login = login;
-        this.password = password;
-        const credential = new handlers.BasicCredentialHandler(this.login, this.password);
-        this.client = new rm.RestClient('kinto-api', this.url, [credential], undefined);
-        this.url = `/v1/buckets/ds_collector/collections`;
+        const credential = new handlers.BasicCredentialHandler(login, password);
+        this.client = new rm.RestClient('kinto-api', url, [credential], undefined);
+        this.apiPath = `/v1/buckets/ds_collector/collections`;
     }
 
     public collection<T>(collectionName: string): KintoCollection<T> {
         return {
             add: (record: T) => {
-                return from(this.client.create<KintoResult<T>>(`${this.url}/${collectionName}/records`, { data: record })).pipe(
+                return from(this.client.create<KintoResult<T>>(`${this.apiPath}/${collectionName}/records`, { data: record })).pipe(
                     tap((res: any) => logger.debug(`[KintoClient.collection.add] RESULT:`, res)),
                     map(this.handleResult<KintoResult<T>>()),
                     map((res: KintoResult<T>) => res.data),
                 );
             },
             all: () => {
-                return from(this.client.get<T[]>(`${this.url}/${collectionName}/records`)).pipe(
+                return from(this.client.get<T[]>(`${this.apiPath}/${collectionName}/records`)).pipe(
                     tap((res: any) => logger.debug(`[KintoClient.collection.all] RESULT:`, res)),
                     map(this.handleResult<T[]>())
                 );
             },
             one: (recordId: string) => {
-                return from(this.client.get<T>(`${this.url}/${collectionName}/records/${recordId}`)).pipe(
+                return from(this.client.get<T>(`${this.apiPath}/${collectionName}/records/${recordId}`)).pipe(
                     tap((res: any) => logger.debug(`[KintoClient.collection.one] RESULT:`, res)),
                     map(this.handleResult<T>())
                 );
             },
             update: (recordId: string, record: T) => {
-                return from(this.client.update<KintoResult<T>>(`${this.url}/${collectionName}/records/${recordId}`, { data: record })).pipe(
+                return from(this.client.update<KintoResult<T>>(`${this.apiPath}/${collectionName}/records/${recordId}`, { data: record })).pipe(
                     tap((res: any) => logger.debug(`[KintoClient.collection.update] RESULT:`, res)),
                     map(this.handleResult<KintoResult<T>>()),
                     map((res: KintoResult<T>) => res.data),
@@ -69,7 +64,7 @@ export class KintoClient {
 
 
             search: (filter: string) => {
-                return from(this.client.get<KintoResult<T[]>>(`${this.url}/${collectionName}/records?${filter}`)).pipe(
+                return from(this.client.get<KintoResult<T[]>>(`${this.apiPath}/${collectionName}/records?${filter}`)).pipe(
                     tap((res: any) => logger.debug(`[KintoClient.collection.all] RESULT:`, res)),
                     map(this.handleResult<KintoResult<T[]>>()),
                     map((res: KintoResult<T[]>) => res.data),
@@ -88,4 +83,8 @@ export class KintoClient {
     }
 }
 
-export const kintoClient = (url: string, login: string, password: string) => new KintoClient(url, login, password);
+const kintoAPI = configuration.kintoAPI || '';
+const kintoLogin = configuration.kintoLogin || '';
+const kintoPassword = configuration.kintoPassword || '';
+
+export const kintoClient = new KintoClient(kintoAPI, kintoLogin, kintoPassword);
