@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { NEVER, Observable } from "rxjs";
 import { kintoClient, KintoCollection } from "../../lib";
 import { Task } from "../model";
 
@@ -12,6 +12,17 @@ class TaskRepository {
 
     public add(task: Task): Observable<Task> {
         return this.collection.add(task);
+    }
+
+    public update(task: Task): Observable<Task> {
+        if (task.id == null) {
+            return NEVER;
+        }
+        return this.collection.update(task.id, task);
+    }
+
+    public getTaskToComplete(): Observable<Task[]> {
+        return this.collection.search('task_state=to_complete');
     }
 
 }
