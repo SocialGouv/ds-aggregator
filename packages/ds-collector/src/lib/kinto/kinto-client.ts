@@ -45,7 +45,8 @@ class KintoClient {
             all: () => {
                 return from(this.client.get<T[]>(`${this.apiPath}/${collectionName}/records`)).pipe(
                     tap((res: any) => logger.debug(`[KintoClient.collection.all] RESULT:`, res)),
-                    map(this.handleResult<T[]>())
+                    map(this.handleResult<KintoResult<T[]>>()),
+                    map((res: KintoResult<T[]>) => res.data),
                 );
             },
             one: (recordId: string) => {

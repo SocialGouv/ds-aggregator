@@ -1,10 +1,8 @@
 import { interval, Observable, of } from "rxjs";
-import { concatMap, flatMap, map, mergeMap, switchMap, tap } from "rxjs/operators";
-import { DSRecord, Task, taskService } from "./collector";
-import { wifDossierService } from "./collector/service/dossier.service";
-import { procedureService } from "./collector/service/procedure.service";
+import { concatMap, delay, flatMap, map, mergeMap, switchMap, tap } from "rxjs/operators";
+import { dossierService, dsProcedureConfigService, DSRecord, procedureService, Task, taskService } from "./collector";
 import { demarcheSimplifieeService, DSDossier, DSProcedure } from "./demarche-simplifiee";
-import { configuration, logger } from "./util";
+import { logger } from "./util";
 
 class SyncService {
 
@@ -28,9 +26,15 @@ class SyncService {
     }
 
     public syncAll() {
-        return this.procedureIds().pipe(
-            tap((procedureId) => logger.info(`[SyncService.syncAll] start procedure #${procedureId}]`)),
-            concatMap((procedureId) => this.updateProcedure(procedureId))
+        of(null).pipe(
+            delay(1000 * 10),
+            mergeMap(() => dsProcedureConfigService.all()),
+            flatMap(x => x),
+            flatMap(x => x.procedures),
+            concatMap((res) => {
+                logger.info(`[SyncService.syncAll] start procedure #${res}]`);
+                return this.updateProcedure(res);
+            })
         ).subscribe({
             complete: () => {
                 logger.info(`[SyncService.syncAll] success`)
@@ -57,7 +61,7 @@ class SyncService {
     private updateDossier(procedureId: string, dossierId: string): Observable<DSRecord<DSDossier>> {
         return demarcheSimplifieeService.getDSDossier(procedureId, dossierId).pipe(
             tap((res) => logger.info(`[SyncService.updateDossier] procedure #${res.procedureId} > dossier ${res.dossier.id} loaded from DS`)),
-            mergeMap((res: { dossier: DSDossier, procedureId: string }) => wifDossierService.saveOrUpdate(res.procedureId, res.dossier)
+            switchMap((res: { dossier: DSDossier, procedureId: string }) => dossierService.saveOrUpdate(res.procedureId, res.dossier)
                 , (outer, dossier) => ({ dossier, procedureId: outer.procedureId })),
             map((res) => {
                 logger.info(`[SyncService.updateDossier] procedure #${res.procedureId} > dossier ${res.dossier.ds_data.id} created / updated into KINTO with id ${res.dossier.id}`);
@@ -66,12 +70,6 @@ class SyncService {
         );
     }
 
-
-    private procedureIds(): Observable<string> {
-        return of(configuration.dsProcedureIds).pipe(
-            flatMap(x => x),
-        );
-    }
 
     private updateDossiers(procedureId: string, page: number, resultPerPage: number): Observable<DSRecord<DSDossier>> {
         return demarcheSimplifieeService.getDSDossiers(procedureId, page, resultPerPage).pipe(
@@ -88,15 +86,15 @@ class SyncService {
     private updateProcedure(procedureId: string): Observable<DSRecord<DSDossier>> {
         return demarcheSimplifieeService.getDSProcedure(procedureId).pipe(
             tap((res) => logger.info(`[SyncService.updateProcedure] procedure #${res.id} - loaded from DS`)),
-            mergeMap((res: DSProcedure) => procedureService.saveOrUpdate(res)),
+            switchMap((res: DSProcedure) => procedureService.saveOrUpdate(res)),
             tap((res: DSRecord<DSProcedure>) => logger.info(`[SyncService.updateProcedure] procedure #${res.ds_data.id} - created / updated into KINTO with id ${res.id}`)),
             flatMap((res: DSRecord<DSProcedure>) => {
-                const resultPerPage = 10;
+                const resultPerPage = 500;
                 const maxPageNumber = Math.ceil(res.ds_data.total_dossier / resultPerPage);
                 const result = [];
 
                 for (let page = 1; page <= maxPageNumber; page++) {
-                    logger.info(`[SyncService.updateProcedure] procedure #${res.ds_data.id} - add params: page ${page} / ${maxPageNumber}, resultPerPage ${resultPerPage}` )
+                    logger.info(`[SyncService.updateProcedure] procedure #${res.ds_data.id} - add params: page ${page} / ${maxPageNumber}, resultPerPage ${resultPerPage}`)
                     result.push({ procedureId: res.ds_data.id, resultPerPage, page });
                 }
                 return result;

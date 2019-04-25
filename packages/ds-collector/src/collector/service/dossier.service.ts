@@ -29,4 +29,4 @@ class DossierService {
 
 }
 
-export const wifDossierService = new DossierService();
+export const dossierService = new DossierService();

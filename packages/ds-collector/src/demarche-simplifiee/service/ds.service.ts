@@ -22,7 +22,7 @@ class DemarcheSimplifieeService {
     public getDSDossier(procedureId: string, dossierId: string): Observable<{ dossier: DSDossier, procedureId: string }> {
         return of({ procedureId, dossierId }).pipe(
             mergeMap((ctx) => demarcheSimplifieeAPI.getDSDossier(ctx.procedureId, ctx.dossierId), (ctx, res) => ({ ctx, res })),
-            map(({ ctx, res }) => ({ dossier: res.dossier, procedureId: ctx.dossierId }))
+            map(({ ctx, res }) => ({ dossier: res.dossier, procedureId: ctx.procedureId }))
         )
     }
 
