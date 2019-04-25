@@ -49,9 +49,9 @@ class DemarcheSimplifieeAPI implements IDemarcheSimplifieeAPI {
         return from(this.client.get<DSDossierListResult>(`/api/v1/procedures/${procedureId}/dossiers`)).pipe(
             map(this.handleResult<DSDossierListResult>('getDSDossiers', {
                 dossiers: [], pagination: {
+                    "nombre_de_page": 0,
                     "page": 0,
-                    "resultats_par_page": 0,
-                    "nombre_de_page": 0
+                    "resultats_par_page": 0
                 }
             })),
         );

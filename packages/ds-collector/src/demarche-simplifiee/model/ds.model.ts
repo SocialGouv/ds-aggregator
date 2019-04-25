@@ -1,6 +1,6 @@
 export type procedureState = 'publiee';
 
-export type dossierState = 'initiated';
+export type dossierState = 'initiated' | 'closed' | 'without_continuation';
 
 export interface DSData {
     id: string;
@@ -44,5 +44,7 @@ export interface DSDossierItem extends DSData {
 }
 
 export interface DSDossier extends DSData {
-
+    created_at: Date,
+    updated_at: Date,
+    initiated_at: Date
 }
