@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
-import { collectorService } from './collector';
+import { taskService } from './collector';
 import { configuration, logger } from './util';
 
 const routeOptions: Router.IRouterOptions = {
@@ -15,7 +15,7 @@ router.post(`/ds-webhook-${configuration.dsWebHookKey}`, (ctx: Koa.Context) => {
     const dossierId = ctx.query.dossier_id;
     const state = ctx.query.state;
     const updated_at = ctx.query.updated_at;
-    collectorService.addTask(procedureId, dossierId, state, updated_at).subscribe({
+    taskService.addTask(procedureId, dossierId, state, updated_at).subscribe({
         complete: () => {
             logger.info(`[WEB HOOK] dossier ${procedureId}-${dossierId} added to update`);
             ctx.body = 'success';

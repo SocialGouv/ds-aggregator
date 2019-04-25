@@ -11,9 +11,9 @@ class DemarcheSimplifieeService {
         )
     }
 
-    public getDSDossiers(procedureId: string): Observable<{ dossiers: DSDossierItem[], procedureId: string }> {
-        return of({ procedureId }).pipe(
-            mergeMap((ctx) => demarcheSimplifieeAPI.getDSDossiers(ctx.procedureId),
+    public getDSDossiers(procedureId: string, page: number, resultPerPage: number): Observable<{ dossiers: DSDossierItem[], procedureId: string }> {
+        return of({ procedureId, page, resultPerPage }).pipe(
+            mergeMap((ctx) => demarcheSimplifieeAPI.getDSDossiers(ctx.procedureId, ctx.page, ctx.resultPerPage),
                 (ctx, res) => ({ ctx, res })),
             map(({ ctx, res }) => ({ dossiers: res.dossiers, procedureId: ctx.procedureId }))
         )

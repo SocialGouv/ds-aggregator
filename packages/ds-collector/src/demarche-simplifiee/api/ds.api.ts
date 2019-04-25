@@ -22,13 +22,7 @@ interface DSProcedureResult {
     procedure: DSProcedure;
 }
 
-export interface IDemarcheSimplifieeAPI {
-    getDSProcedure: (DSprocedureId: string | number) => Observable<DSProcedureResult>;
-    getDSDossiers: (DSprocedureId: string) => Observable<DSDossierListResult>;
-    getDSDossier: (DSprocedureId: string, DSdossierId: string) => Observable<DSDossierResult>
-}
-
-class DemarcheSimplifieeAPI implements IDemarcheSimplifieeAPI {
+class DemarcheSimplifieeAPI {
 
     private dsAPI = configuration.dsAPI;
     private token = configuration.dsToken || '';
@@ -45,8 +39,8 @@ class DemarcheSimplifieeAPI implements IDemarcheSimplifieeAPI {
         );
     }
 
-    public getDSDossiers(procedureId: string | number): Observable<DSDossierListResult> {
-        return from(this.client.get<DSDossierListResult>(`/api/v1/procedures/${procedureId}/dossiers`)).pipe(
+    public getDSDossiers(procedureId: string | number, page: number, resultPerPage: number): Observable<DSDossierListResult> {
+        return from(this.client.get<DSDossierListResult>(`/api/v1/procedures/${procedureId}/dossiers?page=${page}&resultats_par_page=${resultPerPage}`)).pipe(
             map(this.handleResult<DSDossierListResult>('getDSDossiers', {
                 dossiers: [], pagination: {
                     "nombre_de_page": 0,
