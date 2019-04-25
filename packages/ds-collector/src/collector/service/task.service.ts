@@ -2,7 +2,7 @@ import { Observable } from "rxjs";
 import { Task } from "../model";
 import { taskRepository } from "../repository";
 
-class DSCollectorService {
+class TaskService {
 
     public addTask(procedureId: string, dossierId: string, state: string, updatedAt: Date): Observable<Task> {
         const task: Task = {
@@ -28,7 +28,7 @@ class DSCollectorService {
 
 }
 
-export const collectorService = new DSCollectorService();
+export const taskService = new TaskService();
 
 
 

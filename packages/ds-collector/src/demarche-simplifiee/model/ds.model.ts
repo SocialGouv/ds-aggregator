@@ -1,12 +1,11 @@
+import { IIdentifiable } from "../../util";
+
 export type procedureState = 'publiee';
 
 export type dossierState = 'initiated' | 'closed' | 'without_continuation';
 
-export interface DSData {
-    id: string;
-}
 
-export interface DSProcedure extends DSData {
+export interface DSProcedure extends IIdentifiable {
     label: string;
     description: string;
     organisation: string;
@@ -36,14 +35,14 @@ export interface DSTypeChamp {
     description: string;
 }
 
-export interface DSDossierItem extends DSData {
+export interface DSDossierItem extends IIdentifiable {
     nom_projet: string;
     updated_at: Date;
     initiated_at: Date;
     state: dossierState;
 }
 
-export interface DSDossier extends DSData {
+export interface DSDossier extends IIdentifiable {
     created_at: Date,
     updated_at: Date,
     initiated_at: Date

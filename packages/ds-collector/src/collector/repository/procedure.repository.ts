@@ -1,17 +1,11 @@
 import { Observable } from "rxjs";
-import { CollectorRecord } from "..";
-import { DSData, DSDossier, DSProcedure } from "../../demarche-simplifiee";
+import { DSRecord } from "..";
+import { DSDossier, DSProcedure } from "../../demarche-simplifiee";
 import { kintoClient } from "../../lib";
+import { IIdentifiable } from "../../util";
 
-export interface IRepository<S extends DSData> {
-    add: (record: CollectorRecord<S>) => Observable<CollectorRecord<S>>;
-    update: (recordId: string, record: CollectorRecord<S>) => Observable<CollectorRecord<S>>;
-    findByDSKey: (dsKey: string) => Observable<Array<CollectorRecord<S>>>;
-    all: () => Observable<Array<CollectorRecord<S>>>;
-}
 
-class CollectorRepository<S extends DSData,> implements IRepository<S> {
-
+class DSBaseRepository<S extends IIdentifiable>  {
 
     private collectionName: string;
 
@@ -19,28 +13,28 @@ class CollectorRepository<S extends DSData,> implements IRepository<S> {
         this.collectionName = collectionName;
     }
 
-    public add(record: CollectorRecord<S>): Observable<CollectorRecord<S>> {
+    public add(record: DSRecord<S>): Observable<DSRecord<S>> {
         return this.collection().add(record);
     };
 
-    public update(recordId: string, record: CollectorRecord<S>): Observable<CollectorRecord<S>> {
+    public update(recordId: string, record: DSRecord<S>): Observable<DSRecord<S>> {
         return this.collection().update(recordId, record);
     };
 
-    public findByDSKey(dsKey: string): Observable<Array<CollectorRecord<S>>> {
+    public findByDSKey(dsKey: string): Observable<Array<DSRecord<S>>> {
         return this.collection().search(`ds_key=${dsKey}`);
     };
 
-    public all(): Observable<Array<CollectorRecord<S>>> {
+    public all(): Observable<Array<DSRecord<S>>> {
         return this.collection().all();
     };
 
     private collection() {
-        return kintoClient.collection<CollectorRecord<S>>(this.collectionName);
+        return kintoClient.collection<DSRecord<S>>(this.collectionName);
     }
 
 }
 
-export const procedureRepository = new CollectorRepository<DSProcedure>('procedures');
+export const procedureRepository = new DSBaseRepository<DSProcedure>('procedures');
 
-export const dossierRepository = new CollectorRepository<DSDossier>('dossiers');
+export const dossierRepository = new DSBaseRepository<DSDossier>('dossiers');

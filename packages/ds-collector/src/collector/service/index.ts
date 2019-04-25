@@ -1,1 +1,1 @@
-export * from './collector.service';
+export * from './task.service';

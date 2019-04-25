@@ -1,6 +1,6 @@
 import { interval, Observable, of } from "rxjs";
 import { concatMap, flatMap, map, mergeMap, switchMap, tap } from "rxjs/operators";
-import { CollectorRecord, collectorService, Task } from "./collector";
+import { DSRecord, Task, taskService } from "./collector";
 import { wifDossierService } from "./collector/service/dossier.service";
 import { procedureService } from "./collector/service/procedure.service";
 import { demarcheSimplifieeService, DSDossier, DSProcedure } from "./demarche-simplifiee";
@@ -38,7 +38,7 @@ class SyncService {
             error: (error: any) => {
                 logger.error(`[SyncService.syncAll] error: `, error)
             },
-            next: (next: CollectorRecord<DSDossier>) => {
+            next: (next: DSRecord<DSDossier>) => {
                 logger.info(`[SyncService.syncAll] dossier synchronized: ${next.ds_key}`)
                 logger.debug(`[SyncService.syncAll] dossier synchronized: `, next)
             }
@@ -46,15 +46,15 @@ class SyncService {
     }
 
     private handleTasksToComplete(): Observable<Task> {
-        return collectorService.getTasksToComplete().pipe(
+        return taskService.getTasksToComplete().pipe(
             flatMap(x => x),
             concatMap((task) => this.updateDossier(task.procedure_id, task.dossier_id), (task, dossier) => ({ task, dossier })),
-            switchMap(({ task }) => collectorService.markAsCompleted(task))
+            switchMap(({ task }) => taskService.markAsCompleted(task))
         );
     }
 
 
-    private updateDossier(procedureId: string, dossierId: string): Observable<CollectorRecord<DSDossier>> {
+    private updateDossier(procedureId: string, dossierId: string): Observable<DSRecord<DSDossier>> {
         return demarcheSimplifieeService.getDSDossier(procedureId, dossierId).pipe(
             tap((res) => logger.info(`[SyncService.updateDossier] procedure #${res.procedureId} > dossier ${res.dossier.id} loaded from DS`)),
             mergeMap((res: { dossier: DSDossier, procedureId: string }) => wifDossierService.saveOrUpdate(res.procedureId, res.dossier)
@@ -73,7 +73,7 @@ class SyncService {
         );
     }
 
-    private updateDossiers(procedureId: string): Observable<CollectorRecord<DSDossier>> {
+    private updateDossiers(procedureId: string): Observable<DSRecord<DSDossier>> {
         return demarcheSimplifieeService.getDSDossiers(procedureId).pipe(
             flatMap(res => {
                 logger.info(`[SyncService.updateDossiers] procedure #${res.procedureId} - ${res.dossiers.length} dossiers`);
@@ -85,12 +85,12 @@ class SyncService {
         );
     }
 
-    private updateProcedure(procedureId: string): Observable<CollectorRecord<DSDossier>> {
+    private updateProcedure(procedureId: string): Observable<DSRecord<DSDossier>> {
         return demarcheSimplifieeService.getDSProcedure(procedureId).pipe(
             tap((res) => logger.info(`[SyncService.updateProcedure] procedure #${res.id} - loaded from DS`)),
             mergeMap((res: DSProcedure) => procedureService.saveOrUpdate(res)),
-            tap((res: CollectorRecord<DSProcedure>) => logger.info(`[SyncService.updateProcedure] procedure #${res.ds_data.id} - created / updated into KINTO with id ${res.id}`)),
-            concatMap((res: CollectorRecord<DSProcedure>) => this.updateDossiers(res.ds_data.id))
+            tap((res: DSRecord<DSProcedure>) => logger.info(`[SyncService.updateProcedure] procedure #${res.ds_data.id} - created / updated into KINTO with id ${res.id}`)),
+            concatMap((res: DSRecord<DSProcedure>) => this.updateDossiers(res.ds_data.id))
         );
     };
 
