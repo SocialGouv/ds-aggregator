@@ -1,15 +1,17 @@
-import { interval, Observable, of } from "rxjs";
-import { concatMap, delay, flatMap, map, mergeMap, switchMap, tap } from "rxjs/operators";
-import { dossierService, dsProcedureConfigService, DSRecord, procedureService, Task, taskService } from "./collector";
-import { demarcheSimplifieeService, DSDossier, DSProcedure } from "./demarche-simplifiee";
+import { interval, Observable } from "rxjs";
+import { concatMap, filter, flatMap, map, switchMap, tap } from "rxjs/operators";
+import { dossierService, DSDossierRecord, dsProcedureConfigService, DSRecord, procedureService, Task, taskService } from "./collector";
+import { demarcheSimplifieeService, DSDossier, DSDossierItem, DSProcedure } from "./demarche-simplifiee";
+import { DossierListResult } from "./demarche-simplifiee/service/ds.service";
 import { logger } from "./util";
+import { asTimestamp } from "./util/converter";
 
 class SyncService {
 
     public startHandleTaskToComplete(periodInMilliSecond: number) {
         logger.info(`[SyncService.startHandleTaskToComplete] periodInMilliSecond: ${periodInMilliSecond}`)
         interval(periodInMilliSecond).pipe(
-            tap((val) => logger.info(`[SyncService.startHandleTaskToComplete] ${val}`)),
+            tap(() => logger.info(`[SyncService.startHandleTaskToComplete] check if tasks must be processed`)),
             switchMap(() => syncService.handleTasksToComplete())
         ).subscribe({
             complete: () => {
@@ -26,9 +28,7 @@ class SyncService {
     }
 
     public syncAll() {
-        of(null).pipe(
-            delay(1000 * 10),
-            mergeMap(() => dsProcedureConfigService.all()),
+        dsProcedureConfigService.all().pipe(
             flatMap(x => x),
             flatMap(x => x.procedures),
             concatMap((res) => {
@@ -76,11 +76,34 @@ class SyncService {
             flatMap(res => {
                 logger.info(`[SyncService.updateDossiers] procedure #${res.procedureId} - page ${page} / resultPerPage ${resultPerPage}: ${res.dossiers.length} dossiers`);
                 return res.dossiers;
-            }, (res, dossier) => {
-                return { procedureId: res.procedureId, dossier }
+            }, (res, dossier) => this.buildDossierUpdateInfo(res, dossier)),
+            switchMap((res: DossierUpdateInfo<DSDossierItem>) => dossierService.findOne(res.procedureId, res.dossierId)
+                , (outer: DossierUpdateInfo<DSDossierItem>, inner: DSDossierRecord | null) => this.updateDossierUpdateInfo(outer, inner)),
+            filter((res: DossierUpdateInfo<DSDossierRecord>) => {
+                const updated = this.shouldBeUpdated(res)
+                logger.info(`[SyncService.updateDossiers] procedure #${res.procedureId} - dossier ${res.dossierId} update ${updated}`);
+                return updated;
             }),
-            concatMap((res) => this.updateDossier(res.procedureId, res.dossier.id || ''))
+            concatMap((res: DossierUpdateInfo<DSDossierRecord>) => this.updateDossier(res.procedureId, res.dossierId || ''))
         );
+    }
+
+    private buildDossierUpdateInfo(res: DossierListResult, dossier: DSDossierItem): DossierUpdateInfo<DSDossierItem> {
+        return { procedureId: res.procedureId, dossierId: dossier.id, updatedDate: asTimestamp(dossier.updated_at) || 0, data: dossier };
+    }
+
+    private updateDossierUpdateInfo(outer: DossierUpdateInfo<DSDossierItem>, inner: DSDossierRecord | null): DossierUpdateInfo<DSDossierRecord> {
+        return { procedureId: outer.procedureId, dossierId: outer.dossierId, updatedDate: outer.updatedDate, data: inner };
+    }
+
+    private shouldBeUpdated(res: DossierUpdateInfo<DSDossierRecord>) {
+        if (res.data == null) {
+            return true;
+        } if (res.data.metadata.updated_at == null) {
+            return true;
+        }
+        logger.info(`[SyncService.shouldBeUpdated] updatedDate: DS ${res.updatedDate} - KINTO ${res.data.metadata.updated_at}`);
+        return res.updatedDate > res.data.metadata.updated_at;
     }
 
     private updateProcedure(procedureId: string): Observable<DSRecord<DSDossier>> {
@@ -104,5 +127,8 @@ class SyncService {
     };
 
 }
+
+
+interface DossierUpdateInfo<T> { procedureId: string, dossierId: string, updatedDate: number, data: T | null }
 
 export const syncService = new SyncService();

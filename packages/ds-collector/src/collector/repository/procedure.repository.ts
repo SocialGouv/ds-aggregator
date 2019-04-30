@@ -1,40 +1,30 @@
 import { Observable } from "rxjs";
-import { DSRecord } from "..";
-import { DSDossier, DSProcedure } from "../../demarche-simplifiee";
 import { kintoClient } from "../../lib";
-import { IIdentifiable } from "../../util";
+import { DSProcedureRecord } from "../model";
 
 
-class DSBaseRepository<S extends IIdentifiable>  {
+class ProcedureRepository {
 
-    private collectionName: string;
-
-    constructor(collectionName: string) {
-        this.collectionName = collectionName;
-    }
-
-    public add(record: DSRecord<S>): Observable<DSRecord<S>> {
+    public add(record: DSProcedureRecord): Observable<DSProcedureRecord> {
         return this.collection().add(record);
     };
 
-    public update(recordId: string, record: DSRecord<S>): Observable<DSRecord<S>> {
+    public update(recordId: string, record: DSProcedureRecord): Observable<DSProcedureRecord> {
         return this.collection().update(recordId, record);
     };
 
-    public findByDSKey(dsKey: string): Observable<Array<DSRecord<S>>> {
+    public findByDSKey(dsKey: string): Observable<DSProcedureRecord[]> {
         return this.collection().search(`ds_key=${dsKey}`);
     };
 
-    public all(): Observable<Array<DSRecord<S>>> {
+    public all(): Observable<DSProcedureRecord[]> {
         return this.collection().all();
     };
 
     private collection() {
-        return kintoClient.collection<DSRecord<S>>(this.collectionName);
+        return kintoClient.collection<DSProcedureRecord>("procedures");
     }
 
 }
 
-export const procedureRepository = new DSBaseRepository<DSProcedure>('procedures');
-
-export const dossierRepository = new DSBaseRepository<DSDossier>('dossiers');
+export const procedureRepository = new ProcedureRepository();

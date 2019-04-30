@@ -22,7 +22,7 @@ export const configuration = {
     dsToken: process.env.DS_TOKEN,
     dsWebHookKey: process.env.DS_WEBHOOK_KEY,
 
-    taskSchedulerPeriod: asNumber(process.env.TASK_SCHEDULER_PERIOD, 1000 * 60),
+    taskSchedulerPeriod: asNumber(process.env.TASK_SCHEDULER_PERIOD, 1000 * 60 * 60),
 
     apiPort: process.env.API_PORT || 1337,
 
