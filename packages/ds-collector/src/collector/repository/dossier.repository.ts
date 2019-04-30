@@ -21,6 +21,10 @@ class DossierRepository {
         return this.collection().all();
     };
 
+    public findAllByProcedureIn(procedureIds: string[]): Observable<DossierRecord[]> {
+        return this.collection().search(`in_metadata.procedure_id=${procedureIds}`);
+    }
+
     private collection() {
         return kintoClient.collection<DossierRecord>("dossiers");
     }

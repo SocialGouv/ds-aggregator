@@ -20,6 +20,9 @@ class DossierService {
     }
 
     public shouldBeUpdated(procedureId: string, dossier: DSDossierItem): Observable<boolean> {
+        if (!dossier.id) {
+            throw new Error('[DossierService.shouldBeUpdated] dossier id should not be null.');
+        }
         return dossierRepository.findByDSKey(this.getDSKey(procedureId, dossier.id)).pipe(
             map((records: DossierRecord[]) => {
                 if (records.length === 0) {
@@ -42,7 +45,8 @@ class DossierService {
             ds_data: dossier,
             ds_key: `${procedureId}-${dossier.id}`,
             metadata: {
-                created_at: asTimestamp(dossier.created_at),
+                created_at: asTimestamp(dossier.created_at) || 0,
+                procedure_id: procedureId,
                 processed_at: asTimestamp(dossier.processed_at),
                 received_at: asTimestamp(dossier.received_at),
                 state: dossier.state,

@@ -14,13 +14,14 @@ export interface ProcedureRecord extends Record<DSProcedure> {
 export interface DossierRecord extends Record<DSDossier> {
     metadata: {
         state: DossierStateType;
-        created_at: number | null;
+        procedure_id: string;
+        created_at: number;
         // date de la dernière modification du dossier
-        updated_at?: number | null;
+        updated_at: number | null;
         // date du passage en instruction
-        received_at?: number | null;
+        received_at: number | null;
         // date de décision du dossier
-        processed_at?: number | null;
+        processed_at: number | null;
     }
 }
 

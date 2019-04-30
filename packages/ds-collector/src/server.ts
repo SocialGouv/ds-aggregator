@@ -2,6 +2,7 @@ import * as cors from '@koa/cors';
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import { dsProcedureConfigService } from './collector';
+import { statisticService } from './collector/service/statistic.service';
 import { router } from './routes';
 import { syncService } from './sync.service';
 import { configuration } from './util';
@@ -11,7 +12,8 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 syncService.startHandleTaskToComplete(configuration.taskSchedulerPeriod);
-syncService.syncAll();
+// syncService.syncAll();
+statisticService.statistic();
 
 const app = new Koa();
 

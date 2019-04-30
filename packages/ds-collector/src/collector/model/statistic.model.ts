@@ -1,10 +1,11 @@
+import { IIdentifiable } from "../../util";
 
-interface LabelCount {
+export interface LabelCount {
     count: number,
     label: string
 }
 
-interface DossierStatesCount {
+export interface DossierStatesCount {
     draft: LabelCount;
     initiated: LabelCount;
     received: LabelCount;
@@ -13,18 +14,22 @@ interface DossierStatesCount {
     without_continuation: LabelCount;
 }
 
-export interface Statistic {
+export interface StatisticBlock {
+    count: number;
+    duration: number;
+    durations: number[];
+    status: DossierStatesCount;
+}
+
+export interface Statistic extends IIdentifiable {
     result: {
+        structure: string;
         count: number;
         duration: number;
+        durations: number[],
         status: DossierStatesCount;
         monthly: {
-            [month: string]: { // "2019-03"
-                count: number;
-                duration: number;
-                // durations: number[];
-                status: DossierStatesCount;
-            }
+            [month: string]: StatisticBlock
         }
     }
     // daily: {
@@ -49,3 +54,42 @@ export interface Statistic {
 // Temps de traitement par mois => data.monthly
 
 // Répartition des dossiers par statut => data.status
+
+export const initStatistic = (structure: string) => {
+    const block = initStatisticBlock();
+    return {
+        result: {
+            structure,
+            // tslint:disable-next-line: object-literal-sort-keys
+            ...block,
+            monthly: {}
+        }
+    }
+}
+
+export const initStatisticBlock = () => {
+    return {
+        count: 0,
+        duration: 0,
+        durations: [],
+        status: initDossierStatesCount(),
+    }
+}
+
+const initDossierStatesCount = () => {
+    return {
+        closed: initLabelCount('accepté'),
+        draft: initLabelCount('draft'),
+        initiated: initLabelCount('en construction'),
+        received: initLabelCount('en instruction'),
+        refused: initLabelCount('refusé'),
+        without_continuation: initLabelCount('classé sans suite'),
+    }
+}
+
+const initLabelCount = (label: string) => {
+    return {
+        count: 0,
+        label
+    }
+}

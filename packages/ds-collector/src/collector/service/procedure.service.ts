@@ -8,6 +8,9 @@ import { procedureRepository } from "../repository";
 class ProcedureService {
 
     public saveOrUpdate(procedure: DSProcedure): Observable<Record<DSProcedure>> {
+        if (!procedure.id) {
+            throw new Error('[ProcedureService.saveOrUpdate] Procedure id should not be null.');
+        }
         const wifProcedure: Record<DSProcedure> = {
             ds_data: procedure,
             ds_key: procedure.id
