@@ -1,17 +1,17 @@
 import { DossierStateType, DSDossier, DSProcedure } from "../../demarche-simplifiee";
 import { IIdentifiable } from "../../util";
 
-export interface DSRecord<T extends IIdentifiable> {
+export interface Record<T extends IIdentifiable> {
     id?: string;
     ds_key: string;
     ds_data: T;
 }
 
 // tslint:disable-next-line: no-empty-interface
-export interface DSProcedureRecord extends DSRecord<DSProcedure> {
+export interface ProcedureRecord extends Record<DSProcedure> {
 }
 
-export interface DSDossierRecord extends DSRecord<DSDossier> {
+export interface DossierRecord extends Record<DSDossier> {
     metadata: {
         state: DossierStateType;
         created_at: number | null;

@@ -1,12 +1,12 @@
 import { Observable } from "rxjs";
 import { filter, flatMap, switchMap, tap } from "rxjs/operators";
 import { logger } from "../../util";
-import { DSProcedureConfig } from "../model";
+import { ProcedureConfig } from "../model";
 import { dsProcedureConfigRepository } from "../repository";
 
 class DSProcedureConfigService {
 
-    public all(): Observable<DSProcedureConfig[]> {
+    public all(): Observable<ProcedureConfig[]> {
         return dsProcedureConfigRepository.all();
     }
 
@@ -28,7 +28,7 @@ class DSProcedureConfigService {
 export const dsProcedureConfigService = new DSProcedureConfigService();
 
 
-const devConfigs: DSProcedureConfig[] = [{
+const devConfigs: ProcedureConfig[] = [{
     "departement": "13",
     "procedures": [
         12858,

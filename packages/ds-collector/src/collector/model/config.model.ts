@@ -1,4 +1,4 @@
-export interface DSProcedureConfig {
+export interface ProcedureConfig {
     procedures: any[];
     departement: string;
 }
