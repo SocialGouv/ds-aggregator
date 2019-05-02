@@ -1,20 +1,20 @@
 import { Observable } from "rxjs";
 import { kintoClient, KintoCollection } from "../../lib";
-import { DSProcedureConfig } from "../model";
+import { ProcedureConfig } from "../model";
 
 class DSProcedureConfigRepository {
 
-    private collection: KintoCollection<DSProcedureConfig>;
+    private collection: KintoCollection<ProcedureConfig>;
 
     constructor() {
-        this.collection = kintoClient.collection<DSProcedureConfig>("ds_configs");
+        this.collection = kintoClient.collection<ProcedureConfig>("ds_configs");
     }
 
-    public all(): Observable<DSProcedureConfig[]> {
+    public all(): Observable<ProcedureConfig[]> {
         return this.collection.all();
     }
 
-    public add(config: DSProcedureConfig): Observable<DSProcedureConfig> {
+    public add(config: ProcedureConfig): Observable<ProcedureConfig> {
         return this.collection.add(config);
     }
 

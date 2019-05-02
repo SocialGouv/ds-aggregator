@@ -1,28 +1,32 @@
 import { Observable } from "rxjs";
 import { kintoClient } from "../../lib";
-import { DSDossierRecord } from "../model";
+import { DossierRecord } from "../model";
 
 
 class DossierRepository {
 
-    public add(record: DSDossierRecord): Observable<DSDossierRecord> {
+    public add(record: DossierRecord): Observable<DossierRecord> {
         return this.collection().add(record);
     };
 
-    public update(recordId: string, record: DSDossierRecord): Observable<DSDossierRecord> {
+    public update(recordId: string, record: DossierRecord): Observable<DossierRecord> {
         return this.collection().update(recordId, record);
     };
 
-    public findByDSKey(dsKey: string): Observable<DSDossierRecord[]> {
+    public findByDSKey(dsKey: string): Observable<DossierRecord[]> {
         return this.collection().search(`ds_key=${dsKey}`);
     };
 
-    public all(): Observable<DSDossierRecord[]> {
+    public all(): Observable<DossierRecord[]> {
         return this.collection().all();
     };
 
+    public findAllByProcedureIn(procedureIds: string[]): Observable<DossierRecord[]> {
+        return this.collection().search(`in_metadata.procedure_id=${procedureIds}`);
+    }
+
     private collection() {
-        return kintoClient.collection<DSDossierRecord>("dossiers");
+        return kintoClient.collection<DossierRecord>("dossiers");
     }
 
 }

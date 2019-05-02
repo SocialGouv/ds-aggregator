@@ -1,3 +1,3 @@
 export * from './task.model';
-export * from './ds-record.model';
-export * from './ds-config.model';
+export * from './record.model';
+export * from './config.model';

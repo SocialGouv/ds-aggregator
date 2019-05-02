@@ -1,12 +1,12 @@
 import { Observable } from "rxjs";
 import { filter, flatMap, switchMap, tap } from "rxjs/operators";
 import { logger } from "../../util";
-import { DSProcedureConfig } from "../model";
+import { ProcedureConfig } from "../model";
 import { dsProcedureConfigRepository } from "../repository";
 
 class DSProcedureConfigService {
 
-    public all(): Observable<DSProcedureConfig[]> {
+    public all(): Observable<ProcedureConfig[]> {
         return dsProcedureConfigRepository.all();
     }
 
@@ -28,136 +28,136 @@ class DSProcedureConfigService {
 export const dsProcedureConfigService = new DSProcedureConfigService();
 
 
-const devConfigs: DSProcedureConfig[] = [{
-    "departement": "13",
+const devConfigs: ProcedureConfig[] = [{
     "procedures": [
         12858,
         12859
-    ]
+    ],
+    "structure": "13"
 },
 {
-    "departement": "35",
     "procedures": [
         17197,
         17198
-    ]
+    ],
+    "structure": "35"
 },
 {
-    "departement": "42",
     "procedures": [
         16517,
         16520
-    ]
+    ],
+    "structure": "42"
 },
 {
-    "departement": "45",
     "procedures": [
         11959,
         11968
-    ]
+    ],
+    "structure": "45"
 },
 {
-    "departement": "54",
     "procedures": [
         15700,
         15705
-    ]
+    ],
+    "structure": "54"
 },
 {
-    "departement": "55",
     "procedures": [
         16590,
         16592
-    ]
+    ],
+    "structure": "55"
 },
 {
-    "departement": "57",
     "procedures": [
         15749,
         15750
-    ]
+    ],
+    "structure": "57"
 },
 {
-    "departement": "67",
     "procedures": [
         15751,
         15752
-    ]
+    ],
+    "structure": "67"
 },
 {
-    "departement": "69",
     "procedures": [
         6274,
         6286
-    ]
+    ],
+    "structure": "69"
 },
 {
-    "departement": "75",
     "procedures": [
         14131,
         13760
-    ]
+    ],
+    "structure": "75"
 },
 {
-    "departement": "76",
     "procedures": [
         13093,
         13094
-    ]
+    ],
+    "structure": "76"
 },
 {
-    "departement": "77",
     "procedures": [
         12023,
         12101
-    ]
+    ],
+    "structure": "77"
 },
 {
-    "departement": "78",
     "procedures": [
         15275,
         15276
-    ]
+    ],
+    "structure": "78"
 },
 {
-    "departement": "88",
     "procedures": [
         15747,
         15748
-    ]
+    ],
+    "structure": "88"
 },
 {
-    "departement": "91",
     "procedures": [
         15151,
         15149
-    ]
+    ],
+    "structure": "91"
 },
 {
-    "departement": "92",
     "procedures": [
         12828,
         12854
-    ]
+    ],
+    "structure": "92"
 },
 {
-    "departement": "93",
     "procedures": [
         16476,
         16478
-    ]
+    ],
+    "structure": "93"
 },
 {
-    "departement": "94",
     "procedures": [
         16073,
         16075
-    ]
+    ],
+    "structure": "94"
 },
 {
-    "departement": "95",
     "procedures": [
         12332,
         12345
-    ]
+    ],
+    "structure": "95"
 }]

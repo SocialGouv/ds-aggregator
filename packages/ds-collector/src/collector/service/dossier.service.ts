@@ -3,12 +3,12 @@ import { map, mergeMap } from "rxjs/operators";
 import { DSDossier, DSDossierItem } from "../../demarche-simplifiee";
 import { logger } from "../../util";
 import { asTimestamp } from "../../util/converter";
-import { DSDossierRecord } from "../model";
+import { DossierRecord } from "../model";
 import { dossierRepository } from "../repository";
 
 class DossierService {
 
-    public findOne(procedureId: string, dossierId: string): Observable<DSDossierRecord | null> {
+    public findOne(procedureId: string, dossierId: string): Observable<DossierRecord | null> {
         return dossierRepository.findByDSKey(this.getDSKey(procedureId, dossierId)).pipe(
             map((res) => {
                 if (res.length === 0) {
@@ -20,8 +20,11 @@ class DossierService {
     }
 
     public shouldBeUpdated(procedureId: string, dossier: DSDossierItem): Observable<boolean> {
+        if (!dossier.id) {
+            throw new Error('[DossierService.shouldBeUpdated] dossier id should not be null.');
+        }
         return dossierRepository.findByDSKey(this.getDSKey(procedureId, dossier.id)).pipe(
-            map((records: DSDossierRecord[]) => {
+            map((records: DossierRecord[]) => {
                 if (records.length === 0) {
                     return true;
                 }
@@ -37,12 +40,13 @@ class DossierService {
         )
     }
 
-    public saveOrUpdate(procedureId: string | number, dossier: DSDossier): Observable<DSDossierRecord> {
-        const wifDossier: DSDossierRecord = {
+    public saveOrUpdate(procedureId: string, dossier: DSDossier): Observable<DossierRecord> {
+        const wifDossier: DossierRecord = {
             ds_data: dossier,
             ds_key: `${procedureId}-${dossier.id}`,
             metadata: {
-                created_at: asTimestamp(dossier.created_at),
+                created_at: asTimestamp(dossier.created_at) || 0,
+                procedure_id: procedureId,
                 processed_at: asTimestamp(dossier.processed_at),
                 received_at: asTimestamp(dossier.received_at),
                 state: dossier.state,
@@ -50,12 +54,12 @@ class DossierService {
             }
         }
         return dossierRepository.findByDSKey(wifDossier.ds_key).pipe(
-            mergeMap((res: DSDossierRecord[]) => {
+            mergeMap((res: DossierRecord[]) => {
                 if (res.length === 0) {
                     logger.debug(`[WIFDSDossierService.saveOrUpdate] add dossier for ds_key ${wifDossier.ds_key}`)
                     return dossierRepository.add(wifDossier);
                 } else {
-                    const record: DSDossierRecord = res[0];
+                    const record: DossierRecord = res[0];
                     logger.debug(`[WIFDossierService.saveOrUpdate] update dossier for ds_key ${wifDossier.ds_key}`)
                     Object.assign(record, wifDossier);
                     return dossierRepository.update(record.id || '', record);
