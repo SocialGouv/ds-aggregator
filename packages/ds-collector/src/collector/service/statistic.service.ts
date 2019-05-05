@@ -10,11 +10,11 @@ import { dsProcedureConfigService } from "./ds-config.service";
 
 class StatisticService {
 
-    public statistic() {
-        dsProcedureConfigService.all().pipe(
+    public statistic(): Observable<any> {
+        return dsProcedureConfigService.all().pipe(
             flatMap(x => x),
             concatMap((x) => this.statisticByProcedure(x)),
-        ).subscribe();
+        );
     }
 
     private statisticByProcedure(param: ProcedureConfig) {

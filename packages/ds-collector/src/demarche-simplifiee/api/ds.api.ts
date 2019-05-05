@@ -1,7 +1,5 @@
-import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import * as handlers from 'typed-rest-client/Handlers';
-import * as rm from 'typed-rest-client/RestClient';
+import { Observable } from "rxjs";
+import { RestClient } from "../../lib/rest";
 import { configuration } from "../../util";
 import { DSDossier, DSDossierItem, DSProcedure } from "../model";
 
@@ -24,49 +22,22 @@ interface DSProcedureResult {
 
 class DemarcheSimplifieeAPI {
 
-    private dsAPI = configuration.dsAPI;
-    private token = configuration.dsToken || '';
-    private client: rm.RestClient;
+    private client: RestClient;
 
     constructor() {
-        const bearer = new handlers.BearerCredentialHandler(this.token);
-        this.client = new rm.RestClient('ds-api', this.dsAPI, [bearer], undefined);
+        this.client = new RestClient(configuration.dsAPI || '', configuration.dsToken || '');
     }
 
     public getDSProcedure(procedureId: string | number): Observable<DSProcedureResult> {
-        return from(this.client.get<any>(`/api/v1/procedures/${procedureId}`)).pipe(
-            map(this.handleResult<DSProcedureResult>('getDSProcedure'))
-        );
+        return this.client.get<any>(`/api/v1/procedures/${procedureId}`);
     }
 
     public getDSDossiers(procedureId: string | number, page: number, resultPerPage: number): Observable<DSDossierListResult> {
-        return from(this.client.get<DSDossierListResult>(`/api/v1/procedures/${procedureId}/dossiers?page=${page}&resultats_par_page=${resultPerPage}`)).pipe(
-            map(this.handleResult<DSDossierListResult>('getDSDossiers', {
-                dossiers: [], pagination: {
-                    "nombre_de_page": 0,
-                    "page": 0,
-                    "resultats_par_page": 0
-                }
-            })),
-        );
+        return this.client.get<DSDossierListResult>(`/api/v1/procedures/${procedureId}/dossiers?page=${page}&resultats_par_page=${resultPerPage}`);
     }
 
     public getDSDossier(procedureId: string | number, DSdossierId: string | number): Observable<DSDossierResult> {
-        return from(this.client.get<DSDossierResult>(`/api/v1/procedures/${procedureId}/dossiers/${DSdossierId}`)).pipe(
-            map(this.handleResult<DSDossierResult>('getDSDossier'))
-        );
-    }
-
-    private handleResult<T>(source: string, defaultValue?: T): (value: rm.IRestResponse<T>) => T {
-        return (res: rm.IRestResponse<T>) => {
-            if (res.result) {
-                return res.result;
-            }
-            if (defaultValue) {
-                return defaultValue;
-            }
-            throw new Error(`[DS-API.${source}] request result is null`);
-        };
+        return this.client.get<DSDossierResult>(`/api/v1/procedures/${procedureId}/dossiers/${DSdossierId}`);
     }
 
 }

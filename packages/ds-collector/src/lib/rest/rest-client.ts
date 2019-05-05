@@ -1,0 +1,56 @@
+
+import { from, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import * as handlers from 'typed-rest-client/Handlers';
+import * as rm from 'typed-rest-client/RestClient';
+import { logger } from '../../util';
+
+export class RestClient {
+    private client: rm.RestClient;
+
+    constructor(api: string, token?: string, credential?: { login: string, password: string }) {
+        if (token) {
+            const bearer = new handlers.BearerCredentialHandler(token);
+            this.client = new rm.RestClient('http-client', api, [bearer], undefined);
+        } else if (credential) {
+            const credentialHandler = new handlers.BasicCredentialHandler(credential.login, credential.password);
+            this.client = new rm.RestClient('http-client', api, [credentialHandler], undefined);
+        } else {
+            throw new Error("[RestClient] credential or token are required");
+        }
+    }
+
+    public get<T>(url: string): Observable<T> {
+        return from(this.client.get<any>(url)).pipe(
+            map(this.handleResult),
+            catchError(this.handleError)
+        );
+    }
+
+    public create<T>(url: string, data: any): Observable<T> {
+        return from(this.client.create<any>(url, data)).pipe(
+            map(this.handleResult),
+            catchError(this.handleError)
+        );
+    }
+
+    public update<T>(url: string, data: any): Observable<T> {
+        return from(this.client.update<any>(url, data)).pipe(
+            map(this.handleResult),
+            catchError(this.handleError),
+        );
+    }
+
+    private handleError(error: any): Observable<any> {
+        logger.error('[REST-CLIENT] error: ', error);
+        return of(`Bad Promise: ${error}`);
+    }
+
+    private handleResult(res: rm.IRestResponse<any>) {
+        if ([200, 201].includes(res.statusCode)) {
+            return res.result;
+        }
+        throw Error("");
+    }
+
+}

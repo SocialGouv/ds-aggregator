@@ -1,132 +1,134 @@
-import { interval, Observable } from "rxjs";
-import { concatMap, filter, flatMap, map, mergeMap, switchMap, tap } from "rxjs/operators";
-import { DossierRecord, dossierService, dsProcedureConfigService, procedureService, Record, Task, taskService } from "./collector";
-import { demarcheSimplifieeService, DSDossier, DSDossierItem, DSProcedure } from "./demarche-simplifiee";
+import { Observable, of } from "rxjs";
+import { concatMap, filter, flatMap, mergeMap, tap } from "rxjs/operators";
+import { DossierRecord, dossierService, dsProcedureConfigService, ProcedureRecord, procedureService, Task, taskService } from "./collector";
+import { statisticService } from "./collector/service/statistic.service";
+import { demarcheSimplifieeService, DSDossierItem, DSProcedure } from "./demarche-simplifiee";
 import { DossierListResult } from "./demarche-simplifiee/service/ds.service";
 import { logger } from "./util";
 import { asTimestamp } from "./util/converter";
 
 class SyncService {
 
-    public startHandleTaskToComplete(periodInMilliSecond: number) {
-        logger.info(`[SyncService.startHandleTaskToComplete] periodInMilliSecond: ${periodInMilliSecond}`)
-        interval(periodInMilliSecond).pipe(
-            tap(() => logger.info(`[SyncService.startHandleTaskToComplete] check if tasks must be processed`)),
-            switchMap(() => syncService.handleTasksToComplete())
+
+    public syncAllDossiers() {
+        this.allDossierItemInfos().pipe(
+            concatMap(res => this.syncDossier(res.procedureId, res.dossierId)),
+        ).subscribe(
+            {
+                complete: () => {
+                    logger.info(`[SyncService.syncAllDossiers] complete`);
+                    statisticService.statistic().subscribe();
+                },
+                error: (error: any) => {
+                    logger.error(`[SyncService.syncAllDossiers] error: `, error);
+                },
+                next: (next: DossierRecord) => {
+                    logger.info(`[SyncService.syncAllDossiers] record with ds_id ${next.ds_key} synchronised`);
+                }
+            }
+        )
+    }
+
+    public handleTaskToComplete() {
+        this.allTasksToComplete().pipe(
+            concatMap(this.syncDossierAndCompleteTask),
         ).subscribe({
             complete: () => {
-                logger.info(`[SyncService.startHandleTaskToComplete] tasks with success`)
+                logger.info(`[SyncService.handleTaskToCompletes] tasks with success`);
+                statisticService.statistic().subscribe();
             },
             error: (error: any) => {
-                logger.error(`[SyncService.startHandleTaskToComplete] error: `, error)
+                logger.error(`[SyncService.handleTaskToCompletes] error: `, error);
             },
             next: (next: Task) => {
-                logger.info(`[SyncService.startHandleTaskToComplete] task completed: ${next.procedure_id}-${next.dossier_id}`)
-                logger.debug(`[SyncService.startHandleTaskToComplete] task completed: `, next)
+                logger.info(`[SyncService.handleTaskToCompletes] task ${next.procedure_id}-${next.dossier_id} completed`);
             }
         })
     }
 
-    public syncAll() {
-        dsProcedureConfigService.all().pipe(
+    private allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
+        return dsProcedureConfigService.all().pipe(
             flatMap(x => x),
             flatMap(x => x.procedures),
-            concatMap((res) => {
-                logger.info(`[SyncService.syncAll] start procedure #${res}]`);
-                return this.updateProcedure(res);
-            }), 
-        ).subscribe({
-            complete: () => {
-                logger.info(`[SyncService.syncAll] success`)
-            },
-            error: (error: any) => {
-                logger.error(`[SyncService.syncAll] error: `, error)
-            },
-            next: (next: Record<DSDossier>) => {
-                logger.info(`[SyncService.syncAll] dossier ${next.ds_key} synchronized`)
-            }
-        })
+            concatMap(demarcheSimplifieeService.getDSProcedure),
+            tap(res => logger.info(`[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${res.total_dossier} dossiers`))
+        )
     }
 
-    private handleTasksToComplete(): Observable<Task> {
+    private syncProcedures(): Observable<ProcedureRecord> {
+        return this.allDemarcheSimlifieeProcedures().pipe(
+            concatMap(procedureService.saveOrUpdate),
+        )
+    }
+
+    private allDemarcheSimplifieeDossierItems(): Observable<DossierItemInfo> {
+        return this.syncProcedures().pipe(
+            flatMap(this.buildPages),
+            concatMap(pageOption => demarcheSimplifieeService.getDSDossiers(pageOption.procedureId, pageOption.page, pageOption.resultPerPage)),
+            flatMap(res => res.dossiers, (res, dossier) => this.buildDossierUpdateInfo(res, dossier)),
+        )
+    }
+
+    private allDossierItemInfos(): Observable<DossierItemInfo> {
+        return this.allDemarcheSimplifieeDossierItems().pipe(
+            concatMap((res: DossierItemInfo) => dossierService.findOne(res.procedureId, res.dossierId)
+                , (outer: DossierItemInfo, inner: DossierRecord | null) => { outer.record = inner; return outer; }),
+            filter(this.shouldBeUpdated),
+            tap((res) => logger.info(`[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${res.dossierId} will be synchronised`))
+        )
+    }
+
+    private allTasksToComplete(): Observable<Task> {
         return taskService.getTasksToComplete().pipe(
-            flatMap(x => x),
-            concatMap((task) => this.updateDossier(task.procedure_id, task.dossier_id), (task, dossier) => ({ task, dossier })),
-            switchMap(({ task }) => taskService.markAsCompleted(task))
+            flatMap(x => x)
         );
     }
 
+    private buildPages(res: ProcedureRecord): PageOption[] {
+        const resultPerPage = 500;
+        const maxPageNumber = Math.ceil(res.ds_data.total_dossier / resultPerPage);
+        const result: PageOption[] = [];
 
-    private updateDossier(procedureId: string, dossierId: string): Observable<Record<DSDossier>> {
+        for (let page = 1; page <= maxPageNumber; page++) {
+            logger.debug(`[SyncService.buildPages] procedure #${res.ds_data.id} - add params: page ${page} / ${maxPageNumber}, resultPerPage ${resultPerPage}`)
+            result.push({ procedureId: res.ds_data.id || '', resultPerPage, page });
+        }
+        return result;
+    }
+
+    private syncDossier(procedureId: string, dossierId: string): Observable<DossierRecord> {
         return demarcheSimplifieeService.getDSDossier(procedureId, dossierId).pipe(
-            switchMap((res: { dossier: DSDossier, procedureId: string }) => dossierService.saveOrUpdate(res.procedureId, res.dossier)
-                , (outer, dossier) => ({ dossier, procedureId: outer.procedureId })),
-            map((res) => res.dossier)
+            mergeMap((dsDossier) => dossierService.saveOrUpdate(dsDossier.procedureId, dsDossier.dossier))
         );
     }
 
-
-    private updateDossiers(procedureId: string, page: number, resultPerPage: number): Observable<Record<DSDossier>> {
-        return demarcheSimplifieeService.getDSDossiers(procedureId, page, resultPerPage).pipe(
-            flatMap(res => {
-                logger.debug(`[SyncService.updateDossiers] procedure #${res.procedureId} - page ${page} / resultPerPage ${resultPerPage}: ${res.dossiers.length} dossiers`);
-                return res.dossiers;
-            }, (res, dossier) => this.buildDossierUpdateInfo(res, dossier)),
-            mergeMap((res: DossierUpdateInfo<DSDossierItem>) => dossierService.findOne(res.procedureId, res.dossierId)
-                , (outer: DossierUpdateInfo<DSDossierItem>, inner: DossierRecord | null) => this.updateDossierUpdateInfo(outer, inner)),
-            filter((res: DossierUpdateInfo<DossierRecord>) => {
-                const updated = this.shouldBeUpdated(res)
-                logger.info(`[SyncService.updateDossiers] procedure #${res.procedureId} > dossier ${res.dossierId} update ${updated}`);
-                return updated;
-            }),
-            concatMap((res: DossierUpdateInfo<DossierRecord>) => this.updateDossier(res.procedureId, res.dossierId || ''))
+    private syncDossierAndCompleteTask(task: Task) {
+        return of(task).pipe(
+            mergeMap((t: Task) => this.syncDossier(t.procedure_id, t.dossier_id), (outer, inner) => ({ task: outer, dossier: inner })),
+            mergeMap(res => taskService.markAsCompleted(res.task))
         );
     }
 
-    private buildDossierUpdateInfo(res: DossierListResult, dossier: DSDossierItem): DossierUpdateInfo<DSDossierItem> {
+    private buildDossierUpdateInfo(res: DossierListResult, dossier: DSDossierItem): DossierItemInfo {
         if (!dossier.id) {
             throw new Error('id should not be null.');
         }
-        return { procedureId: res.procedureId, dossierId: dossier.id, updatedDate: asTimestamp(dossier.updated_at) || 0, data: dossier };
+        return { procedureId: res.procedureId, dossierId: dossier.id, updatedDate: asTimestamp(dossier.updated_at) || 0 };
     }
 
-    private updateDossierUpdateInfo(outer: DossierUpdateInfo<DSDossierItem>, inner: DossierRecord | null): DossierUpdateInfo<DossierRecord> {
-        return { procedureId: outer.procedureId, dossierId: outer.dossierId, updatedDate: outer.updatedDate, data: inner };
-    }
 
-    private shouldBeUpdated(res: DossierUpdateInfo<DossierRecord>): boolean {
-        if (!res.data) {
+    private shouldBeUpdated(res: DossierItemInfo): boolean {
+        if (!res.record) {
             return true;
-        } if (!res.data.metadata.updated_at) {
+        } if (!res.record.metadata.updated_at) {
             return true;
         }
-        logger.debug(`[SyncService.shouldBeUpdated] updatedDate: DS ${res.updatedDate} - KINTO ${res.data.metadata.updated_at}`);
-        return res.updatedDate > res.data.metadata.updated_at;
+        return res.updatedDate > res.record.metadata.updated_at;
     }
-
-    private updateProcedure(procedureId: string): Observable<Record<DSDossier>> {
-        return demarcheSimplifieeService.getDSProcedure(procedureId).pipe(
-            tap((res) => logger.info(`[SyncService.updateProcedure] procedure #${res.id} dossier number ${res.total_dossier}`)),
-            switchMap((res: DSProcedure) => procedureService.saveOrUpdate(res)),
-            tap((res: Record<DSProcedure>) => logger.debug(`[SyncService.updateProcedure] procedure #${res.ds_data.id} - created / updated into KINTO with id ${res.id}`)),
-            flatMap((res: Record<DSProcedure>) => {
-                const resultPerPage = 500;
-                const maxPageNumber = Math.ceil(res.ds_data.total_dossier / resultPerPage);
-                const result = [];
-
-                for (let page = 1; page <= maxPageNumber; page++) {
-                    logger.debug(`[SyncService.updateProcedure] procedure #${res.ds_data.id} - add params: page ${page} / ${maxPageNumber}, resultPerPage ${resultPerPage}`)
-                    result.push({ procedureId: res.ds_data.id, resultPerPage, page });
-                }
-                return result;
-            }),
-            concatMap((res) => this.updateDossiers(res.procedureId || '', res.page, res.resultPerPage))
-        );
-    };
 
 }
 
-
-interface DossierUpdateInfo<T> { procedureId: string, dossierId: string, updatedDate: number, data: T | null }
+interface PageOption { procedureId: string, resultPerPage: number, page: number }
+interface DossierItemInfo { procedureId: string, dossierId: string, updatedDate: number, record?: DossierRecord | null }
 
 export const syncService = new SyncService();
