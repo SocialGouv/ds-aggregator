@@ -14,7 +14,6 @@ if (process.env.NODE_ENV !== 'development') {
 interval(configuration.taskSchedulerPeriod).subscribe(
     () => syncService.handleTaskToComplete()
 );
-syncService.syncAllDossiers();
 
 const app = new Koa();
 

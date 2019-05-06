@@ -1,5 +1,5 @@
-import { Observable, of } from "rxjs";
-import { concatMap, filter, flatMap, mergeMap, tap } from "rxjs/operators";
+import { Observable, of, Subject } from "rxjs";
+import { concatMap, exhaustMap, filter, flatMap, mergeMap, tap } from "rxjs/operators";
 import { DossierRecord, dossierService, dsProcedureConfigService, ProcedureRecord, procedureService, Task, taskService } from "./collector";
 import { statisticService } from "./collector/service/statistic.service";
 import { demarcheSimplifieeService, DSDossierItem, DSProcedure } from "./demarche-simplifiee";
@@ -9,15 +9,61 @@ import { asTimestamp } from "./util/converter";
 
 class SyncService {
 
+    private refreshStatistics$ = new Subject();
+    private syncAllDossiers$ = new Subject();
 
-    public syncAllDossiers() {
-        this.allDossierItemInfos().pipe(
-            concatMap(res => this.syncDossier(res.procedureId, res.dossierId)),
+    constructor() {
+        this.initRefreshStatistics();
+        this.initDossiersSynchronisation();
+    }
+
+    public launchGlobalSynchronisation() {
+        this.syncAllDossiers$.next();
+    }
+
+    public launchStatisticsComputation() {
+        this.refreshStatistics$.next();
+    }
+
+    public handleTaskToComplete() {
+        this.allTasksToComplete().pipe(
+            concatMap(this.syncDossierAndCompleteTask),
+        ).subscribe({
+            complete: () => {
+                logger.info(`[SyncService.handleTaskToCompletes] tasks with success`);
+                this.refreshStatistics$.next();
+            },
+            error: (error: any) => {
+                logger.error(`[SyncService.handleTaskToCompletes] error: `, error);
+            },
+            next: (next: Task) => {
+                logger.info(`[SyncService.handleTaskToCompletes] task ${next.procedure_id}-${next.dossier_id} completed`);
+            }
+        })
+    }
+
+    private initRefreshStatistics() {
+        this.refreshStatistics$.pipe(
+            exhaustMap(() => statisticService.statistic())
+        ).subscribe({
+            complete: () => {
+                logger.info(`[SyncService.statistics] statistics refreshed`);
+                this.refreshStatistics$.next();
+            },
+            error: (error: any) => {
+                logger.error(`[SyncService.statistics] error: `, error);
+            }
+        });
+    }
+
+    private initDossiersSynchronisation() {
+        this.syncAllDossiers$.pipe(
+            exhaustMap(_ => this.syncDossiers())
         ).subscribe(
             {
                 complete: () => {
                     logger.info(`[SyncService.syncAllDossiers] complete`);
-                    statisticService.statistic().subscribe();
+                    this.refreshStatistics$.next();
                 },
                 error: (error: any) => {
                     logger.error(`[SyncService.syncAllDossiers] error: `, error);
@@ -29,21 +75,16 @@ class SyncService {
         )
     }
 
-    public handleTaskToComplete() {
-        this.allTasksToComplete().pipe(
-            concatMap(this.syncDossierAndCompleteTask),
-        ).subscribe({
-            complete: () => {
-                logger.info(`[SyncService.handleTaskToCompletes] tasks with success`);
-                statisticService.statistic().subscribe();
-            },
-            error: (error: any) => {
-                logger.error(`[SyncService.handleTaskToCompletes] error: `, error);
-            },
-            next: (next: Task) => {
-                logger.info(`[SyncService.handleTaskToCompletes] task ${next.procedure_id}-${next.dossier_id} completed`);
-            }
-        })
+    private syncDossiers(): Observable<DossierRecord> {
+        return this.allDossierItemInfos().pipe(
+            concatMap(res => this.syncDossier(res.procedureId, res.dossierId)),
+        );
+    }
+
+    private syncProcedures(): Observable<ProcedureRecord> {
+        return this.allDemarcheSimlifieeProcedures().pipe(
+            concatMap(procedureService.saveOrUpdate),
+        )
     }
 
     private allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
@@ -52,12 +93,6 @@ class SyncService {
             flatMap(x => x.procedures),
             concatMap(demarcheSimplifieeService.getDSProcedure),
             tap(res => logger.info(`[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${res.total_dossier} dossiers`))
-        )
-    }
-
-    private syncProcedures(): Observable<ProcedureRecord> {
-        return this.allDemarcheSimlifieeProcedures().pipe(
-            concatMap(procedureService.saveOrUpdate),
         )
     }
 

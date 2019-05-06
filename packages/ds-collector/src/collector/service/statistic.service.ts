@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { concatMap, flatMap, map, mergeMap, switchMap } from "rxjs/operators";
+import { concatMap, flatMap, map, mergeMap, switchMap, tap } from "rxjs/operators";
 import { DossierStateType } from "../../demarche-simplifiee";
 import { logger } from "../../util";
 import { DossierRecord, ProcedureConfig } from "../model";
@@ -32,7 +32,7 @@ class StatisticService {
                     const receivedAt = current.metadata.received_at;
                     const processedAt = current.metadata.processed_at;
 
-                    const generalBlock = acc.result;
+                    const generalBlock = acc;
 
                     this.incrementStatus(generalBlock, 'initiated');
                     this.incrementMonthlyStatus(acc, createdAt, 'initiated');
@@ -105,10 +105,10 @@ class StatisticService {
 
     private getMonthlyStatistic(stat: Statistic, timestamp: number) {
         const monthKey = this.getMonthKey(timestamp);
-        let monthStat = stat.result.monthly[monthKey];
+        let monthStat = stat.monthly[monthKey];
         if (!monthStat) {
             monthStat = initStatisticBlock();
-            stat.result.monthly[monthKey] = monthStat;
+            stat.monthly[monthKey] = monthStat;
         }
         return monthStat;
     }
