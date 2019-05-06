@@ -22,8 +22,8 @@ class StatisticRepository {
         return this.collection.update(id, stat);
     }
 
-    public findByStructure(structure: string): Observable<Statistic[]> {
-        return this.collection.search(`result.structure="${structure}"`);
+    public findByGroupId(groupId: string): Observable<Statistic[]> {
+        return this.collection.search(`group.id="${groupId}"`);
     }
 
 }

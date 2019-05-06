@@ -33,131 +33,207 @@ const devConfigs: ProcedureConfig[] = [{
         12858,
         12859
     ],
-    "structure": "13"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "13",
+        label: "13 - Bouches du Rhône"
+    }
 },
 {
     "procedures": [
         17197,
         17198
     ],
-    "structure": "35"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "35",
+        label: "35 - Ille-et-Vilaine"
+    }
 },
 {
     "procedures": [
         16517,
         16520
     ],
-    "structure": "42"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "42",
+        label: "42 - Loire"
+    }
 },
 {
     "procedures": [
         11959,
         11968
     ],
-    "structure": "45"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "45",
+        label: "45 - Loiret"
+    }
 },
 {
     "procedures": [
         15700,
         15705
     ],
-    "structure": "54"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "54",
+        label: "54 - Meurthe-et-Moselle"
+    }
 },
 {
     "procedures": [
         16590,
         16592
     ],
-    "structure": "55"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "55",
+        label: "55 - Meuse"
+    }
 },
 {
     "procedures": [
         15749,
         15750
     ],
-    "structure": "57"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "57",
+        label: "57 - Moselle"
+    }
 },
 {
     "procedures": [
         15751,
         15752
     ],
-    "structure": "67"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "67",
+        label: "67 - Bas-Rhin"
+    }
 },
 {
     "procedures": [
         6274,
         6286
     ],
-    "structure": "69"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "69",
+        label: "69 - Rhône"
+    }
 },
 {
     "procedures": [
         14131,
         13760
     ],
-    "structure": "75"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "75",
+        label: "75 - Paris"
+    }
 },
 {
     "procedures": [
         13093,
         13094
     ],
-    "structure": "76"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "76",
+        label: "76 - Seine Maritime"
+    }
 },
 {
     "procedures": [
         12023,
         12101
     ],
-    "structure": "77"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "77",
+        label: "77 - Seine et marne"
+    }
 },
 {
     "procedures": [
         15275,
         15276
     ],
-    "structure": "78"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "78",
+        label: "78 - Yvelines"
+    }
 },
 {
     "procedures": [
         15747,
         15748
     ],
-    "structure": "88"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "88",
+        label: "88 - Vosges"
+    }
 },
 {
     "procedures": [
         15151,
         15149
     ],
-    "structure": "91"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "91",
+        label: "91 - Essonne"
+    }
 },
 {
     "procedures": [
         12828,
         12854
     ],
-    "structure": "92"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "92",
+        label: "92 - Hauts de Seine"
+    }
 },
 {
     "procedures": [
         16476,
         16478
     ],
-    "structure": "93"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "93",
+        label: "93 - Seine-Saint-Denis"
+    }
 },
 {
     "procedures": [
         16073,
         16075
     ],
-    "structure": "94"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "94",
+        label: "94 - Val de Marne"
+    }
 },
 {
     "procedures": [
         12332,
         12345
     ],
-    "structure": "95"
+    // tslint:disable-next-line: object-literal-sort-keys
+    "group": {
+        id: "95",
+        label: "95 - Val-d'Oise"
+    }
 }]

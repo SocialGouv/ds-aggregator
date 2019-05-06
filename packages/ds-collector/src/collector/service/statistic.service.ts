@@ -10,9 +10,16 @@ import { dsProcedureConfigService } from "./ds-config.service";
 
 class StatisticService {
 
+    public findByGroupId(groupId: string): Observable<Statistic> {
+        return statisticRepository.findByGroupId(groupId).pipe(
+            map(res => res[0])
+        );
+    }
+
     public statistic(): Observable<any> {
         return dsProcedureConfigService.all().pipe(
             flatMap(x => x),
+            tap(res => logger.info(`[StatisticService.statistic] Refresh stats for group ${res.group.id}`)),
             concatMap((x) => this.statisticByProcedure(x)),
         );
     }
@@ -47,7 +54,7 @@ class StatisticService {
                     }
 
                     return acc;
-                }, initStatistic(param.structure))
+                }, initStatistic(param.group))
             }),
             switchMap((stat) => {
                 return this.saveOrUpdate(stat);
@@ -56,15 +63,15 @@ class StatisticService {
     }
 
     private saveOrUpdate(stat: Statistic): Observable<Statistic> {
-        return statisticRepository.findByStructure(stat.result.structure).pipe(
+        return statisticRepository.findByGroupId(stat.group.id).pipe(
             mergeMap((res: Statistic[]) => {
                 if (res.length === 0) {
-                    logger.debug(`[StatisticService.saveOrUpdate] no record for structure ${stat.result.structure}`)
+                    logger.debug(`[StatisticService.saveOrUpdate] no record for structure ${stat.group.id}`)
                     return statisticRepository.add(stat);
                 } else {
                     const record: Statistic = res[0];
                     Object.assign(record, stat);
-                    logger.debug(`[StatisticService.saveOrUpdate] record found for structure ${stat.result.structure} id#${record.id}`)
+                    logger.debug(`[StatisticService.saveOrUpdate] record found for structure ${stat.group.id} id#${record.id}`)
                     return statisticRepository.update(record.id || '', record);
                 }
             })

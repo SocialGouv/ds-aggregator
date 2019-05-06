@@ -22,15 +22,16 @@ export interface StatisticBlock {
 }
 
 export interface Statistic extends IIdentifiable {
-    result: {
-        structure: string;
-        count: number;
-        duration: number;
-        durations: number[],
-        status: DossierStatesCount;
-        monthly: {
-            [month: string]: StatisticBlock
-        }
+    group: {
+        id: string;
+        label: string;
+    }
+    count: number;
+    duration: number;
+    durations: number[],
+    status: DossierStatesCount;
+    monthly: {
+        [month: string]: StatisticBlock
     }
     // daily: {
     //     [day: string]: {
@@ -55,15 +56,16 @@ export interface Statistic extends IIdentifiable {
 
 // Répartition des dossiers par statut => data.status
 
-export const initStatistic = (structure: string) => {
+export const initStatistic = (group: {
+    id: string;
+    label: string;
+}) => {
     const block = initStatisticBlock();
     return {
-        result: {
-            structure,
-            // tslint:disable-next-line: object-literal-sort-keys
-            ...block,
-            monthly: {}
-        }
+        group,
+        // tslint:disable-next-line: object-literal-sort-keys
+        ...block,
+        monthly: {}
     }
 }
 

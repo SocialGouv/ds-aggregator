@@ -1,4 +1,7 @@
 export interface ProcedureConfig {
     procedures: any[];
-    structure: string;
+    group: {
+        id: string;
+        label: string;
+    }
 }
