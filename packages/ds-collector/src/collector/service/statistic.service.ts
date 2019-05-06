@@ -1,12 +1,14 @@
+import { differenceInDays, format } from "date-fns";
 import { Observable } from "rxjs";
 import { concatMap, flatMap, map, mergeMap, switchMap, tap } from "rxjs/operators";
-import { DossierStateType } from "../../demarche-simplifiee";
+import { DSDossier } from "../../demarche-simplifiee";
 import { logger } from "../../util";
 import { DossierRecord, ProcedureConfig } from "../model";
 import { DossierStatesCount, initStatistic, initStatisticBlock, Statistic } from "../model/statistic.model";
 import { dossierRepository, statisticRepository } from "../repository";
 import { dsProcedureConfigService } from "./ds-config.service";
 
+const DS_STATUSES_COMPLETED = ["closed", "refused", "without_continuation"];
 
 class StatisticService {
 
@@ -28,29 +30,22 @@ class StatisticService {
         return dossierRepository.findAllByProcedureIn(param.procedures).pipe(
             map((dossiers: DossierRecord[]) => {
                 return dossiers.reduce((acc: Statistic, current) => {
-                    const createdAt = current.metadata.created_at;
-                    const receivedAt = current.metadata.received_at;
-                    const processedAt = current.metadata.processed_at;
+                    const dossier = current.ds_data;
+                    const state = current.metadata.state;
 
-                    const generalBlock = acc;
+                    const monthlyStat = this.getMonthlyStatistic(acc, new Date(dossier.created_at));
 
-                    this.incrementStatus(generalBlock, 'initiated');
-                    this.incrementMonthlyStatus(acc, createdAt, 'initiated');
+                    acc.count++;
+                    acc.status[state].count++;
 
-                    if (receivedAt) {
-                        this.incrementStatus(generalBlock, 'received');
-                        this.incrementMonthlyStatus(acc, receivedAt, 'received');
-                    }
+                    monthlyStat.count++;
+                    monthlyStat.status[state].count++;
 
-                    if (processedAt) {
-                        this.incrementStatus(generalBlock, current.metadata.state);
-                        this.incrementMonthlyStatus(acc, processedAt, current.metadata.state);
+                    if (DS_STATUSES_COMPLETED.indexOf(dossier.state) > -1) {
+                        const delayInDays = computeDuration(dossier);
 
-                        const delayInDays = diffIndays(createdAt, processedAt);
-                        this.updateDuration(generalBlock, delayInDays);
-                        const monthlyStatistic = this.getMonthlyStatistic(acc, processedAt);
-                        this.updateDuration(monthlyStatistic, delayInDays);
-
+                        this.updateDuration(acc, delayInDays);
+                        this.updateDuration(monthlyStat, delayInDays);
                     }
 
                     return acc;
@@ -79,32 +74,14 @@ class StatisticService {
     }
 
     private updateDuration(param: { duration: number, durations: number[], status: DossierStatesCount }, delayInDays: number) {
-        const durationsNb = param.durations.length || 0;
-
-        param.durations.push(delayInDays);
+        const durationsNb = param.durations.length;
         param.duration = (param.duration * durationsNb + delayInDays) / (durationsNb + 1);
+        param.durations.push(delayInDays);
 
     }
 
-    private incrementStatus(param: { count: number, status: DossierStatesCount }, state: DossierStateType) {
-        param.status[state].count++;
-        param.count++;
-    }
-
-    private incrementMonthlyStatus(acc: Statistic, at: number, stateType: DossierStateType) {
-        const stat = this.getMonthlyStatistic(acc, at);
-        this.incrementStatus(stat, stateType);
-    }
-
-    private getMonthKey(timestamp: number) {
-        const date = new Date(timestamp);
-        const year = date.getFullYear();
-        const month = date.getMonth().toString().padStart(2, "0");
-        return `${year}-${month}`;
-    }
-
-    private getMonthlyStatistic(stat: Statistic, timestamp: number) {
-        const monthKey = this.getMonthKey(timestamp);
+    private getMonthlyStatistic(stat: Statistic, date: Date) {
+        const monthKey = format(date, "YYYY-MM");
         let monthStat = stat.monthly[monthKey];
         if (!monthStat) {
             monthStat = initStatisticBlock();
@@ -117,8 +94,7 @@ class StatisticService {
 
 export const statisticService = new StatisticService();
 
-const diffIndays = (createdAt: number, processedAt: number) => {
-    return Math.round(processedAt - createdAt) / (1000 * 60 * 60 * 24);
-}
+// compute some dossier duration in days
+const computeDuration = (dossier: DSDossier) => differenceInDays(dossier.processed_at, dossier.created_at);
 
 

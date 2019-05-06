@@ -6,12 +6,7 @@ export interface LabelCount {
 }
 
 export interface DossierStatesCount {
-    draft: LabelCount;
-    initiated: LabelCount;
-    received: LabelCount;
-    closed: LabelCount;
-    refused: LabelCount;
-    without_continuation: LabelCount;
+    [state: string]: LabelCount
 }
 
 export interface StatisticBlock {
