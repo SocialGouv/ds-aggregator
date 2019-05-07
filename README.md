@@ -4,7 +4,7 @@
 
 pour lancer le projet en développement:
 
-1. démarrer et configurer `kinto`
+*démarrer et configurer `kinto`*
 
 ```bash
 cd ./kinto
@@ -20,8 +20,9 @@ l'interface d'administation de kinto est accessible à l'adresse suivante `http:
 - Compte `admin`: admin / passw0rd
 - Compte `ds-collector`: ds-collector / W0rkInFranceND
 
-ajouter un ou plusieurs `record` dans la `collection` `ds_configs`.:
-``json
+ajouter un ou plusieurs `record` dans la `collection` `ds_configs`:
+
+```json
 {
     "procedures": [12858,12859],
     "group": {"id": "13","label": "13 - Bouches du Rhône"}
@@ -30,7 +31,7 @@ ajouter un ou plusieurs `record` dans la `collection` `ds_configs`.:
 
 La liste des configurations possible est listée dans `ds-config.json`.
 
-2. démarrer et configurer `ds-collector`
+*démarrer et configurer `ds-collector`*
 
 configurer `ds-collector`
 
@@ -47,7 +48,7 @@ lancer `ds-collector`
 yarn dev
 ```
 
-3. appeler les API de `ds-collector:`
+*appeler les API de `ds-collector`*
 
 lancer une synchronisation globale:
 
