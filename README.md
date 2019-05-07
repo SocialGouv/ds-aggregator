@@ -1,40 +1,86 @@
-# Documentation
+# ds-collector
 
-- [Présentation du projet](https://htmlpreview.github.io/?https://github.com/SocialGouv/ds-aggregator/blob/master/project-presentation.html)
-- [API démarche simplifiée](https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/api)
+## développement
 
-## Procédure de test
- 
- - https://www.demarches-simplifiees.fr/procedures/9407
- - Procédure: 9407
- - Token: ********************
+pour lancer le projet en développement:
 
-## données de test
+1. démarrer et configurer `kinto`
 
-- [Exemple de fichier extrait via l’API DS pour une démarche WIF](./example/example.json)
-- [Example de données pour la validation d'une demande](./example/validity.json)
-- [Example de données pour les statistiques](./example/stat.json)
+```bash
+cd ./kinto
 
-# Kinto
+# run kinto in docker
+docker-compose up -d
 
-[Kinto](./kinto/kinto.md)
+# configure kinto (launch only the first time)
+./setup-kinto.sh
+```
 
-# Synchronisation
+l'interface d'administation de kinto est accessible à l'adresse suivante `http://localhost:8888/v1/admin`:
+- Compte `admin`: admin / passw0rd
+- Compte `ds-collector`: ds-collector / W0rkInFranceND
 
-Pour ajouter une procédure de démarche simplifiée à synchroniser:
-- ajouter l'identifiant de la procédure dans la variable `DS_PROCEDURE_IDS` du fichier `.env`, puis redémarrer l'application.
-- dans l'espace administrateur de la nouvelle démarche simplifiée, configurer l'URL du [web hook](https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/webhook): `api/ds-webhook-${.env.DS_WEBHOOK_KEY}`
+ajouter un ou plusieurs `record` dans la `collection` `ds_configs`.:
+``json
+{
+    "procedures": [12858,12859],
+    "group": {"id": "13","label": "13 - Bouches du Rhône"}
+}
+```
 
-## Au démarrage
+La liste des configurations possible est listée dans `ds-config.json`.
 
-Au lancement de l'application, l'application synchronise l'ensemble des dossiers des procédures déclarées dans la variable `DS_PROCEDURE_IDS` du fichier `.env`.
+2. démarrer et configurer `ds-collector`
 
+configurer `ds-collector`
 
-## WebHook
+```bash
+cd ./packages/ds-collector
+cp env.sample .env
+```
 
-A chaque changement d'état dun dossier d'une procédure, dont l'URL du [web hook](https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/webhook) a été configuré, l'application ajoute un `record` dans la collection kinto `tasks`.
+modifier les paramètres de `.env`
 
-Un scheduler dont la fréquence est configurable avec la variable `TASK_SCHEDULER_PERIOD` du fichier `.env` traite synchronise les dossiers ajoutés à cette collection. Après syncrhonisation, le `record` correspondant est marqué comme `completed`.
+lancer `ds-collector`
+
+```bash
+yarn dev
+```
+
+3. appeler les API de `ds-collector:`
+
+lancer une synchronisation globale:
+
+```bash
+curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/sync-all
+```
+
+après la synchronisation, lancer le calcul des statistiques
+```bash
+curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/refresh-stats
+```
+
+récupération des statistiques pour un groupe:
+ ```bash
+curl -X GET http://localhost:1337/api/statistics/13
+```
+
+## Description
+
+### kinto
+
+- deux comptes: `admin`, `ds-collector`
+- un groupe `system` dont `ds-collector` est membre
+- une bucket `ds_collector` avec 4 collections:
+
+|Collection     |Description                                            | Modèle                                    |
+|---------------|-------------------------------------------------------|-------------------------------------------|
+|`ds_configs    | configuration des démarches simplifiées à synchoniser | `src/collector/model/config.model.ts`     |
+|`procedures`   | procédures synchronisées                              | `src/collector/model/record.model.ts`     |
+|`dossiers`     | dossiers synchronisés                                 | `src/collector/model/record.model.ts`     |
+|`tasks`        | liste des dossiers à synchroniser                     | `src/collector/model/task.model.ts`       |
+|`statistics`   | statistique par `ds_configs`                          | `src/collector/model/statistic.model.ts`  |
+
 
 
 

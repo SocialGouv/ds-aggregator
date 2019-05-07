@@ -12,7 +12,7 @@ const routeOptions: Router.IRouterOptions = {
 const router = new Router(routeOptions);
 
 // https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/webhook
-router.post(`/${configuration.dsWebHookKey}/webhook`, async (ctx: Koa.Context) => {
+router.post(`/${configuration.apiPrefix}/webhook`, async (ctx: Koa.Context) => {
     const procedureId = ctx.query.procedure_id;
     const dossierId = ctx.query.dossier_id;
     const state = ctx.query.state;
@@ -25,14 +25,14 @@ router.post(`/${configuration.dsWebHookKey}/webhook`, async (ctx: Koa.Context) =
 });
 
 // launch global synchronisation
-router.post(`/${configuration.dsWebHookKey}/sync-all`, (ctx: Koa.Context) => {
+router.post(`/${configuration.apiPrefix}/sync-all`, (ctx: Koa.Context) => {
     syncService.launchGlobalSynchronisation();
     ctx.status = 200;
     ctx.message = "Global synchonisation launched"
 });
 
 // launch global synchronisation
-router.post(`/${configuration.dsWebHookKey}/refresh-stats`, (ctx: Koa.Context) => {
+router.post(`/${configuration.apiPrefix}/refresh-stats`, (ctx: Koa.Context) => {
     syncService.launchStatisticsComputation();
     ctx.status = 200;
     ctx.message = "Statistics computation launched"

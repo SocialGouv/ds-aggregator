@@ -1,10 +1,5 @@
 #!/bin/bash
 
-docker-compose up -d
-
-echo "sleep 10: waiting for container ready" ;
-sleep 10
-
 # create the admin account
 
 curl -X PUT http://localhost:8888/v1/accounts/admin \
