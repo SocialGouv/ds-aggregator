@@ -78,11 +78,14 @@ Pour visualiser les statistiques dans `ds-dahsboard`, utiliser les API `/api/sta
 
 |Collection     |Description                                            | Modèle                                    |
 |---------------|-------------------------------------------------------|-------------------------------------------|
-|`ds_configs    | configuration des démarches simplifiées à synchoniser | `src/collector/model/config.model.ts`     |
+|`ds_configs`    | configuration des démarches simplifiées à synchoniser | `src/collector/model/config.model.ts`     |
 |`procedures`   | procédures synchronisées                              | `src/collector/model/record.model.ts`     |
 |`dossiers`     | dossiers synchronisés                                 | `src/collector/model/record.model.ts`     |
 |`tasks`        | liste des dossiers à synchroniser                     | `src/collector/model/task.model.ts`       |
 |`statistics`   | statistique par `ds_configs`                          | `src/collector/model/statistic.model.ts`  |
+
+
+
 
 
 
