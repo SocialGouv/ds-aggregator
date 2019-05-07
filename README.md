@@ -66,6 +66,8 @@ récupération des statistiques pour un groupe:
 curl -X GET http://localhost:1337/api/statistics/13
 ```
 
+Pour visualiser les statistiques dans `ds-dahsboard`, utiliser les API `/api/statitics/${groupeId}`
+
 ## Description
 
 ### kinto
