@@ -58,12 +58,12 @@ class SyncService {
 
     private initDossiersSynchronisation() {
         this.syncAllDossiers$.pipe(
-            exhaustMap(_ => this.syncDossiers())
+            exhaustMap(_ => this.syncDossiers()),
+            tap(() => this.refreshStatistics$.next())
         ).subscribe(
             {
                 complete: () => {
                     logger.info(`[SyncService.syncAllDossiers] complete`);
-                    this.refreshStatistics$.next();
                 },
                 error: (error: any) => {
                     logger.error(`[SyncService.syncAllDossiers] error: `, error);
