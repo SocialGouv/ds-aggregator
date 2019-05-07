@@ -56,7 +56,7 @@ lancer une synchronisation globale:
 curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/sync-all
 ```
 
-après la synchronisation, lancer le calcul des statistiques
+lancer le calcul des statistiques (il est lancé automatiquement après une synchronisation globale)
 ```bash
 curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/refresh-stats
 ```
