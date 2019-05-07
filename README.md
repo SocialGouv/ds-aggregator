@@ -1,6 +1,10 @@
-# ds-collector
+# ds-aggregator
 
-## développement
+Ce dépot contient `ds-collector` qui synchronise les données de N démarches simplifiées dans une même base de données (kinto).
+
+L'API des démarches simplifiées doivent être accessibles avec le même token.
+
+## Environnement de développement
 
 pour lancer le projet en développement:
 
