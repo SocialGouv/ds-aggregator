@@ -7,8 +7,10 @@ import { logger } from '../../util';
 
 export class RestClient {
     private client: rm.RestClient;
+    private api: string;
 
     constructor(api: string, token?: string, credential?: { login: string, password: string }) {
+        this.api = api;
         if (token) {
             const bearer = new handlers.BearerCredentialHandler(token);
             this.client = new rm.RestClient('http-client', api, [bearer], undefined);
@@ -21,21 +23,21 @@ export class RestClient {
     }
 
     public get<T>(url: string): Observable<T> {
-        return from(this.client.get<any>(url)).pipe(
+        return from(this.client.get<any>(this.buildResourcePath(url))).pipe(
             map(this.handleResult),
             catchError(this.handleError)
         );
     }
 
     public create<T>(url: string, data: any): Observable<T> {
-        return from(this.client.create<any>(url, data)).pipe(
+        return from(this.client.create<any>(this.buildResourcePath(url), data)).pipe(
             map(this.handleResult),
             catchError(this.handleError)
         );
     }
 
     public update<T>(url: string, data: any): Observable<T> {
-        return from(this.client.update<any>(url, data)).pipe(
+        return from(this.client.update<any>(this.buildResourcePath(url), data)).pipe(
             map(this.handleResult),
             catchError(this.handleError),
         );
@@ -51,5 +53,11 @@ export class RestClient {
             return res.result;
         }
         throw Error(`[RestClient] http status ${res.statusCode}`);
+    }
+
+    private buildResourcePath(url: string) {
+        const resourcePath = `${this.api}/${url}`;
+        logger.debug(`[rest-client] resource path ${resourcePath}`)
+        return resourcePath;
     }
 }

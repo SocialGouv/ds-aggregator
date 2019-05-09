@@ -22,40 +22,38 @@ export interface KintoCollection<T> {
 
 class KintoClient {
 
-    private apiPath: string;
     private client: RestClient;
 
     constructor(url: string, login: string, password: string) {
         this.client = new RestClient(url, undefined, { login, password });
-        this.apiPath = `/v1/buckets/ds_collector/collections`;
     }
 
     public collection<T>(collectionName: string): KintoCollection<T> {
         return {
             add: (record: T) => {
-                return this.client.create<KintoResult<T>>(`${this.apiPath}/${collectionName}/records`, { data: record }).pipe(
+                return this.client.create<KintoResult<T>>(`${collectionName}/records`, { data: record }).pipe(
                     map((res: KintoResult<T>) => res.data)
                 );
             },
             all: () => {
-                return this.client.get<KintoResult<T[]>>(`${this.apiPath}/${collectionName}/records`).pipe(
+                return this.client.get<KintoResult<T[]>>(`${collectionName}/records`).pipe(
                     map((res: KintoResult<T[]>) => res.data)
                 );
             },
             one: (recordId: string) => {
-                return this.client.get<KintoResult<T>>(`${this.apiPath}/${collectionName}/records/${recordId}`).pipe(
+                return this.client.get<KintoResult<T>>(`${collectionName}/records/${recordId}`).pipe(
                     map((res: KintoResult<T>) => res.data)
                 );
             },
             update: (recordId: string, record: T) => {
-                return this.client.update<KintoResult<T>>(`${this.apiPath}/${collectionName}/records/${recordId}`, { data: record }).pipe(
+                return this.client.update<KintoResult<T>>(`${collectionName}/records/${recordId}`, { data: record }).pipe(
                     map((res: KintoResult<T>) => res.data),
                 );
             },
 
 
             search: (filter: string) => {
-                return this.client.get<KintoResult<T[]>>(`${this.apiPath}/${collectionName}/records?${filter}`).pipe(
+                return this.client.get<KintoResult<T[]>>(`${collectionName}/records?${filter}`).pipe(
                     map((res: KintoResult<T[]>) => (res.data) ? res.data : []),
                 );
             }
