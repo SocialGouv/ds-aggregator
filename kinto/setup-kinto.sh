@@ -7,9 +7,10 @@ curl -X PUT http://localhost:8888/v1/accounts/admin \
      -H 'Content-Type:application/json'
 
 
-curl -X PUT http://localhost:8888/v1/accounts/ds-collector \
-     -d '{"data": {"password": "W0rkInFranceND"}}' \
-     -H 'Content-Type:application/json'
+curl -u admin:passw0rd  \
+    -X PUT http://localhost:8888/v1/accounts/ds-collector \
+    -d '{"data": {"password": "W0rkInFranceND"}}' \
+    -H 'Content-Type:application/json'
 
 # create the bucket `ds_collector`
 
