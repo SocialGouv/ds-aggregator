@@ -1,5 +1,5 @@
 import { Observable, of, Subject } from "rxjs";
-import { concatMap, exhaustMap, filter, flatMap, mergeMap, tap } from "rxjs/operators";
+import { concatMap, exhaustMap, filter, flatMap, mergeMap, reduce, tap } from "rxjs/operators";
 import { DossierRecord, dossierService, dsProcedureConfigService, ProcedureRecord, procedureService, Task, taskService } from "./collector";
 import { statisticService } from "./collector/service/statistic.service";
 import { demarcheSimplifieeService, DSDossierItem, DSProcedure } from "./demarche-simplifiee";
@@ -48,7 +48,6 @@ class SyncService {
         ).subscribe({
             complete: () => {
                 logger.info(`[SyncService.statistics] statistics refreshed`);
-                this.refreshStatistics$.next();
             },
             error: (error: any) => {
                 logger.error(`[SyncService.statistics] error: `, error);
@@ -62,22 +61,23 @@ class SyncService {
             tap(() => this.refreshStatistics$.next())
         ).subscribe(
             {
-                complete: () => {
-                    logger.info(`[SyncService.syncAllDossiers] complete`);
-                },
                 error: (error: any) => {
                     logger.error(`[SyncService.syncAllDossiers] error: `, error);
                 },
-                next: (next: DossierRecord) => {
-                    logger.info(`[SyncService.syncAllDossiers] record with ds_id ${next.ds_key} synchronised`);
+                next: (next: DossierRecord[]) => {
+                    logger.info(`[SyncService.syncAllDossiers] ${next.length} records synchronized`);
                 }
             }
         )
     }
 
-    private syncDossiers(): Observable<DossierRecord> {
+    private syncDossiers(): Observable<DossierRecord[]> {
         return this.allDossierItemInfos().pipe(
             concatMap(res => this.syncDossier(res.procedureId, res.dossierId)),
+            reduce((acc: DossierRecord[], record: DossierRecord) => {
+                acc.push(record);
+                return acc;
+            }, [])
         );
     }
 
