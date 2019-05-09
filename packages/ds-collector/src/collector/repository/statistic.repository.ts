@@ -1,13 +1,14 @@
 import { Observable } from "rxjs";
-import { kintoClient, KintoCollection } from "../../lib";
+import { KintoCollection } from "../../lib";
 import { Statistic } from "../model/statistic.model";
+import { kintoClientInstance } from "./kinto-client-instance";
 
 class StatisticRepository {
 
     private collection: KintoCollection<Statistic>;
 
     constructor() {
-        this.collection = kintoClient.collection<Statistic>("statistics");
+        this.collection = kintoClientInstance.collection<Statistic>("statistics");
     }
 
     public all(): Observable<Statistic[]> {

@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
-import { kintoClient } from "../../lib";
 import { DossierRecord } from "../model";
+import { kintoClientInstance } from "./kinto-client-instance";
 
 
 class DossierRepository {
@@ -26,7 +26,7 @@ class DossierRepository {
     }
 
     private collection() {
-        return kintoClient.collection<DossierRecord>("dossiers");
+        return kintoClientInstance.collection<DossierRecord>("dossiers");
     }
 
 }

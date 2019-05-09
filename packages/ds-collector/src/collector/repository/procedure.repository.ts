@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
-import { kintoClient } from "../../lib";
 import { ProcedureRecord } from "../model";
+import { kintoClientInstance } from "./kinto-client-instance";
 
 
 class ProcedureRepository {
@@ -22,7 +22,7 @@ class ProcedureRepository {
     };
 
     private collection() {
-        return kintoClient.collection<ProcedureRecord>("procedures");
+        return kintoClientInstance.collection<ProcedureRecord>("procedures");
     }
 
 }

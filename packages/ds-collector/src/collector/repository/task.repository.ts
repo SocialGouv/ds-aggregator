@@ -1,13 +1,14 @@
 import { NEVER, Observable } from "rxjs";
-import { kintoClient, KintoCollection } from "../../lib";
+import { KintoCollection } from "../../lib";
 import { Task } from "../model";
+import { kintoClientInstance } from "./kinto-client-instance";
 
 class TaskRepository {
 
     private collection: KintoCollection<Task>;
 
     constructor() {
-        this.collection = kintoClient.collection<Task>("tasks");
+        this.collection = kintoClientInstance.collection<Task>("tasks");
     }
 
     public add(task: Task): Observable<Task> {

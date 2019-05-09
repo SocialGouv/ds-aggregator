@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { configuration } from '../../config';
 import { RestClient } from '../rest';
 
 interface KintoResult<T> {
@@ -64,8 +63,4 @@ class KintoClient {
     }
 }
 
-const kintoAPI = configuration.kintoAPI || '';
-const kintoLogin = configuration.kintoLogin || '';
-const kintoPassword = configuration.kintoPassword || '';
-
-export const kintoClient = new KintoClient(kintoAPI, kintoLogin, kintoPassword);
+export const kintoClient = (api: string, login: string, password: string) => new KintoClient(api, login, password);
