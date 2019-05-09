@@ -2,8 +2,9 @@ import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import { taskService } from './collector';
 import { statisticService } from './collector/service/statistic.service';
+import { configuration } from './config';
 import { syncService } from './sync.service';
-import { configuration, logger } from './util';
+import { logger } from './util';
 
 const routeOptions: Router.IRouterOptions = {
     prefix: '/api'

@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
+import { configuration } from "../../config";
 import { RestClient } from "../../lib/rest";
-import { configuration } from "../../util";
 import { DSDossier, DSDossierItem, DSProcedure } from "../model";
 
 interface DSDossierListResult {

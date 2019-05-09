@@ -2,9 +2,9 @@ import * as cors from '@koa/cors';
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import { interval } from 'rxjs';
+import { configuration } from './config';
 import { router } from './routes';
 import { syncService } from './sync.service';
-import { configuration } from './util';
 
 interval(configuration.taskSchedulerPeriod).subscribe(
     () => syncService.handleTaskToComplete()

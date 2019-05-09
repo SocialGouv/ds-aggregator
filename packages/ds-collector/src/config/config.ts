@@ -1,21 +1,7 @@
 import { config } from 'dotenv';
+import { asNumber } from '../util';
 
 config();
-
-// const asArray = (args: string) => {
-//     if (args === undefined || args == null) {
-//         return [];
-//     }
-//     args = args.trim();
-//     return args.split(",").map(val => val.trim());
-// }
-
-const asNumber = (args: string | undefined, defaultValue: number) => {
-    if (args == null || args === undefined) {
-        return defaultValue;
-    }
-    return Number.parseInt(args, 10)
-}
 
 export const configuration = {
     dsAPI: process.env.DS_API,

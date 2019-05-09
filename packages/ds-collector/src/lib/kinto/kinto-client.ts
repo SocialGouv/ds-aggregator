@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { configuration } from '../../util';
+import { configuration } from '../../config';
 import { RestClient } from '../rest';
 
 interface KintoResult<T> {
