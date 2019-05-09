@@ -42,15 +42,14 @@ export class RestClient {
     }
 
     private handleError(error: any): Observable<any> {
-        logger.error('[REST-CLIENT] error: ', error);
-        return of(`Bad Promise: ${error}`);
+        logger.error('[RestClient] error: ', error);
+        return of(`[RestClient] error: ${error}`);
     }
 
     private handleResult(res: rm.IRestResponse<any>) {
         if ([200, 201].includes(res.statusCode)) {
             return res.result;
         }
-        throw Error("");
+        throw Error(`[RestClient] http status ${res.statusCode}`);
     }
-
 }
