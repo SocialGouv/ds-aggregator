@@ -41,7 +41,7 @@ configurer `ds-collector`
 
 ```bash
 cd ./packages/ds-collector
-cp env.sample .env
+cp .env.sample .env
 ```
 
 modifier les paramètres de `.env`
