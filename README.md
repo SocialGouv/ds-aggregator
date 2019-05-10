@@ -2,7 +2,7 @@
 
 Ce dépot contient `ds-collector` qui synchronise les données de N démarches simplifiées dans une même base de données (kinto).
 
-L'API des démarches simplifiées doivent être accessibles avec le même token.
+Les démarches simplifiées à synchroniser doivent être accessibles avec le même token API DS.
 
 ## Environnement de développement
 
