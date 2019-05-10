@@ -95,6 +95,6 @@ class StatisticService {
 export const statisticService = new StatisticService();
 
 // compute some dossier duration in days
-const computeDuration = (dossier: DSDossier) => differenceInDays(dossier.processed_at, dossier.created_at);
+const computeDuration = (dossier: DSDossier) => differenceInDays(dossier.processed_at, dossier.initiated_at);
 
 
