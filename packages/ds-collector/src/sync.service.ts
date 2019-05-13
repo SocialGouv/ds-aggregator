@@ -5,7 +5,7 @@ import { statisticService } from "./collector/service/statistic.service";
 import { demarcheSimplifieeService, DSDossierItem, DSProcedure } from "./demarche-simplifiee";
 import { DossierListResult } from "./demarche-simplifiee/service/ds.service";
 import { logger } from "./util";
-import { asTimestamp } from "./util/converter";
+import { asNumber, asTimestamp } from "./util/converter";
 
 class SyncService {
 
@@ -133,7 +133,9 @@ class SyncService {
 
     private syncDossier(procedureId: string, dossierId: string): Observable<DossierRecord> {
         return demarcheSimplifieeService.getDSDossier(procedureId, dossierId).pipe(
-            mergeMap((dsDossier) => dossierService.saveOrUpdate(dsDossier.procedureId, dsDossier.dossier))
+            mergeMap((dsDossier) => dsProcedureConfigService.findByProcedureId(asNumber(dsDossier.procedureId, 0)),
+                (dsDossier, configs) => ({ ...dsDossier, group: configs[0].group })),
+            mergeMap((param) => dossierService.saveOrUpdate(param.group, param.procedureId, param.dossier))
         );
     }
 

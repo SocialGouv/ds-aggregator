@@ -15,6 +15,10 @@ export interface DossierRecord extends Record<DSDossier> {
     metadata: {
         state: DossierStateType;
         procedure_id: string;
+        group: {
+            id: string;
+            label: string;
+        },
         created_at: number;
         // date de la dernière modification du dossier
         updated_at: number | null;

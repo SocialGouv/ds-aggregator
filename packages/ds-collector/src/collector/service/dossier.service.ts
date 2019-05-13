@@ -19,12 +19,13 @@ class DossierService {
         );
     }
 
-    public saveOrUpdate(procedureId: string, dossier: DSDossier): Observable<DossierRecord> {
+    public saveOrUpdate(group: { id: string, label: string }, procedureId: string, dossier: DSDossier): Observable<DossierRecord> {
         const wifDossier: DossierRecord = {
             ds_data: dossier,
             ds_key: `${procedureId}-${dossier.id}`,
             metadata: {
                 created_at: asTimestamp(dossier.created_at) || 0,
+                group,
                 procedure_id: procedureId,
                 processed_at: asTimestamp(dossier.processed_at),
                 received_at: asTimestamp(dossier.received_at),

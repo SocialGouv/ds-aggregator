@@ -8,6 +8,10 @@ class DSProcedureConfigService {
         return dsProcedureConfigRepository.all();
     }
 
+    public findByProcedureId(procedureId: number): Observable<ProcedureConfig[]> {
+        return dsProcedureConfigRepository.search(`contains_procedures=${procedureId}`);
+    }
+
 }
 
 export const dsProcedureConfigService = new DSProcedureConfigService();

@@ -15,6 +15,10 @@ class DSProcedureConfigRepository {
         return this.collection.all();
     }
 
+    public search(filter: string): Observable<ProcedureConfig[]> {
+        return this.collection.search(filter);
+    }
+
     public add(config: ProcedureConfig): Observable<ProcedureConfig> {
         return this.collection.add(config);
     }
