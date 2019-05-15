@@ -24,13 +24,15 @@ class DossierService {
             ds_data: dossier,
             ds_key: `${procedureId}-${dossier.id}`,
             metadata: {
-                created_at: asTimestamp(dossier.created_at) || 0,
                 group,
                 procedure_id: procedureId,
-                processed_at: asTimestamp(dossier.processed_at),
-                received_at: asTimestamp(dossier.received_at),
                 state: dossier.state,
+                // tslint:disable-next-line: object-literal-sort-keys
+                created_at: asTimestamp(dossier.created_at) || 0,
                 updated_at: asTimestamp(dossier.updated_at),
+                initiated_at: asTimestamp(dossier.initiated_at),
+                received_at: asTimestamp(dossier.received_at),
+                processed_at: asTimestamp(dossier.processed_at),
             }
         }
         return dossierRepository.findByDSKey(wifDossier.ds_key).pipe(

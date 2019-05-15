@@ -20,6 +20,8 @@ export interface DossierRecord extends Record<DSDossier> {
             label: string;
         },
         created_at: number;
+        // date de depot du dossier
+        initiated_at: number | null;
         // date de la dernière modification du dossier
         updated_at: number | null;
         // date du passage en instruction
