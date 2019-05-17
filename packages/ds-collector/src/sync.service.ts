@@ -135,7 +135,8 @@ class SyncService {
         return demarcheSimplifieeService.getDSDossier(procedureId, dossierId).pipe(
             mergeMap((dsDossier) => dsProcedureConfigService.findByProcedureId(asNumber(dsDossier.procedureId, 0)),
                 (dsDossier, configs) => ({ ...dsDossier, group: configs[0].group })),
-            mergeMap((param) => dossierService.saveOrUpdate(param.group, param.procedureId, param.dossier))
+            mergeMap((param) => dossierService.saveOrUpdate(param.group, param.procedureId, param.dossier)),
+            tap((dossier) => logger.info(`[SyncService.syncDossier] dossier ${dossier.ds_key} synchronised`))
         );
     }
 
