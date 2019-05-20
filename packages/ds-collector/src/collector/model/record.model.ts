@@ -28,6 +28,7 @@ export interface DossierRecord extends Record<DSDossier> {
         received_at: number | null;
         // date de décision du dossier
         processed_at: number | null;
+        instructors_history: string[];
     }
 }
 

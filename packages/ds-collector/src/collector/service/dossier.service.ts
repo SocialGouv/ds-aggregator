@@ -33,6 +33,7 @@ class DossierService {
                 initiated_at: asTimestamp(dossier.initiated_at),
                 received_at: asTimestamp(dossier.received_at),
                 processed_at: asTimestamp(dossier.processed_at),
+                instructors_history: dossier.instructeurs ? dossier.instructeurs : []
             }
         }
         return dossierRepository.findByDSKey(wifDossier.ds_key).pipe(
@@ -42,8 +43,11 @@ class DossierService {
                     return dossierRepository.add(wifDossier);
                 } else {
                     const record: DossierRecord = res[0];
-                    logger.debug(`[DossierService.saveOrUpdate] update dossier for ds_key ${wifDossier.ds_key}`)
+                    logger.debug(`[DossierService.saveOrUpdate] update dossier for ds_key ${wifDossier.ds_key}`);
+                    const instructorsHistory = buildInstructorsHistory(record, wifDossier);
                     Object.assign(record, wifDossier);
+                    record.metadata.instructors_history = instructorsHistory;
+
                     return dossierRepository.update(record.id || '', record);
                 }
             })
@@ -56,3 +60,14 @@ class DossierService {
 }
 
 export const dossierService = new DossierService();
+
+const buildInstructorsHistory = (record: DossierRecord, newRecord: DossierRecord) => {
+    const instructeursHistory: string[] = [];
+    record.metadata.instructors_history.forEach(i => instructeursHistory.push(i));
+    newRecord.metadata.instructors_history.forEach((i) => {
+        if (!instructeursHistory.includes(i)) {
+            instructeursHistory.push(i);
+        }
+    });
+    return instructeursHistory;
+}

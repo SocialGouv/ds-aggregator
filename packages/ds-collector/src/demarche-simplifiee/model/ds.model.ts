@@ -61,4 +61,5 @@ export interface DSDossier extends IIdentifiable {
     initiated_at: string;
     received_at: string;
     processed_at: string;
+    instructeurs: string[];
 }
