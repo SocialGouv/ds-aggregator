@@ -11,13 +11,11 @@ pour lancer le projet en développement:
 *démarrer et configurer `kinto`*
 
 ```bash
-cd ./kinto
-
 # run kinto in docker
-docker-compose up -d
+yarn db:start
 
 # configure kinto (launch only the first time)
-./setup-kinto.sh
+yarn db:init
 ```
 
 l'interface d'administation de kinto est accessible à l'adresse suivante `http://localhost:8888/v1/admin`:
@@ -82,7 +80,7 @@ Pour visualiser les statistiques dans `ds-dahsboard`, utiliser les API `/api/sta
 
 |Collection     |Description                                            | Modèle                                    |
 |---------------|-------------------------------------------------------|-------------------------------------------|
-|`ds_configs`    | configuration des démarches simplifiées à synchoniser | `src/collector/model/config.model.ts`     |
+|`ds_configs`   | configuration des démarches simplifiées à synchoniser | `src/collector/model/config.model.ts`     |
 |`procedures`   | procédures synchronisées                              | `src/collector/model/record.model.ts`     |
 |`dossiers`     | dossiers synchronisés                                 | `src/collector/model/record.model.ts`     |
 |`tasks`        | liste des dossiers à synchroniser                     | `src/collector/model/task.model.ts`       |
