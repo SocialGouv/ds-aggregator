@@ -1,10 +1,13 @@
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
-import { taskService } from './collector';
+import { of } from 'rxjs';
+import { flatMap, mergeMap } from 'rxjs/operators';
+import { dsProcedureConfigRepository, taskService } from './collector';
 import { statisticService } from './collector/service/statistic.service';
 import { configuration } from './config';
 import { syncService } from './sync.service';
 import { logger } from './util';
+import { dsConfigs } from './util/ds-config';
 
 const routeOptions: Router.IRouterOptions = {
     prefix: '/api'
@@ -49,6 +52,17 @@ router.get(`/statistics/:group`, async (ctx: Koa.Context) => {
         };
         ctx.status = 200;
     })
+});
+
+// init ds_configs
+router.post(`/${configuration.apiPrefix}/ds_configs/init`, (ctx: Koa.Context) => {
+    of(dsConfigs).pipe(
+        flatMap(x => x),
+        mergeMap((x) => dsProcedureConfigRepository.add(x))
+    ).subscribe();
+
+    ctx.status = 200;
+    ctx.message = "Init ds configs"
 });
 
 export { router };
