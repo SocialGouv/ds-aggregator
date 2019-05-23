@@ -1,7 +1,7 @@
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import { of } from 'rxjs';
-import { flatMap, mergeMap } from 'rxjs/operators';
+import { flatMap, mergeMap, tap } from 'rxjs/operators';
 import { dsProcedureConfigRepository, taskService } from './collector';
 import { statisticService } from './collector/service/statistic.service';
 import { configuration } from './config';
@@ -58,7 +58,8 @@ router.get(`/statistics/:group`, async (ctx: Koa.Context) => {
 router.post(`/${configuration.apiPrefix}/ds_configs/init`, (ctx: Koa.Context) => {
     of(dsConfigs).pipe(
         flatMap(x => x),
-        mergeMap((x) => dsProcedureConfigRepository.add(x))
+        mergeMap((x) => dsProcedureConfigRepository.add(x)),
+        tap((res) => logger.info(`Initialize ds_condig ${res.group.label}`))
     ).subscribe();
 
     ctx.status = 200;
