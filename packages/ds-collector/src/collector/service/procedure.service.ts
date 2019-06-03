@@ -30,7 +30,7 @@ class ProcedureService {
         )
     }
 
-    public all(): Observable<Array<Record<DSProcedure>> | null> {
+    public all(): Observable<ProcedureRecord[]> {
         return procedureRepository.all();
     }
 }
