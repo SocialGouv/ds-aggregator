@@ -8,6 +8,14 @@ import { dossierRepository } from "../repository";
 
 class DossierService {
 
+    public all(): Observable<DossierRecord[]> {
+        return dossierRepository.all();
+    }
+
+    public allByMetadataProcedureId(procedureId: string): Observable<DossierRecord[]> {
+        return dossierRepository.findAllByProcedureIn([procedureId]);
+    }
+
     public findOne(procedureId: string, dossierId: string): Observable<DossierRecord | null> {
         return dossierRepository.findByDSKey(this.getDSKey(procedureId, dossierId)).pipe(
             map((res) => {

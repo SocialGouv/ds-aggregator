@@ -2,7 +2,7 @@ import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import { of } from 'rxjs';
 import { flatMap, mergeMap, tap } from 'rxjs/operators';
-import { dsProcedureConfigRepository, taskService } from './collector';
+import { dossierService, dsProcedureConfigRepository, procedureService, taskService } from './collector';
 import { statisticService } from './collector/service/statistic.service';
 import { configuration } from './config';
 import { syncService } from './sync.service';
@@ -64,6 +64,19 @@ router.post(`/${configuration.apiPrefix}/ds_configs/init`, (ctx: Koa.Context) =>
 
     ctx.status = 200;
     ctx.message = "Init ds configs"
+});
+
+// get sum(dossier_total)
+router.get(`/${configuration.apiPrefix}/dossiers/check`, async (ctx: Koa.Context) => {
+    procedureService.all().pipe(
+        flatMap(x => x),
+        mergeMap(res => dossierService.allByMetadataProcedureId(res.ds_data.id || '0'),
+            (procedure, dossiers) => ({ procedure, dossiers })),
+        tap(param => {
+            logger.info(`${param.procedure.ds_data.id} > ${param.procedure.ds_data.total_dossier} - ${param.dossiers.length}`)
+        })
+    ).subscribe();
+    ctx.status = 200;
 });
 
 export { router };
