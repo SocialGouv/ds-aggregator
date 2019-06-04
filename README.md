@@ -52,6 +52,12 @@ yarn dev
 
 *appeler les API de `ds-collector`*
 
+Ajouter les `ds_configs` renseignées dans le ficher `ds-configs.ts`
+
+```bash
+curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/ds_configs/init
+```
+
 lancer une synchronisation globale:
 
 ```bash
@@ -59,11 +65,19 @@ curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/sync-all
 ```
 
 lancer le calcul des statistiques (il est lancé automatiquement après une synchronisation globale)
+
 ```bash
 curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/refresh-stats
 ```
 
-récupération des statistiques pour un groupe:
+Lister les démarches simplifiés pour lesquelless le nombre de dossiers importés est différent du nombre de dossiers renseigné dans la démarche simplifiée
+
+```bash
+curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/dossiers/check
+```
+
+récupération des statistiques pour un groupe
+
  ```bash
 curl -X GET http://localhost:1337/api/statistics/13
 ```
