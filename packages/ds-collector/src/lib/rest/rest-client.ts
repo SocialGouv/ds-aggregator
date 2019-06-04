@@ -43,6 +43,13 @@ export class RestClient {
         );
     }
 
+    public delete<T>(url: string): Observable<T> {
+        return from(this.client.del<any>(this.buildResourcePath(url))).pipe(
+            map(this.handleResult),
+            catchError(this.handleError),
+        );
+    }
+
     private handleError(error: any): Observable<any> {
         logger.error('[RestClient] error: ', error);
         return throwError(error);

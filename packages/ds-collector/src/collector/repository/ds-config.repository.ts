@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { KintoCollection } from "../../lib";
+import { DeletedData, KintoCollection } from "../../lib";
 import { ProcedureConfig } from "../model";
 import { kintoClientInstance } from "./kinto-client-instance";
 
@@ -17,6 +17,10 @@ class DSProcedureConfigRepository {
 
     public search(filter: string): Observable<ProcedureConfig[]> {
         return this.collection.search(filter);
+    }
+
+    public delete(filter?: string): Observable<DeletedData[]> {
+        return this.collection.delete(filter);
     }
 
     public add(config: ProcedureConfig): Observable<ProcedureConfig> {
