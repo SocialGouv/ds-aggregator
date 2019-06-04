@@ -1,5 +1,5 @@
 
-import { from, Observable, of } from 'rxjs';
+import { from, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import * as handlers from 'typed-rest-client/Handlers';
 import * as rm from 'typed-rest-client/RestClient';
@@ -45,7 +45,7 @@ export class RestClient {
 
     private handleError(error: any): Observable<any> {
         logger.error('[RestClient] error: ', error);
-        return of(`[RestClient] error: ${error}`);
+        return throwError(error);
     }
 
     private handleResult(res: rm.IRestResponse<any>) {

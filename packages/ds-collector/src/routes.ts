@@ -15,17 +15,16 @@ const routeOptions: Router.IRouterOptions = {
 
 const router = new Router(routeOptions);
 
+
 // https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/webhook
 router.post(`/${configuration.apiPrefix}/webhook`, async (ctx: Koa.Context) => {
     const procedureId = ctx.query.procedure_id;
     const dossierId = ctx.query.dossier_id;
     const state = ctx.query.state;
     const updated_at = ctx.query.updated_at;
-    await taskService.addTask(procedureId, dossierId, state, updated_at).toPromise().then(() => {
-        logger.info(`[WEB HOOK] dossier ${procedureId}-${dossierId} added to update`);
-        ctx.body = 'success';
-        ctx.status = 201;
-    });
+    const res = await taskService.addTask(procedureId, dossierId, state, updated_at).toPromise();
+    ctx.body = res;
+    ctx.status = 201;
 });
 
 // launch global synchronisation
@@ -44,39 +43,43 @@ router.post(`/${configuration.apiPrefix}/refresh-stats`, (ctx: Koa.Context) => {
 
 router.get(`/statistics/:group`, async (ctx: Koa.Context) => {
     const groupId = ctx.params.group;
-    await statisticService.findByGroupId(groupId).toPromise().then((res) => {
-        ctx.body = {
-            "success": true,
-            // tslint:disable-next-line: object-literal-sort-keys
-            "result": res
-        };
-        ctx.status = 200;
-    })
+    const res = await statisticService.findByGroupId(groupId).toPromise();
+    ctx.body = res;
+    ctx.status = 200;
 });
 
 // init ds_configs
-router.post(`/${configuration.apiPrefix}/ds_configs/init`, (ctx: Koa.Context) => {
-    of(dsConfigs).pipe(
+router.post(`/${configuration.apiPrefix}/ds_configs/init`, async (ctx: Koa.Context) => {
+    await of(dsConfigs).pipe(
         flatMap(x => x),
         mergeMap((x) => dsProcedureConfigRepository.add(x)),
-        tap((res) => logger.info(`Initialize ds_condig ${res.group.label}`))
-    ).subscribe();
-
+        tap((res) => logger.info(`ds config ${res.group.label} added`))
+    ).toPromise();
     ctx.status = 200;
-    ctx.message = "Init ds configs"
+    ctx.message = ctx.message = "ds configs initialized";
 });
 
 // get sum(dossier_total)
 router.get(`/${configuration.apiPrefix}/dossiers/check`, async (ctx: Koa.Context) => {
-    procedureService.all().pipe(
+    const res: any[] = [];
+    await procedureService.all().pipe(
         flatMap(x => x),
-        mergeMap(res => dossierService.allByMetadataProcedureId(res.ds_data.id || '0'),
+        mergeMap(x => dossierService.allByMetadataProcedureId(x.ds_data.id || '0'),
             (procedure, dossiers) => ({ procedure, dossiers })),
         tap(param => {
-            logger.info(`${param.procedure.ds_data.id} > ${param.procedure.ds_data.total_dossier} - ${param.dossiers.length}`)
+            const total_dossier = param.procedure.ds_data.total_dossier;
+            const dossiersNb = param.dossiers.length;
+            if (total_dossier !== dossiersNb) {
+                res.push({
+                    nb_dossiers: dossiersNb,
+                    procedure: param.procedure.ds_data.id,
+                    total_dossier,
+                });
+            }
         })
-    ).subscribe();
+    ).toPromise();
     ctx.status = 200;
+    ctx.body = res;
 });
 
 export { router };

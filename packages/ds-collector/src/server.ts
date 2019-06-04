@@ -5,6 +5,7 @@ import { interval } from 'rxjs';
 import { configuration } from './config';
 import { router } from './routes';
 import { syncService } from './sync.service';
+import { logger } from './util';
 
 interval(configuration.taskSchedulerPeriod).subscribe(
     () => syncService.handleTaskToComplete()
@@ -19,5 +20,9 @@ app.use(cors());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+app.on('error', (err, ctx: Koa.Context) => {
+    logger.error(`[error] ${ctx.originalUrl} `, err);
+});
 
 app.listen(port);
