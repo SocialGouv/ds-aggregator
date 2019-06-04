@@ -41,6 +41,16 @@ export const dsConfigs = [
     },
     {
         "group": {
+            "id": "52",
+            "label": "52 - Haute-Marne"
+        },
+        "procedures": [
+            17450,
+            17460
+        ]
+    },
+    {
+        "group": {
             "id": "54",
             "label": "54 - Meurthe-et-Moselle"
         },
@@ -71,12 +81,32 @@ export const dsConfigs = [
     },
     {
         "group": {
+            "id": "63",
+            "label": "63 - Bas-Rhin"
+        },
+        "procedures": [
+            17073,
+            17076
+        ]
+    },
+    {
+        "group": {
             "id": "67",
             "label": "67 - Bas-Rhin"
         },
         "procedures": [
             15751,
             15752
+        ]
+    },
+    {
+        "group": {
+            "id": "68",
+            "label": "68 - Haut-Rhin"
+        },
+        "procedures": [
+            17617,
+            17659
         ]
     },
     {
