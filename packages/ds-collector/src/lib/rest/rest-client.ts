@@ -1,4 +1,3 @@
-
 import { from, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import * as handlers from 'typed-rest-client/Handlers';
@@ -51,7 +50,7 @@ export class RestClient {
     }
 
     private handleError(error: any): Observable<any> {
-        logger.error('[RestClient] error: ', error);
+        logger.error('[RestClient] ', error);
         return throwError(error);
     }
 

@@ -1,20 +1,47 @@
 import { config } from 'dotenv';
-import { asNumber } from '../util';
 
 config();
 
+const asString = (arg: any): string => {
+    const res = process.env[arg]
+    if (!res) {
+        throw new Error(`env variable ${arg} is required`);
+    }
+    return res;
+}
+
+const asNumber = (arg: any): number => {
+    const res = process.env[arg]
+    if (!res) {
+        throw new Error(`env variable ${arg} is required`);
+    }
+    return Number.parseInt(res, 10);
+}
+
+const asBoolean = (arg: any): boolean => {
+    const res = process.env[arg];
+    if (!res) {
+        throw new Error(`env variable ${arg} is required`);
+    }
+    return 'true' === res ? true : false;
+}
+
+
 export const configuration = {
-    dsAPI: process.env.DS_API,
-    dsToken: process.env.DS_TOKEN,
+    dsAPI: asString('DS_API'),
+    dsToken: asString('DS_TOKEN'),
 
-    taskSchedulerPeriod: asNumber(process.env.TASK_SCHEDULER_PERIOD, 1000 * 60 * 60),
+    taskSchedulerPeriod: asNumber('TASK_SCHEDULER_PERIOD'),
 
-    apiPrefix: process.env.API_PREFIX,
+    apiPrefix: asString('API_PREFIX'),
     // tslint:disable-next-line: object-literal-sort-keys
-    apiPort: process.env.API_PORT || 1337,
+    apiPort: asNumber('API_PORT'),
 
-    kintoAPI: process.env.KINTO_API,
-    kintoLogin: process.env.KINTO_LOGIN,
-    kintoPassword: process.env.KINTO_PASSWORD,
+    kintoAPI: asString('KINTO_API'),
+    kintoLogin: asString('KINTO_LOGIN'),
+    kintoPassword: asString('KINTO_PASSWORD'),
+
+    sentrySilent: asBoolean('SENTRY_SILENT'),
+    sentryDSN: asString('SENTRY_DSN')
 };
 
