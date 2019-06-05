@@ -4,7 +4,6 @@ import { flatMap, map, mergeMap, tap } from 'rxjs/operators';
 import { dossierService, dsProcedureConfigRepository, procedureService, taskService } from './collector';
 import { statisticService } from './collector/service/statistic.service';
 import { configuration } from './config';
-import { syncService } from './sync.service';
 import { logger } from './util';
 import { dsConfigs } from './util/ds-config';
 
@@ -24,20 +23,6 @@ router.post(`/${configuration.apiPrefix}/webhook`, async (ctx: Koa.Context) => {
     const res = await taskService.addTask(procedureId, dossierId, state, updated_at).toPromise();
     ctx.body = res;
     ctx.status = 201;
-});
-
-// launch global synchronisation
-router.post(`/${configuration.apiPrefix}/sync-all`, (ctx: Koa.Context) => {
-    syncService.launchGlobalSynchronisation();
-    ctx.status = 200;
-    ctx.message = "Global synchonisation launched"
-});
-
-// launch global synchronisation
-router.post(`/${configuration.apiPrefix}/refresh-stats`, (ctx: Koa.Context) => {
-    syncService.launchStatisticsComputation();
-    ctx.status = 200;
-    ctx.message = "Statistics computation launched"
 });
 
 router.get(`/statistics/:group`, async (ctx: Koa.Context) => {

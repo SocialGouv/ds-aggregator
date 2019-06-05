@@ -1,15 +1,14 @@
 import * as cors from '@koa/cors';
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
-import { interval } from 'rxjs';
 import { configuration } from './config';
 import { router } from './routes';
-import { syncService } from './sync.service';
+import { dossierScheduler } from './scheduler/dossier.scheduler';
+import { taskScheduler } from './scheduler/task.scheduler';
 import { logger } from './util';
 
-interval(configuration.taskSchedulerPeriod).subscribe(
-    () => syncService.handleTaskToComplete()
-);
+dossierScheduler.start();
+taskScheduler.start();
 
 const app = new Koa();
 

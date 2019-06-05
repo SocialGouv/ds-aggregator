@@ -21,7 +21,7 @@ curl -u admin:passw0rd  \
      -H 'Content-Type:application/json' 
 
 
-# create the collections `ds_configs, `procedure`, `dossier`, `task`, `statistic`
+# create the collections `ds_configs, `procedure`, `dossier`, `task`, `statistic`, `synchro_histories`
 
 curl -u admin:passw0rd  \
      -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
@@ -46,6 +46,11 @@ curl -u admin:passw0rd  \
 curl -u admin:passw0rd  \
      -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
      -d '{"data": {"id": "statistics"}}' \
+     -H 'Content-Type:application/json' 
+     
+curl -u admin:passw0rd  \
+     -X POST http://localhost:8888/v1/buckets/ds_collector/collections \
+     -d '{"data": {"id": "synchro_histories"}}' \
      -H 'Content-Type:application/json' 
 
 ## the group `system` has READ/WRITE permission on `ds_configs`, `procedure`, `dossier`, `tasks`, `statistic`
@@ -78,6 +83,10 @@ curl -u admin:passw0rd  \
 
 curl -u admin:passw0rd  \
      -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/statistics \
+     -d '{"permissions": {"write": ["/buckets/ds_collector/groups/system"]}}' \
+
+curl -u admin:passw0rd  \
+     -X PATCH http://localhost:8888/v1/buckets/ds_collector/collections/synchro_histories \
      -d '{"permissions": {"write": ["/buckets/ds_collector/groups/system"]}}' \
      -H 'Content-Type:application/json'
 

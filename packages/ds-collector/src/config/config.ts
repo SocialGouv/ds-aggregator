@@ -31,7 +31,9 @@ export const configuration = {
     dsAPI: asString('DS_API'),
     dsToken: asString('DS_TOKEN'),
 
-    taskSchedulerPeriod: asNumber('TASK_SCHEDULER_PERIOD'),
+    dossierSynchroCron: asString('DOSSIER_SYNCHRO_CRON'),
+
+    taskCron: asString('TASK_CRON'),
 
     apiPrefix: asString('API_PREFIX'),
     // tslint:disable-next-line: object-literal-sort-keys
