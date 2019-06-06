@@ -43,7 +43,7 @@ export const configuration = {
     kintoLogin: asString('KINTO_LOGIN'),
     kintoPassword: asString('KINTO_PASSWORD'),
 
-    sentrySilent: asBoolean('SENTRY_SILENT'),
+    sentryEnabled: asBoolean('SENTRY_ENABLED'),
     sentryDSN: asString('SENTRY_DSN')
 };
 

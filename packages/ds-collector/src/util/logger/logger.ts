@@ -47,14 +47,16 @@ const logger = createLogger({
     new transports.Console({
       format: alignedWithColorsAndTime,
       handleExceptions: true
-    }),
-    new SentryTransport({
-      sentry: {
-        dsn: configuration.sentryDSN,
-      },
-      silent: configuration.sentrySilent
     })
   ]
 });
+
+if (configuration.sentryEnabled) {
+  logger.add(new SentryTransport({
+    sentry: {
+      dsn: configuration.sentryDSN,
+    }
+  }));
+}
 
 export default logger;
