@@ -1,24 +1,24 @@
-db:
+ds-db:
   image: postgres
   container_name: ds-aggregator-db
   environment:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
-cache:
+ds-cache:
   image: library/memcached
   container_name: ds-aggregator-cache
-web:
+ds-web:
   image: kinto/kinto-server
   container_name: ds-aggregator-kinto
   links:
-   - db
-   - cache
+   - ds-db
+   - ds-cache
   ports:
    - "8888:8888"
   environment:
     KINTO_CACHE_BACKEND: kinto.core.cache.memcached
-    KINTO_CACHE_HOSTS: cache:11211 cache:11212
+    KINTO_CACHE_HOSTS: ds-cache:11211 ds-cache:11212
     KINTO_STORAGE_BACKEND: kinto.core.storage.postgresql
-    KINTO_STORAGE_URL: postgresql://postgres:postgres@db/postgres
+    KINTO_STORAGE_URL: postgresql://postgres:postgres@ds-db/postgres
     KINTO_PERMISSION_BACKEND: kinto.core.permission.postgresql
-    KINTO_PERMISSION_URL: postgresql://postgres:postgres@db/postgres
+    KINTO_PERMISSION_URL: postgresql://postgres:postgres@ds-db/postgres

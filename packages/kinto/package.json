@@ -1,5 +1,5 @@
 {
-    "name": "public-db",
+    "name": "kinto",
     "version": "1.0.0",
     "main": "index.js",
     "author": "Incubateur des Ministères Sociaux <dsi-incubateur@sg.social.gouv.fr> (https://incubateur.social.gouv.fr)",

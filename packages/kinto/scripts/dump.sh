@@ -6,8 +6,8 @@ echo "build kinto-wizard image...."
 docker build -t kinto-wizard .
 
 CONTAINER_NAME=kinto-dump
-KINTO_CONTAINER=ds-aggregator-kinto
-KINTO_URL=http://ds-aggregator-kinto:8888/v1
+KINTO_CONTAINER=workinfrance-bo-kinto
+KINTO_URL=http://workinfrance-bo-kinto:8888/v1
 KINTO_AUTH=admin:passw0rd
 
 echo "run kinto-wizard container...."

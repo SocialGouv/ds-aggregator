@@ -10,9 +10,6 @@ KINTO_CONTAINER=ds-aggregator-kinto
 KINTO_URL=http://ds-aggregator-kinto:8888/v1
 KINTO_AUTH=admin:passw0rd
 
-ADMIN_LOGIN=
-ADMIN_PASSWORD=
-
 echo "build kinto-wizard image...."
 
 docker build -t kinto-wizard .

@@ -11,6 +11,11 @@ pour lancer le projet en développement:
 *démarrer et configurer `kinto`*
 
 ```bash
+cd ./packages/kinto
+cp .env.sample .env
+```
+
+```bash
 # run kinto in docker
 yarn db:start
 
