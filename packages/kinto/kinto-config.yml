@@ -1,0 +1,45 @@
+buckets:
+  ds_collector:
+    collections:
+      dossiers:
+        permissions:
+          write:
+          - /buckets/ds_collector/groups/system
+          - account:admin
+      ds_configs:
+        permissions:
+          write:
+          - /buckets/ds_collector/groups/system
+          - account:admin
+      procedures:
+        permissions:
+          write:
+          - /buckets/ds_collector/groups/system
+          - account:admin
+      statistics:
+        permissions:
+          read:
+          - system.Everyone
+          write:
+          - account:admin
+      synchro_histories:
+        permissions:
+          write:
+          - /buckets/ds_collector/groups/system
+          - account:admin
+      tasks:
+        permissions:
+          write:
+          - /buckets/ds_collector/groups/system
+          - account:admin
+    groups:
+      system:
+        data:
+          members:
+          - account:ds-collector
+        permissions:
+          write:
+          - account:admin
+    permissions:
+      write:
+      - account:admin

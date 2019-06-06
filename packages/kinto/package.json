@@ -8,6 +8,13 @@
     "scripts": {
         "db:start": "docker-compose up -d",
         "db:stop": "docker-compose stop",
-        "db:init": "./setup-kinto.sh"
+        "db:init": "node src/index.js && ./scripts/load.sh kinto-config.yml",
+        "db:load": "./scripts/load.sh",
+        "db:dump": "./scripts/dump.sh"
+    },
+    "dependencies": {
+        "btoa": "^1.2.1",
+        "dotenv": "^8.0.0",
+        "node-fetch": "^2.6.0"
     }
 }

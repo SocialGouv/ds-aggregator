@@ -18,6 +18,7 @@ yarn db:start
 yarn db:init
 ```
 
+
 l'interface d'administation de kinto est accessible à l'adresse suivante `http://localhost:8888/v1/admin`:
 - Compte `admin`: admin / passw0rd
 - Compte `ds-collector`: ds-collector / W0rkInFranceND
@@ -89,7 +90,21 @@ Pour visualiser les statistiques dans `ds-dahsboard`, utiliser les API `/api/sta
 |`statistics`   | statistique par `ds_configs`                          | `src/collector/model/statistic.model.ts`  |
 
 
+pour faire un dump
 
+```bash
+yarn db:dump
+
+# le fichier se trouve packages/kinto/scripts/dumps/dump_{TIMESTAMP}.yml
+```
+
+pour charger un dump
+
+```bash
+# DUMP_FILE_PATH: chemin relatif à partir de /packages/kinto/
+yarn db:load -- -- $DUMP_FILE_PATH
+
+```
 
 
 

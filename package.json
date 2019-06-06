@@ -8,7 +8,9 @@
     "start": "lerna run start --parallel",
     "db:start": "lerna run db:start --parallel",
     "db:stop": "lerna run db:stop --parallel",
-    "db:init": "lerna run db:init --parallel"
+    "db:init": "lerna run db:init --parallel",
+    "db:dump": "lerna run db:dump --parallel",
+    "db:load": "lerna run db:load --parallel"
   },
   "devDependencies": {
     "lerna": "^3.13.2"

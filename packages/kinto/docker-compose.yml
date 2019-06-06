@@ -1,12 +1,15 @@
 db:
   image: postgres
+  container_name: ds-aggregator-db
   environment:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
 cache:
   image: library/memcached
+  container_name: ds-aggregator-cache
 web:
   image: kinto/kinto-server
+  container_name: ds-aggregator-kinto
   links:
    - db
    - cache

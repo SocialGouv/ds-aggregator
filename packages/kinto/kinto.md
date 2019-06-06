@@ -23,8 +23,4 @@ $ docker-compose exec web cat /etc/kinto/kinto.ini
 
 A web UI is accessible: `http://localhost:8888/v1/admin/#/`
 
-## configuration
-
-[script d'initialisation](./setup-kinto.sh)
-
 
