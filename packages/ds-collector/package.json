@@ -1,43 +1,43 @@
 {
-    "name": "ds-collector",
-    "version": "1.0.0",
-    "main": "index.js",
-    "author": "Incubateur des Ministères Sociaux <dsi-incubateur@sg.social.gouv.fr> (https://incubateur.social.gouv.fr)",
-    "license": "Apache-2.0",
-    "private": true,
-    "scripts": {
-        "dev": "nodemon --watch 'src/**/*' -e ts --exec ts-node src/server.ts",
-        "build": "tsc",
-        "lint": "tslint -p tsconfig.json -t stylish"
-    },
-    "devDependencies": {
-        "@socialgouv/tslint-config-recommended": "^0.6.0",
-        "@types/date-fns": "^2.6.0",
-        "@types/dotenv": "^6.1.1",
-        "@types/koa": "^2.0.48",
-        "@types/koa-bodyparser": "^4.2.2",
-        "@types/koa-router": "^7.0.40",
-        "@types/koa__cors": "^2.2.3",
-        "@types/node": "^11.13.2",
-        "@types/node-cron": "^2.0.2",
-        "@types/rx": "^4.1.1",
-        "nodemon": "^1.18.11",
-        "prettier": "^1.17.0",
-        "ts-node": "^8.0.3",
-        "tslint": "^5.16.0",
-        "typescript": "^3.4.3"
-    },
-    "dependencies": {
-        "@koa/cors": "^3.0.0",
-        "date-fns": "^1.30.1",
-        "dotenv": "^7.0.0",
-        "koa": "^2.7.0",
-        "koa-bodyparser": "^4.2.1",
-        "koa-router": "^7.4.0",
-        "node-cron": "^2.0.3",
-        "rxjs": "^6.5.1",
-        "typed-rest-client": "^1.2.0",
-        "winston": "^3.2.1",
-        "winston-sentry-node": "^0.0.4"
-    }
+  "name": "ds-collector",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Incubateur des Ministères Sociaux <dsi-incubateur@sg.social.gouv.fr> (https://incubateur.social.gouv.fr)",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon --watch 'src/**/*' -e ts --exec ts-node src/server.ts",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json -t stylish"
+  },
+  "devDependencies": {
+    "@socialgouv/tslint-config-recommended": "^0.6.0",
+    "@types/date-fns": "^2.6.0",
+    "@types/dotenv": "^6.1.1",
+    "@types/koa": "^2.0.48",
+    "@types/koa-bodyparser": "^4.2.2",
+    "@types/koa-router": "^7.0.40",
+    "@types/koa__cors": "^2.2.3",
+    "@types/node": "^11.13.2",
+    "@types/node-cron": "^2.0.2",
+    "@types/rx": "^4.1.1",
+    "nodemon": "^1.18.11",
+    "prettier": "^1.17.0",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.3"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.0.0",
+    "date-fns": "^1.30.1",
+    "dotenv": "^7.0.0",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "node-cron": "^2.0.3",
+    "rxjs": "^6.5.1",
+    "typed-rest-client": "^1.2.0",
+    "winston": "^3.2.1",
+    "winston-sentry-node": "^0.0.4"
+  }
 }
