@@ -1,5 +1,4 @@
 {
-  "name": "ds-aggregator",
   "private": true,
   "scripts": {
     "build": "lerna run build",
@@ -12,7 +11,7 @@
     "db:dump": "lerna run db:dump --parallel",
     "db:load": "lerna run db:load --parallel"
   },
-  "devDependencies": {
+  "dependencies": {
     "lerna": "^3.13.2"
   },
   "workspaces": [
