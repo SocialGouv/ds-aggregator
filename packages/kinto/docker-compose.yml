@@ -1,6 +1,8 @@
 ds-db:
   image: postgres
   container_name: ds-aggregator-db
+  ports:
+   - "5433:5432"
   environment:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
