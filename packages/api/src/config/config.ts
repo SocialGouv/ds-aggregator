@@ -1,25 +1,22 @@
-import { config } from 'dotenv';
 
-config();
-
-const asString = (arg: any): string => {
-    const res = process.env[arg]
+const asString = (env: typeof process.env, arg: string): string => {
+    const res = env[arg]
     if (!res) {
         throw new Error(`env variable ${arg} is required`);
     }
     return res;
 }
 
-const asNumber = (arg: any): number => {
-    const res = process.env[arg]
+const asNumber = (env: typeof process.env, arg: string): number => {
+    const res = env[arg]
     if (!res) {
         throw new Error(`env variable ${arg} is required`);
     }
     return Number.parseInt(res, 10);
 }
 
-const asBoolean = (arg: any): boolean => {
-    const res = process.env[arg];
+const asBoolean = (env: typeof process.env, arg: string): boolean => {
+    const res = env[arg];
     if (!res) {
         throw new Error(`env variable ${arg} is required`);
     }
@@ -27,23 +24,23 @@ const asBoolean = (arg: any): boolean => {
 }
 
 
-export const configuration = {
-    dsAPI: asString('DS_API'),
-    dsToken: asString('DS_TOKEN'),
+export const getConfiguration = (env: typeof process.env) => ({
+    dsAPI: asString(env, 'DS_API'),
+    dsToken: asString(env, 'DS_TOKEN'),
 
-    dossierSynchroCron: asString('DOSSIER_SYNCHRO_CRON'),
+    dossierSynchroCron: asString(env, 'DOSSIER_SYNCHRO_CRON'),
 
-    taskCron: asString('TASK_CRON'),
+    taskCron: asString(env, 'TASK_CRON'),
 
-    apiPrefix: asString('API_PREFIX'),
+    apiPrefix: asString(env, 'API_PREFIX'),
     // tslint:disable-next-line: object-literal-sort-keys
-    apiPort: asNumber('API_PORT'),
+    apiPort: asNumber(env, 'API_PORT'),
 
-    kintoAPI: asString('KINTO_API'),
-    kintoLogin: asString('KINTO_LOGIN'),
-    kintoPassword: asString('KINTO_PASSWORD'),
+    kintoAPI: asString(env, 'KINTO_API'),
+    kintoLogin: asString(env, 'KINTO_LOGIN'),
+    kintoPassword: asString(env, 'KINTO_PASSWORD'),
 
-    sentryEnabled: asBoolean('SENTRY_ENABLED'),
-    sentryDSN: asString('SENTRY_DSN')
-};
+    sentryEnabled: asBoolean(env, 'SENTRY_ENABLED'),
+    sentryDSN: asString(env, 'SENTRY_DSN')
+});
 
