@@ -28,18 +28,18 @@ const asBoolean = (arg: any): boolean => {
 
 
 export const configuration = {
-    dsAPI: asString('DS_API'),
+    dsAPI: 'https://www.demarches-simplifiees.fr',
     dsToken: asString('DS_TOKEN'),
 
-    dossierSynchroCron: asString('DOSSIER_SYNCHRO_CRON'),
+    dossierSynchroCron: '0 0 2 * * *',
 
-    taskCron: asString('TASK_CRON'),
+    taskCron: '0 * * * * *',
 
     apiPrefix: asString('API_PREFIX'),
     // tslint:disable-next-line: object-literal-sort-keys
     apiPort: asNumber('API_PORT'),
 
-    kintoAPI: asString('KINTO_API'),
+    kintoAPI: asString('KINTO_URL'),
     kintoLogin: asString('KINTO_LOGIN'),
     kintoPassword: asString('KINTO_PASSWORD'),
 
