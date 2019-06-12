@@ -63,14 +63,14 @@ class KintoClient {
                     map((res: KintoResult<T>) => res.data)
                 );
             },
-            update: (recordId: string, record: T) => {
-                return this.client.update<KintoResult<T>>(`${collectionName}/records/${recordId}`, { data: record }).pipe(
-                    map((res: KintoResult<T>) => res.data),
-                );
-            },
             search: (filter: string) => {
                 return this.client.get<KintoResult<T[]>>(`${collectionName}/records?${filter}`).pipe(
                     map((res: KintoResult<T[]>) => (res.data) ? res.data : []),
+                );
+            },
+            update: (recordId: string, record: T) => {
+                return this.client.update<KintoResult<T>>(`${collectionName}/records/${recordId}`, { data: record }).pipe(
+                    map((res: KintoResult<T>) => res.data),
                 );
             }
         }
