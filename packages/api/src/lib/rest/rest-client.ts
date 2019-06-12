@@ -24,33 +24,33 @@ export class RestClient {
     public get<T>(url: string): Observable<T> {
         return from(this.client.get<any>(this.buildResourcePath(url))).pipe(
             map(this.handleResult),
-            catchError(this.handleError)
+            catchError(err => this.handleError(err, url)),
         );
     }
 
     public create<T>(url: string, data: any): Observable<T> {
         return from(this.client.create<any>(this.buildResourcePath(url), data)).pipe(
             map(this.handleResult),
-            catchError(this.handleError)
+            catchError(err => this.handleError(err, url)),
         );
     }
 
     public update<T>(url: string, data: any): Observable<T> {
         return from(this.client.update<any>(this.buildResourcePath(url), data)).pipe(
             map(this.handleResult),
-            catchError(this.handleError),
+            catchError(err => this.handleError(err, url)),
         );
     }
 
     public delete<T>(url: string): Observable<T> {
         return from(this.client.del<any>(this.buildResourcePath(url))).pipe(
             map(this.handleResult),
-            catchError(this.handleError),
+            catchError(err => this.handleError(err, url)),
         );
     }
 
-    private handleError(error: any): Observable<any> {
-        logger.error('[RestClient] ', error);
+    private handleError(error: any, url: string): Observable<any> {
+        logger.error(`[RestClient] ${url}`, error);
         return throwError(error);
     }
 
