@@ -1,0 +1,14 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ds-aggregator-api${HASH_BRANCH_NAME}
+  labels:
+    app: ds-aggregator-api${HASH_BRANCH_NAME}
+    branch: ds-aggregator${HASH_BRANCH_NAME}
+spec:
+  selector:
+    app: ds-aggregator-api${HASH_BRANCH_NAME}
+  ports:
+  - port: ${PORT}
+    name: api
