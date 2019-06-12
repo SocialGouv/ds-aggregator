@@ -11,13 +11,9 @@ RUN yarn build
 
 FROM node:${NODE_VERSION}
 
-ENV API_PORT=1337
-
 WORKDIR /app
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/package.json /app/package.json
-
-EXPOSE ${API_PORT}
 
 CMD [ "yarn", "start"]

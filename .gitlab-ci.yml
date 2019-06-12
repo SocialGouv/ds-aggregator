@@ -12,7 +12,6 @@ variables:
   IMAGE_INFRA_BASE_NAME: "infra/images-docker"
   DEV_ENVIRONMENT_NAME: "dev.factory"
   PROD_ENVIRONMENT_NAME: "incubateur"
-  APP_PORT: 9000
   API_PORT: 4000
   KINTO_PORT: 8888
   POSTGRES_PORT: 5432
