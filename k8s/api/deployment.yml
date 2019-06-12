@@ -35,7 +35,7 @@ spec:
                   name: ds-aggregator-secret
                   key: DS_TOKEN
             - name: KINTO_URL
-              value: "http://kinto${HASH_BRANCH_NAME}:8888/v1"
+              value: "http://kinto${HASH_BRANCH_NAME}:8888/v1/buckets/ds_collector/collections"
             - name: KINTO_BUCKET
               value: "ds-aggregator"
             - name: KINTO_LOGIN

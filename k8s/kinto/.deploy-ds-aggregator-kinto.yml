@@ -9,11 +9,11 @@
   - export HASH_BRANCH_NAME=-$HASH_BRANCH_NAME
   - envsubst < k8s/kinto/deployment.yml > k8s/kinto/deployment-ds-aggregator.yml
   - envsubst < k8s/kinto/service.yml > k8s/kinto/service-ds-aggregator.yml
-  # - envsubst < k8s/kinto/job-init-kinto.yml > k8s/kinto/job-init-kinto-ds-aggregator.yml
+  - envsubst < k8s/kinto/job-init-kinto.yml > k8s/kinto/job-init-kinto-ds-aggregator.yml
   script:
   - kubectl apply -f k8s/kinto/deployment-ds-aggregator.yml
   - kubectl apply -f k8s/kinto/service-ds-aggregator.yml
-  # - k8s/scripts/init-kinto.sh $HASH_BRANCH_NAME
+  - k8s/scripts/init-kinto.sh $HASH_BRANCH_NAME
   allow_failure: false
 
 .deploy-ds-aggregator-kinto-k8s-prod:
@@ -24,9 +24,9 @@
   - /apps/create-kubeconfig.sh
   - envsubst < k8s/kinto/deployment-prod.yml > k8s/kinto/deployment-prod-ds-aggregator.yml
   - envsubst < k8s/kinto/service.yml > k8s/kinto/service-ds-aggregator.yml
-  # - envsubst < k8s/kinto/job-init-kinto.yml > k8s/kinto/job-init-kinto-ds-aggregator.yml
+  - envsubst < k8s/kinto/job-init-kinto.yml > k8s/kinto/job-init-kinto-ds-aggregator.yml
   script:
   - kubectl apply -f k8s/kinto/deployment-prod-ds-aggregator.yml
   - kubectl apply -f k8s/kinto/service-ds-aggregator.yml
-  # - k8s/scripts/init-kinto.sh $HASH_BRANCH_NAME
+  - k8s/scripts/init-kinto.sh $HASH_BRANCH_NAME
   allow_failure: false

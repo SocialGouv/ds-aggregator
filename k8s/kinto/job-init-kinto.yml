@@ -1,29 +1,29 @@
-# ---
-# kind: Job
-# apiVersion: batch/v1
-# metadata:
-#   name: ds-aggregator-init-kinto${HASH_BRANCH_NAME}
-#   labels:
-#     app: ds-aggregator-init-kinto
-#     branch: ds-aggregator${HASH_BRANCH_NAME}
-# spec:
-#   ttlSecondsAfterFinished: 100
-#   template:
-#     spec:
-#       containers:
-#       - image: ${DS_AGGREGATOR_REGISTRY}/kinto:${IMAGE_TAG}
-#         name: ds-aggregator-init-kinto
-#         env:
-#         - name: KINTO_BASE_URL
-#           value: "kinto${HASH_BRANCH_NAME}"
-#         - name: KINTO_ADMIN_LOGIN
-#           valueFrom:
-#             secretKeyRef:
-#               name: ds-aggregator-secret
-#               key: KINTO_ADMIN_LOGIN
-#         - name: KINTO_ADMIN_PASSWORD
-#           valueFrom:
-#             secretKeyRef:
-#               name: ds-aggregator-secret
-#               key: KINTO_ADMIN_PASSWORD
-#       restartPolicy: Never
+---
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: ds-aggregator-init-kinto${HASH_BRANCH_NAME}
+  labels:
+    app: ds-aggregator-init-kinto
+    branch: ds-aggregator${HASH_BRANCH_NAME}
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+      - image: ${DS_AGGREGATOR_REGISTRY}/kinto:${IMAGE_TAG}
+        name: ds-aggregator-init-kinto
+        env:
+        - name: KINTO_BASE_URL
+          value: "kinto${HASH_BRANCH_NAME}"
+        - name: KINTO_ADMIN_LOGIN
+          valueFrom:
+            secretKeyRef:
+              name: ds-aggregator-secret
+              key: KINTO_ADMIN_LOGIN
+        - name: KINTO_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ds-aggregator-secret
+              key: KINTO_ADMIN_PASSWORD
+      restartPolicy: Never
