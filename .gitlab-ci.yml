@@ -84,7 +84,6 @@ Register api image:
     CONTEXT: .
     DOCKERFILE_PATH: packages/api/Dockerfile
     IMAGE_NAME: $CI_REGISTRY_IMAGE/api
-<<<<<<< HEAD
 
 ###########################################
 ###            DEPLOY TO K8S            ###
@@ -147,8 +146,6 @@ Deploy @ds-aggregator/kinto (dev):
   - master
 
 # Prod Environment
-=======
->>>>>>> refactor: rename ds-collector to api
 
 Deploy @ds-aggregator/api (prod):
   <<: *deploy_stage
