@@ -29,10 +29,10 @@ stages:
   - docker push $IMAGE_NAME
 #
 
-Register ds-collector image:
+Register api image:
   <<: *register_stage
   variables:
     CONTEXT: .
-    DOCKERFILE_PATH: packages/ds-collector/Dockerfile
-    IMAGE_NAME: $CI_REGISTRY_IMAGE/ds-collector
+    DOCKERFILE_PATH: packages/api/Dockerfile
+    IMAGE_NAME: $CI_REGISTRY_IMAGE/api
 
