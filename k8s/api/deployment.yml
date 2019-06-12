@@ -1,0 +1,61 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ds-aggregator-api${HASH_BRANCH_NAME}
+  labels:
+    app: ds-aggregator-api${HASH_BRANCH_NAME}
+    branch: ds-aggregator${HASH_BRANCH_NAME}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ds-aggregator-api${HASH_BRANCH_NAME}
+  template:
+    metadata:
+      labels:
+        app: ds-aggregator-api${HASH_BRANCH_NAME}
+    spec:
+      containers:
+      - image: ${ds-aggregator_REGISTRY}/api:${IMAGE_TAG}
+        name: ds-aggregator-api
+        ports:
+        - containerPort: ${PORT}
+        env:
+        - name: API_PORT
+          value: "${PORT}"
+        - name: KINTO_URL
+          value: "http://kinto${HASH_BRANCH_NAME}:8888/v1"
+        - name: KINTO_BUCKET
+          value: "ds-aggregator"
+        - name: KINTO_LOGIN
+          valueFrom:
+            secretKeyRef:
+              name: ds-aggregator-secret
+              key: KINTO_ADMIN_LOGIN
+        - name: KINTO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ds-aggregator-secret
+              key: KINTO_ADMIN_PASSWORD
+        - name: MAIL_USE_TLS
+          value: "true"
+        - name: MAIL_PORT
+          value: "465"
+        - name: MAIL_FROM
+          value: "ds-aggregator <contact@ds-aggregator.beta.gouv.fr>"
+        - name: MAIL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: ds-aggregator-secret
+              key: MAIL_HOST
+        - name: MAIL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: ds-aggregator-secret
+              key: MAIL_USERNAME
+        - name: MAIL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ds-aggregator-secret
+              key: MAIL_PASSWORD

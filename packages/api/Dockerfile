@@ -3,7 +3,7 @@ ARG NODE_VERSION=10.15.3
 FROM node:${NODE_VERSION} as builder
 WORKDIR /app
 
-COPY packages/ds-collector /app
+COPY packages/api /app
 COPY yarn.lock /app/yarn.lock
 
 RUN yarn

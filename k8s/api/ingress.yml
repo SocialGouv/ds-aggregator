@@ -1,0 +1,17 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ds-aggregator-api${HASH_BRANCH_NAME}
+  labels:
+    app: ds-aggregator-api${HASH_BRANCH_NAME}
+    branch: ds-aggregator${HASH_BRANCH_NAME}
+spec:
+  rules:
+  - host: ${HASH_BRANCH_INGRESS}ds-aggregator-api.${ENVIRONMENT}.social.gouv.fr
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ds-aggregator-api${HASH_BRANCH_NAME}
+          servicePort: ${PORT}
