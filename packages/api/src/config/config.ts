@@ -31,7 +31,7 @@ export const configuration = {
     dsAPI: 'https://www.demarches-simplifiees.fr',
     dsToken: asString('DS_TOKEN'),
 
-    dossierSynchroCron: '0 0 2 * * *',
+    dossierSynchroCron: '0 15 * * * *',
 
     taskCron: '0 * * * * *',
 
