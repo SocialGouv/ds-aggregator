@@ -17,7 +17,7 @@ spec:
         app: ds-aggregator-api${HASH_BRANCH_NAME}
     spec:
       containers:
-      - image: ${ds-aggregator_REGISTRY}/api:${IMAGE_TAG}
+      - image: ${DS_AGGREGATOR_REGISTRY}/api:${IMAGE_TAG}
         name: ds-aggregator-api
         ports:
         - containerPort: ${PORT}
