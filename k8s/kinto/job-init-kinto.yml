@@ -11,7 +11,7 @@
 #   template:
 #     spec:
 #       containers:
-#       - image: ${ds-aggregator_REGISTRY}/kinto:${IMAGE_TAG}
+#       - image: ${DS_AGGREGATOR_REGISTRY}/kinto:${IMAGE_TAG}
 #         name: ds-aggregator-init-kinto
 #         env:
 #         - name: KINTO_BASE_URL
