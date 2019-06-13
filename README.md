@@ -1,5 +1,9 @@
 # ds-aggregator
 
+[![pipeline status](https://gitlab.factory.social.gouv.fr/SocialGouv/ds-aggregator/badges/master/pipeline.svg)](https://gitlab.factory.social.gouv.fr/SocialGouv/ds-aggregator/commits/master)
+[![Build Status](https://travis-ci.com/SocialGouv/ds-aggregator.svg?branch=master)](https://travis-ci.com/SocialGouv/ds-aggregator)
+[![codecov](https://codecov.io/gh/SocialGouv/ds-aggregator/branch/master/graph/badge.svg)](https://codecov.io/gh/SocialGouv/ds-aggregator)
+
 Ce dépot contient `api` qui synchronise les données de N démarches simplifiées dans une même base de données (kinto).
 
 Les démarches simplifiées à synchroniser doivent être accessibles avec le même token API DS.
