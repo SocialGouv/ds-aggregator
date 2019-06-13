@@ -19,20 +19,20 @@ const validEnv = {
 it("should return the env configuration", () => {
   const env = { ...validEnv };
   expect(getConfiguration(env)).toMatchInlineSnapshot(`
-        Object {
-          "apiPort": 123456,
-          "apiPrefix": "API_PREFIX",
-          "dossierSynchroCron": "DOSSIER_SYNCHRO_CRON",
-          "dsAPI": "DS_API",
-          "dsToken": "DS_TOKEN",
-          "kintoAPI": "KINTO_API",
-          "kintoLogin": "KINTO_LOGIN",
-          "kintoPassword": "KINTO_PASSWORD",
-          "sentryDSN": "SENTRY_DSN",
-          "sentryEnabled": true,
-          "taskCron": "TASK_CRON",
-        }
-    `);
+    Object {
+      "apiPort": 123456,
+      "apiPrefix": "API_PREFIX",
+      "dossierSynchroCron": "DOSSIER_SYNCHRO_CRON",
+      "dsAPI": "DS_API",
+      "dsToken": "DS_TOKEN",
+      "kintoAPI": "KINTO_API",
+      "kintoLogin": "KINTO_LOGIN",
+      "kintoPassword": "KINTO_PASSWORD",
+      "sentryDSN": "SENTRY_DSN",
+      "sentryEnabled": true,
+      "taskCron": "TASK_CRON",
+    }
+  `);
 });
 
 it("sentryEnabled should be false is not 'true'", () => {
@@ -40,7 +40,9 @@ it("sentryEnabled should be false is not 'true'", () => {
   expect(getConfiguration(env).sentryEnabled).toBeFalsy();
 });
 
-it.each(Object.keys(validEnv))("fails if missing %s", (x) => {
+it.each(Object.keys(validEnv))("fails if missing %s", x => {
   const env = { ...validEnv, [x]: undefined };
-  expect(() => getConfiguration(env)).toThrowError(/env variable \w+ is required/);
+  expect(() => getConfiguration(env)).toThrowError(
+    /env variable \w+ is required/
+  );
 });
