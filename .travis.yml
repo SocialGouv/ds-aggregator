@@ -18,6 +18,6 @@ jobs:
       script:
         - yarn build
         - yarn lint
-        - yarn test
+        - yarn coverage
       after_script:
         - npx codecov
