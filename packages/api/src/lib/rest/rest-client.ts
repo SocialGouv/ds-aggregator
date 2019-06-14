@@ -66,7 +66,7 @@ export class RestClient {
   }
 
   private handleError(error: any, url: string): Observable<any> {
-    logger.error(`[RestClient] ${url}`, error);
+    logger.error(`[RestClient] ${url}: `, error);
     return throwError(error);
   }
 

@@ -33,5 +33,7 @@ export const getConfiguration = (env: typeof process.env) => ({
   kintoURL: asString(env, "KINTO_URL"),
 
   sentryDSN: asString(env, "SENTRY_DSN"),
-  sentryEnabled: asBoolean(env, "SENTRY_ENABLED")
+  sentryEnabled: asBoolean(env, "SENTRY_ENABLED"),
+
+  schedulerCronTask: asString(env, "SCHEDULER_CRON_TASK")
 });
