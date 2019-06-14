@@ -5,7 +5,7 @@ export const asTimestamp = (dateUTC?: string) => {
   return null;
 };
 
-export const asArray = (args: string) => {
+export const asArray = (args?: string | null) => {
   if (args === undefined || args == null) {
     return [];
   }
@@ -13,7 +13,10 @@ export const asArray = (args: string) => {
   return args.split(",").map((val: string) => val.trim());
 };
 
-export const asNumber = (args: string | undefined, defaultValue: number) => {
+export const asNumber = (
+  args: string | undefined | null,
+  defaultValue: number
+) => {
   if (args == null || args === undefined) {
     return defaultValue;
   }
