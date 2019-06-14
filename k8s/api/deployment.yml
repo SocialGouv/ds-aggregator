@@ -79,3 +79,8 @@ spec:
                 secretKeyRef:
                   name: ds-aggregator-secret
                   key: SENTRY_DSN
+            - name: SCHEDULER_CRON_TASK
+              valueFrom:
+                secretKeyRef:
+                  name: ds-aggregator-secret
+                  key: SCHEDULER_CRON_TASK
