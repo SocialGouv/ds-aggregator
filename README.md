@@ -73,3 +73,38 @@ docker-compose up
 |`dossiers`     | dossiers synchronisés                                 | `src/collector/model/record.model.ts`     |
 |`tasks`        | liste des dossiers à synchroniser                     | `src/collector/model/task.model.ts`       |
 |`statistics`   | statistique par `ds_configs`                          | `src/collector/model/statistic.model.ts`  |
+
+
+## Release policy
+
+### Auto
+
+Trigger a custom build on [Travis](https://travis-ci.com/SocialGouv/ds-aggregator) (in the "More options" right menu) on the `master` branch with a custom config:
+
+```yml
+env:
+  global:
+    - RELEASE=true
+```
+
+You can change the lerna arguments though the `LERNA_ARGS` variable.
+
+```yml
+env:
+  global:
+    - LERNA_ARGS="major --yes"
+    - RELEASE=true
+```
+
+### Manual
+
+You need an [Github token](https://github.com/settings/tokens/new) to release.
+
+```sh
+#
+# Bump, push to git and publish to npm
+$ GH_TOKEN=${GITHUB_TOKEN} yarn lerna version
+
+#
+# You might want to add a Gif to your release to make it groovy ;)
+```
