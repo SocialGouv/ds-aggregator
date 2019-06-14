@@ -4,20 +4,55 @@ language: minimal
 git:
   depth: 5
 
+#
+
+.env:
+  github_keys: &github_keys
+    - secure: "NqRm2BupDPrzt+HAWkhQrRAZOHhQ4yZxRL3jO62YSnva0Se6DHMyHg1HZFeXvt0qWcS4kNaPxyQWwslq3WUu7W7nTj/W/icmuoPY4cJ5ju60XLoZMu4bjYhcePIQpDpeT2/JCLhCHZinVHDsnjQX+ltBE/KzE6ouoc2CZu1bn93B4RakfviMtvIIC2vCh2hhgke6KEliR1xdt72KSx3yu02UxPm1mR0tXkEZb3hEPTQ9ztyiaLjjhHQ5bau/AEVNQl408ieJnTY9wPjcuCkTAkVk6+H6yvifoaugSsIVYO1ykZEreOO4Xq37yMtoOxVg+16iv6KG451Wf7oIXgJyftVdlKWgFBCgPwY+iz/tGRL0zmlmpzdgjF3XZ1hdwnYhQ/HORNEKMmGddLsIgoMBUx/afw6HaI5ZhZ+HjMtxn7eR8L3KIFd7YkufLI3KJRJjgz1ihx5a/vJMhx3Whw6dsA+o32riHUMmjs6YTX099mNu8+63oFyHZ9+w5mIa7NjFab5fchphMB+pxKGvAfjbi0puy/k4dMaDpmwzdczM2xmjKPFDL3Rfg0JfRwSwt3lCfnzMyBFqhqPZOIrBxHFVfOI5RByJvja3jt7OaR108RWmIMSDJm3D7pSNB5qwuwpFFe+Lyf+QU3ZsI9OBoS7awBZ5sgcnpMXFIkHxzLMfJoM="
+
+#
+
+.node_stage: &node_stage
+  language: node_js
+  node_js: "10"
+  cache: yarn
+  before_install:
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
+    - export PATH="$HOME/.yarn/bin:$PATH"
+  install:
+    - yarn --frozen-lockfile
+
+#
+
 jobs:
   include:
     - stage: Build
-      language: node_js
-      node_js: stable
-      cache: yarn
-      before_install:
-        - curl -o- -L https://yarnpkg.com/install.sh | bash
-        - export PATH="$HOME/.yarn/bin:$PATH"
-      install:
-        - yarn --frozen-lockfile
+      <<: *node_stage
       script:
         - yarn build
         - yarn lint
         - yarn coverage
       after_script:
         - npx codecov
+
+    #
+    #
+    #
+
+    - stage: Release
+      name: Make a new release 🎉
+      if: env(RELEASE)
+      <<: *node_stage
+      git:
+        # NOTE(douglasduteil): disable git --depth
+        # Try to have all the commits for the release Change Log
+        # see travis-ci/travis-ci#3412
+        depth: 9999999 # Over 9000 !
+      env: *github_keys
+      before_script:
+        - git checkout ${TRAVIS_BRANCH}
+        - git config user.name "Social Groovy Bot"
+        - git config user.email "45039513+SocialGroovyBot@users.noreply.github.com"
+        - git remote set-url origin https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+      script:
+        - GH_TOKEN=${GITHUB_TOKEN} yarn lerna version ${LERNA_ARGS:=--yes}
