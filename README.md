@@ -92,7 +92,7 @@ You can change the lerna arguments though the `LERNA_ARGS` variable.
 ```yml
 env:
   global:
-    - LERNA_ARGS="major --yes"
+    - LERNA_ARGS="major --force-publish --yes"
     - RELEASE=true
 ```
 
