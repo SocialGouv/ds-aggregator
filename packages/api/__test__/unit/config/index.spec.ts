@@ -6,9 +6,9 @@ const validEnv = {
   API_PORT: "123456",
   API_PREFIX: "API_PREFIX",
   DS_TOKEN: "DS_TOKEN",
-  KINTO_API: "KINTO_API",
   KINTO_LOGIN: "KINTO_LOGIN",
   KINTO_PASSWORD: "KINTO_PASSWORD",
+  KINTO_URL: "KINTO_URL",
   SENTRY_DSN: "SENTRY_DSN",
   SENTRY_ENABLED: "true"
 };
@@ -20,9 +20,9 @@ it("should return the env configuration", () => {
       "apiPort": 123456,
       "apiPrefix": "API_PREFIX",
       "dsToken": "DS_TOKEN",
-      "kintoAPI": "KINTO_API",
       "kintoLogin": "KINTO_LOGIN",
       "kintoPassword": "KINTO_PASSWORD",
+      "kintoURL": "KINTO_URL",
       "sentryDSN": "SENTRY_DSN",
       "sentryEnabled": true,
     }

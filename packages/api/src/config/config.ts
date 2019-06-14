@@ -32,9 +32,9 @@ export const getConfiguration = (env: typeof process.env) => ({
   apiPort: asNumber(env, "API_PORT"),
   apiPrefix: asString(env, "API_PREFIX"),
 
-  kintoAPI: asString(env, "KINTO_URL"),
   kintoLogin: asString(env, "KINTO_LOGIN"),
   kintoPassword: asString(env, "KINTO_PASSWORD"),
+  kintoURL: asString(env, "KINTO_URL"),
 
   sentryDSN: asString(env, "SENTRY_DSN"),
   sentryEnabled: asBoolean(env, "SENTRY_ENABLED")

@@ -1,12 +1,12 @@
 import { configuration } from "../../config";
 import { kintoClient } from "../../lib";
 
-const kintoAPI = configuration.kintoAPI || "";
+const kintoURL = configuration.kintoURL || "";
 const kintoLogin = configuration.kintoLogin || "";
 const kintoPassword = configuration.kintoPassword || "";
 
 export const kintoClientInstance = kintoClient(
-  kintoAPI,
+  kintoURL,
   kintoLogin,
   kintoPassword
 );

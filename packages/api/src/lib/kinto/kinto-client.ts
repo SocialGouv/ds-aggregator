@@ -30,7 +30,11 @@ class KintoClient {
   private client: RestClient;
 
   constructor(url: string, login: string, password: string) {
-    this.client = new RestClient(url, undefined, { login, password });
+    const collectionsURL = `${url}/v1/buckets/ds_collector/collections`;
+    this.client = new RestClient(collectionsURL, undefined, {
+      login,
+      password
+    });
   }
 
   public collection<T>(collectionName: string): KintoCollection<T> {
@@ -78,5 +82,5 @@ class KintoClient {
   }
 }
 
-export const kintoClient = (api: string, login: string, password: string) =>
-  new KintoClient(api, login, password);
+export const kintoClient = (url: string, login: string, password: string) =>
+  new KintoClient(url, login, password);

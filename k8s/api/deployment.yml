@@ -29,7 +29,7 @@ spec:
                 secretKeyRef:
                   name: ds-aggregator-secret
                   key: API_PREFIX
-            - name: KINTO_URL
+            - name: KINTO_API
               value: "http://kinto${HASH_BRANCH_NAME}:8888/v1/buckets/ds_collector/collections"
             - name: KINTO_BUCKET
               value: "ds-aggregator"
