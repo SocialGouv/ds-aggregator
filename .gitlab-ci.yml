@@ -18,11 +18,30 @@ variables:
   MEMCACHED_PORT: 11212
 
 stages:
-  - "Prepare"
+  - "Code Quality"
   - "Registration"
   - "Deploy"
   - "Send Url to GitHub"
   - "Delete K8S objects"
+
+#
+.quality_stage: &quality_stage
+  stage: "Code Quality"
+  image: node:10-alpine
+  before_script:
+    - yarn --frozen-lockfile
+#
+
+Quality tests:
+  <<: *quality_stage
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+  script:
+    - yarn build
+    - yarn lint
+    - yarn test
 
 ###########################################
 ###               PREPARE               ###
@@ -30,6 +49,7 @@ stages:
 
 #
 .get_github_id_stage: &get_github_id_stage
+  stage: "Deploy"
   image:
     name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
     entrypoint: [""]
@@ -44,7 +64,6 @@ stages:
 
 Get Github Id (dev):
   <<: *get_github_id_stage
-  stage: "Prepare"
   environment:
     name: $DEV_ENVIRONMENT_NAME
   except:
@@ -52,7 +71,6 @@ Get Github Id (dev):
 
 Get Github Id (prod):
   <<: *get_github_id_stage
-  stage: "Prepare"
   environment:
     name: $PROD_ENVIRONMENT_NAME
   only:
