@@ -9,6 +9,7 @@ const validEnv = {
   KINTO_LOGIN: "KINTO_LOGIN",
   KINTO_PASSWORD: "KINTO_PASSWORD",
   KINTO_URL: "KINTO_URL",
+  SCHEDULER_CRON_DS: "SCHEDULER_CRON_DS",
   SCHEDULER_CRON_TASK: "SCHEDULER_CRON_TASK",
   SENTRY_DSN: "SENTRY_DSN",
   SENTRY_ENABLED: "true"
@@ -24,6 +25,7 @@ it("should return the env configuration", () => {
       "kintoLogin": "KINTO_LOGIN",
       "kintoPassword": "KINTO_PASSWORD",
       "kintoURL": "KINTO_URL",
+      "schedulerCronDS": "SCHEDULER_CRON_DS",
       "schedulerCronTask": "SCHEDULER_CRON_TASK",
       "sentryDSN": "SENTRY_DSN",
       "sentryEnabled": true,

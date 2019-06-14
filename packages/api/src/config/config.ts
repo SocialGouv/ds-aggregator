@@ -35,5 +35,6 @@ export const getConfiguration = (env: typeof process.env) => ({
   sentryDSN: asString(env, "SENTRY_DSN"),
   sentryEnabled: asBoolean(env, "SENTRY_ENABLED"),
 
+  schedulerCronDS: asString(env, "SCHEDULER_CRON_DS"),
   schedulerCronTask: asString(env, "SCHEDULER_CRON_TASK")
 });
