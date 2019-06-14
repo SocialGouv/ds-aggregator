@@ -34,7 +34,8 @@ it("sentryEnabled should be false is not 'true'", () => {
   expect(getConfiguration(env).sentryEnabled).toBeFalsy();
 });
 
-it.each(Object.keys(validEnv))("fails if missing %s", (x: any) => {
+// tslint:disable-next-line: arrow-parens
+it.each(Object.keys(validEnv))("fails if missing %s", x => {
   const env = { ...validEnv, [x]: undefined };
   expect(() => getConfiguration(env)).toThrowError(
     /env variable \w+ is required/

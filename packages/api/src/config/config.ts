@@ -23,10 +23,6 @@ const asBoolean = (env: typeof process.env, arg: string): boolean => {
 };
 
 export const getConfiguration = (env: typeof process.env) => ({
-  dossierSynchroCron: "0 15 * * * *",
-  dsAPI: "https://www.demarches-simplifiees.fr",
-  taskCron: "0 * * * * *",
-
   dsToken: asString(env, "DS_TOKEN"),
 
   apiPort: asNumber(env, "API_PORT"),

@@ -1,13 +1,12 @@
 import { Observable, of } from "rxjs";
 import { concatMap, flatMap, mergeMap } from "rxjs/operators";
 import { DossierRecord, Task, taskService } from "../collector";
-import { configuration } from "../config";
 import { dossierSynchroService } from "./dossier-synchro.service";
 import { handleScheduler } from "./scheduler.service";
 
 export const taskScheduler = {
   start: () => {
-    handleScheduler(configuration.taskCron, "task", () => {
+    handleScheduler("0 0 * * * *", "task", () => {
       return allTasksToComplete().pipe(concatMap(syncDossierAndCompleteTask));
     });
   }

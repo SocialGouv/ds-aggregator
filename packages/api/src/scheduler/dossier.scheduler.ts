@@ -16,7 +16,6 @@ import {
   procedureService
 } from "../collector";
 import { statisticService } from "../collector/service/statistic.service";
-import { configuration } from "../config";
 import {
   demarcheSimplifieeService,
   DSDossierItem,
@@ -29,23 +28,19 @@ import { handleScheduler } from "./scheduler.service";
 
 export const dossierScheduler = {
   start: () => {
-    handleScheduler(
-      configuration.dossierSynchroCron,
-      "dossier-synchro",
-      (start: number) => {
-        return allDossierItemInfos().pipe(
-          filter((res: DossierItemInfo) => res.updatedDate > start),
-          concatMap((res: DossierItemInfo) =>
-            dossierSynchroService.syncDossier(res.procedureId, res.dossierId)
-          ),
-          reduce((acc: DossierRecord[], record: DossierRecord) => {
-            acc.push(record);
-            return acc;
-          }, []),
-          exhaustMap(() => statisticService.statistic())
-        );
-      }
-    );
+    handleScheduler("0 15 * * * *", "dossier-synchro", (start: number) => {
+      return allDossierItemInfos().pipe(
+        filter((res: DossierItemInfo) => res.updatedDate > start),
+        concatMap((res: DossierItemInfo) =>
+          dossierSynchroService.syncDossier(res.procedureId, res.dossierId)
+        ),
+        reduce((acc: DossierRecord[], record: DossierRecord) => {
+          acc.push(record);
+          return acc;
+        }, []),
+        exhaustMap(() => statisticService.statistic())
+      );
+    });
   }
 };
 

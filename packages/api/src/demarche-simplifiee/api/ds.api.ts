@@ -3,6 +3,8 @@ import { configuration } from "../../config";
 import { RestClient } from "../../lib/rest";
 import { DSDossier, DSDossierItem, DSProcedure } from "../model";
 
+const api = "https://www.demarches-simplifiees.fr";
+
 interface DSDossierListResult {
   dossiers: DSDossierItem[];
   pagination: {
@@ -24,10 +26,7 @@ class DemarcheSimplifieeAPI {
   private client: RestClient;
 
   constructor() {
-    this.client = new RestClient(
-      configuration.dsAPI || "",
-      configuration.dsToken || ""
-    );
+    this.client = new RestClient(api, configuration.dsToken || "");
   }
 
   public getDSProcedure(
