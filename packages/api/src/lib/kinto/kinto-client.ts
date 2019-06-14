@@ -30,7 +30,7 @@ class KintoClient {
   private client: RestClient;
 
   constructor(url: string, login: string, password: string) {
-    const collectionsURL = `${url}/v1/buckets/ds_collector/collections`;
+    const collectionsURL = `${url}/buckets/ds_collector/collections`;
     this.client = new RestClient(collectionsURL, undefined, {
       login,
       password

@@ -6,11 +6,7 @@
     "license": "Apache-2.0",
     "private": true,
     "scripts": {
-        "db:start": "docker-compose up -d",
-        "db:stop": "docker-compose stop",
-        "db:init": "node src/index.js && ./scripts/load.sh kinto-config.yml",
-        "db:load": "./scripts/load.sh",
-        "db:dump": "./scripts/dump.sh"
+      "start": "docker-compose up kinto-server init-kinto"
     },
     "dependencies": {
         "btoa": "^1.2.1",

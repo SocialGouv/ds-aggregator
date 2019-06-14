@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import { getConfiguration } from "./config";
 
-config();
+config({ path: "./../../.env" });
 
 //
 
