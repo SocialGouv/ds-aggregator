@@ -75,7 +75,10 @@ spec:
                   name: ds-aggregator-secret
                   key: MAIL_PASSWORD
             - name: SENTRY_ENABLED
-              value: "true"
+              valueFrom:
+                secretKeyRef:
+                  name: ds-aggregator-secret
+                  key: SENTRY_ENABLED
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
