@@ -3,25 +3,29 @@ import { KintoCollection } from "../../lib";
 import { SynchroHistory } from "../model";
 import { kintoClientInstance } from "./kinto-client-instance";
 
-class SynchroHistoryRepository  {
+class SynchroHistoryRepository {
+  private collection: KintoCollection<SynchroHistory>;
 
-    private collection: KintoCollection<SynchroHistory>
+  constructor() {
+    this.collection = kintoClientInstance.collection<SynchroHistory>(
+      "synchro_histories"
+    );
+  }
 
-    constructor() {
-        this.collection = kintoClientInstance.collection<SynchroHistory>("synchro_histories");
-    }
+  public all(): Observable<SynchroHistory[]> {
+    return this.collection.all();
+  }
 
-    public all(): Observable<SynchroHistory[]> {
-        return this.collection.all();
-    }
+  public add(synchroHistory: SynchroHistory): Observable<SynchroHistory> {
+    return this.collection.add(synchroHistory);
+  }
 
-    public add(synchroHistory: SynchroHistory): Observable<SynchroHistory> {
-        return this.collection.add(synchroHistory);
-    }
-
-    public update(id: string, synchroHistory: SynchroHistory): Observable<SynchroHistory> {
-        return this.collection.update(id, synchroHistory);
-    }
+  public update(
+    id: string,
+    synchroHistory: SynchroHistory
+  ): Observable<SynchroHistory> {
+    return this.collection.update(id, synchroHistory);
+  }
 }
 
 export const synchroHistoryRepository = new SynchroHistoryRepository();

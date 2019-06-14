@@ -1,1 +1,1 @@
-export { default as demarcheSimplifieeService } from './ds.service';
+export { default as demarcheSimplifieeService } from "./ds.service";

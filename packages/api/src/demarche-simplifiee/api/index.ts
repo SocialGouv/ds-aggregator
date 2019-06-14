@@ -1,1 +1,1 @@
-export {default as demarcheSimplifieeAPI} from './ds.api';
+export { default as demarcheSimplifieeAPI } from "./ds.api";

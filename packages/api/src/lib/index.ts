@@ -1,1 +1,1 @@
-export * from './kinto';
+export * from "./kinto";
