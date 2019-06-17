@@ -74,9 +74,7 @@ function allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
     concatMap(demarcheSimplifieeService.getDSProcedure),
     tap((res: DSProcedure) =>
       logger.info(
-        `[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${
-          res.total_dossier
-        } dossiers`
+        `[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${res.total_dossier} dossiers`
       )
     )
   );
@@ -112,9 +110,7 @@ function allDossierItemInfos(): Observable<DossierItemInfo> {
     filter(shouldBeUpdated),
     tap((res: DossierItemInfo) =>
       logger.info(
-        `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${
-          res.dossierId
-        } will be synchronised`
+        `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${res.dossierId} will be synchronised`
       )
     )
   );
@@ -127,9 +123,8 @@ function buildPages(res: ProcedureRecord): PageOption[] {
 
   for (let page = 1; page <= maxPageNumber; page++) {
     logger.debug(
-      `[SyncService.buildPages] procedure #${
-        res.ds_data.id
-      } - add params: page ${page} / ${maxPageNumber}, resultPerPage ${resultPerPage}`
+      `[SyncService.buildPages] procedure #${res.ds_data.id} - add params: ` +
+        `page ${page} / ${maxPageNumber}, resultPerPage ${resultPerPage}`
     );
     result.push({ procedureId: res.ds_data.id || "", resultPerPage, page });
   }
