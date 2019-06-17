@@ -41,14 +41,14 @@ describe("asArray", () => {
 
 describe("asNumber", () => {
   it.each`
-    input         | number
+    input         | numberValue
     ${"123"}      | ${123}
     ${"-123"}     | ${-123}
     ${"Infinity"} | ${NaN}
     ${"4321e+"}   | ${4321}
     ${"4321hop"}  | ${4321}
-  `("returns '$number' for '$input'", ({ input, number }) => {
-    expect(asNumber(input, 42)).toBe(number);
+  `("returns '$number' for '$input'", ({ input, numberValue }) => {
+    expect(asNumber(input, 42)).toBe(numberValue);
   });
   it("should return NaN value if not numeric", () => {
     expect(asNumber("", 42)).toBeNaN();
