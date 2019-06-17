@@ -18,6 +18,8 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ds-aggregator-pgdata:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
 
   cache:
     image: library/memcached
