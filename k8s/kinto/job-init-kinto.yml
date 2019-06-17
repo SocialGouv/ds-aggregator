@@ -16,14 +16,14 @@ spec:
         env:
         - name: KINTO_BASE_URL
           value: "kinto${HASH_BRANCH_NAME}"
-        - name: KINTO_ADMIN_LOGIN
+        - name: KINTO_LOGIN
           valueFrom:
             secretKeyRef:
               name: ds-aggregator-secret
-              key: KINTO_ADMIN_LOGIN
-        - name: KINTO_ADMIN_PASSWORD
+              key: KINTO_LOGIN
+        - name: KINTO_PASSWORD
           valueFrom:
             secretKeyRef:
               name: ds-aggregator-secret
-              key: KINTO_ADMIN_PASSWORD
+              key: KINTO_PASSWORD
       restartPolicy: Never
