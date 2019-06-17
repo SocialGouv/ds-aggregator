@@ -37,12 +37,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: ds-aggregator-secret
-                  key: KINTO_ADMIN_LOGIN
+                  key: KINTO_LOGIN
             - name: KINTO_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: ds-aggregator-secret
-                  key: KINTO_ADMIN_PASSWORD
+                  key: KINTO_PASSWORD
             - name: DS_TOKEN
               valueFrom:
                 secretKeyRef:
