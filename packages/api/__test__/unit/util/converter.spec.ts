@@ -16,7 +16,7 @@ describe("asTimestamp", () => {
     expect(asTimestamp(input)).toEqual(date.getTime());
   });
 
-  it("shuold return null with no arguments", () => {
+  it("should return null with no arguments", () => {
     expect(asTimestamp()).toBeNull();
   });
 });
@@ -33,7 +33,7 @@ describe("asArray", () => {
     expect(asArray(input)).toEqual(array);
   });
 
-  it("shuold return empty array with no arguments", () => {
+  it("should return empty array with no arguments", () => {
     expect(asArray()).toEqual([]);
     expect(asArray(null)).toEqual([]);
   });
@@ -50,10 +50,10 @@ describe("asNumber", () => {
   `("returns '$number' for '$input'", ({ input, number }) => {
     expect(asNumber(input, 42)).toBe(number);
   });
-  it("shuold return NaN value if not numeric", () => {
+  it("should return NaN value if not numeric", () => {
     expect(asNumber("", 42)).toBeNaN();
   });
-  it("shuold return default value if undefined", () => {
+  it("should return default value if undefined", () => {
     expect(asNumber(undefined, 42)).toBe(42);
   });
 });
