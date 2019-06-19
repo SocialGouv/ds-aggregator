@@ -73,9 +73,7 @@ function allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
     concatMap(demarcheSimplifieeService.getDSProcedure),
     tap((res: DSProcedure) =>
       logger.info(
-        `[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${
-          res.total_dossier
-        } dossiers`
+        `[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${res.total_dossier} dossiers`
       )
     )
   );
@@ -113,9 +111,7 @@ function allDossierItemInfosWithUpdatedDateGreatherThan(
     ),
     tap((res: DossierItemInfo) =>
       logger.info(
-        `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${
-          res.dossierId
-        } will be synchronised`
+        `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${res.dossierId} will be synchronised`
       )
     )
   );
