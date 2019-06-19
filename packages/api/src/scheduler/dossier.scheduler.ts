@@ -33,8 +33,7 @@ export const dossierScheduler = {
       configuration.schedulerCronDS,
       "dossier-synchro",
       (start: number) => {
-        return allDossierItemInfos().pipe(
-          filter((res: DossierItemInfo) => res.updatedDate > start),
+        return allDossierItemInfosWithUpdatedDateGreatherThan(start).pipe(
           concatMap((res: DossierItemInfo) =>
             dossierSynchroService.syncDossier(res.procedureId, res.dossierId)
           ),
@@ -74,7 +73,9 @@ function allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
     concatMap(demarcheSimplifieeService.getDSProcedure),
     tap((res: DSProcedure) =>
       logger.info(
-        `[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${res.total_dossier} dossiers`
+        `[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${
+          res.total_dossier
+        } dossiers`
       )
     )
   );
@@ -97,8 +98,11 @@ function allDemarcheSimplifieeDossierItems(): Observable<DossierItemInfo> {
   );
 }
 
-function allDossierItemInfos(): Observable<DossierItemInfo> {
+function allDossierItemInfosWithUpdatedDateGreatherThan(
+  start: number = 0
+): Observable<DossierItemInfo> {
   return allDemarcheSimplifieeDossierItems().pipe(
+    filter((res: DossierItemInfo) => res.updatedDate > start),
     concatMap(
       (res: DossierItemInfo) =>
         dossierService.findOne(res.procedureId, res.dossierId),
@@ -107,10 +111,11 @@ function allDossierItemInfos(): Observable<DossierItemInfo> {
         return outer;
       }
     ),
-    filter(shouldBeUpdated),
     tap((res: DossierItemInfo) =>
       logger.info(
-        `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${res.dossierId} will be synchronised`
+        `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${
+          res.dossierId
+        } will be synchronised`
       )
     )
   );
@@ -143,14 +148,4 @@ function buildDossierUpdateInfo(
     procedureId: res.procedureId,
     updatedDate: asTimestamp(dossier.updated_at) || 0
   };
-}
-
-function shouldBeUpdated(res: DossierItemInfo): boolean {
-  if (!res.record) {
-    return true;
-  }
-  if (!res.record.metadata.updated_at) {
-    return true;
-  }
-  return res.updatedDate > res.record.metadata.updated_at;
 }
