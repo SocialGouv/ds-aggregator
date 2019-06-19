@@ -30,6 +30,7 @@
   script:
   - kubectl apply -f k8s/api/deployment-ds-aggregator.yml
   - kubectl apply -f k8s/api/service-ds-aggregator.yml
+  - kubectl apply -f k8s/certificate/certificate-ds-aggregator.yml
   - kubectl apply -f k8s/api/ingress-prod-ds-aggregator.yml
   allow_failure: false
 
