@@ -9,7 +9,6 @@ import {
 } from "rxjs/operators";
 import {
   DossierRecord,
-  dossierService,
   dsProcedureConfigService,
   ProcedureConfig,
   ProcedureRecord,
@@ -57,7 +56,6 @@ interface DossierItemInfo {
   procedureId: string;
   dossierId: string;
   updatedDate: number;
-  record?: DossierRecord | null;
 }
 
 function syncProcedures(): Observable<ProcedureRecord> {
@@ -101,14 +99,6 @@ function allDossierItemInfosWithUpdatedDateGreatherThan(
 ): Observable<DossierItemInfo> {
   return allDemarcheSimplifieeDossierItems().pipe(
     filter((res: DossierItemInfo) => res.updatedDate > start),
-    concatMap(
-      (res: DossierItemInfo) =>
-        dossierService.findOne(res.procedureId, res.dossierId),
-      (outer: DossierItemInfo, inner: DossierRecord | null) => {
-        outer.record = inner;
-        return outer;
-      }
-    ),
     tap((res: DossierItemInfo) =>
       logger.info(
         `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${res.dossierId} will be synchronised`
