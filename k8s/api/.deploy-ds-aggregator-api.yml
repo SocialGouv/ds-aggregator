@@ -25,6 +25,7 @@
   - /apps/create-kubeconfig.sh
   - envsubst < k8s/api/deployment.yml > k8s/api/deployment-ds-aggregator.yml
   - envsubst < k8s/api/service.yml > k8s/api/service-ds-aggregator.yml
+  - envsubst < k8s/certificate/certificate.yml > k8s/certificate/certificate-ds-aggregator.yml
   - envsubst < k8s/api/ingress-prod.yml > k8s/api/ingress-prod-ds-aggregator.yml
   script:
   - kubectl apply -f k8s/api/deployment-ds-aggregator.yml

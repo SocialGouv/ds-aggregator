@@ -6,14 +6,12 @@ metadata:
 spec:
   secretName: ds-aggregator-crt-secret
   dnsNames:
-  - ds-aggregator.${ENVIRONMENT}.social.gouv.fr
   - ds-aggregator-api.${ENVIRONMENT}.social.gouv.fr
   acme:
     config:
     - http01:
         ingressClass: nginx
       domains:
-      - ds-aggregator.${ENVIRONMENT}.social.gouv.fr
       - ds-aggregator-api.${ENVIRONMENT}.social.gouv.fr
   issuerRef:
     name: letsencrypt-prod
