@@ -1,9 +1,10 @@
-import { Observable } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import {
   concatMap,
   exhaustMap,
   filter,
   flatMap,
+  mergeMap,
   reduce,
   tap
 } from "rxjs/operators";
@@ -32,9 +33,23 @@ export const dossierScheduler = {
       configuration.schedulerCronDS,
       "dossier-synchro",
       (start: number) => {
-        return allDossierItemInfosWithUpdatedDateGreatherThan(start).pipe(
-          concatMap((res: DossierItemInfo) =>
-            dossierSynchroService.syncDossier(res.procedureId, res.dossierId)
+        return combineLatest(
+          dsProcedureConfigService.all(),
+          allDossierItemInfosWithUpdatedDateGreatherThan(start)
+        ).pipe(
+          mergeMap(
+            ([configs, res]) => {
+              const procedureConfig = configs.find((c: ProcedureConfig) =>
+                c.procedures.includes(res.procedureId)
+              );
+              return dossierSynchroService.syncDossier(
+                res.procedureId,
+                res.dossierId,
+                procedureConfig
+              );
+            },
+            undefined,
+            2
           ),
           reduce((acc: DossierRecord[], record: DossierRecord) => {
             acc.push(record);

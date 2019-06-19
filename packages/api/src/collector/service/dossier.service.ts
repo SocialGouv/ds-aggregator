@@ -62,10 +62,6 @@ class DossierService {
       })
     );
   }
-
-  private getDSKey(procedureId: string, dossierId: string) {
-    return `${procedureId}-${dossierId}`;
-  }
 }
 
 export const dossierService = new DossierService();
