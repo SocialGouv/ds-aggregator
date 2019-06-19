@@ -20,14 +20,18 @@ class ProcedureService {
       mergeMap((res: Array<Record<DSProcedure>>) => {
         if (res.length === 0) {
           logger.debug(
-            `[ProcedureService.saveOrUpdate] no record for ds_key ${wifProcedure.ds_key}`
+            `[ProcedureService.saveOrUpdate] no record for ds_key ${
+              wifProcedure.ds_key
+            }`
           );
           return procedureRepository.add(wifProcedure);
         } else {
           const record: Record<DSProcedure> = res[0];
           Object.assign(record, wifProcedure);
           logger.debug(
-            `[ProcedureService.saveOrUpdate] record found for ds_key ${wifProcedure.ds_key} id#${record.id}`
+            `[ProcedureService.saveOrUpdate] record found for ds_key ${
+              wifProcedure.ds_key
+            } id#${record.id}`
           );
           return procedureRepository.update(record.id || "", record);
         }

@@ -58,13 +58,17 @@ class DossierService {
       mergeMap((res: DossierRecord[]) => {
         if (res.length === 0) {
           logger.debug(
-            `[DossierService.saveOrUpdate] add dossier for ds_key ${wifDossier.ds_key}`
+            `[DossierService.saveOrUpdate] add dossier for ds_key ${
+              wifDossier.ds_key
+            }`
           );
           return dossierRepository.add(wifDossier);
         } else {
           const record: DossierRecord = res[0];
           logger.debug(
-            `[DossierService.saveOrUpdate] update dossier for ds_key ${wifDossier.ds_key}`
+            `[DossierService.saveOrUpdate] update dossier for ds_key ${
+              wifDossier.ds_key
+            }`
           );
           const instructorsHistory = buildInstructorsHistory(
             record,
