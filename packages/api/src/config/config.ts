@@ -45,8 +45,8 @@ const configByEnvironment: {
     sentryEnabled: false
   }),
   "dev.local": (env: typeof process.env) => ({
-    schedulerCronDS: asString(env, "SCHEDULER_CRON_DS", "0 0 * * *"),
-    schedulerCronTask: asString(env, "SCHEDULER_CRON_TASK", "0 */10 * * *"),
+    schedulerCronDS: asString(env, "SCHEDULER_CRON_DS", "0 0 * * * *"),
+    schedulerCronTask: asString(env, "SCHEDULER_CRON_TASK", "0 */10 * * * *"),
     sentryEnabled: asBoolean(env, "SENTRY_ENABLED", false)
   }),
   prod: () => ({
