@@ -1,7 +1,7 @@
 import { Observable, of } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { demarcheSimplifieeAPI } from "../api";
-import { DSProcedureResult } from "../api/ds.api";
+import { DSDossierResult, DSProcedureResult } from "../api/ds.api";
 import { DSDossier, DSDossierItem, DSProcedure } from "../model";
 
 class DemarcheSimplifieeService {
@@ -36,18 +36,10 @@ class DemarcheSimplifieeService {
   public getDSDossier(
     procedureId: string,
     dossierId: string
-  ): Observable<{ dossier: DSDossier; procedureId: string }> {
-    return of({ procedureId, dossierId }).pipe(
-      mergeMap(
-        (ctx: any) =>
-          demarcheSimplifieeAPI.getDSDossier(ctx.procedureId, ctx.dossierId),
-        (ctx, res) => ({ ctx, res })
-      ),
-      map(({ ctx, res }) => ({
-        dossier: res.dossier,
-        procedureId: ctx.procedureId
-      }))
-    );
+  ): Observable<DSDossier> {
+    return demarcheSimplifieeAPI
+      .getDSDossier(procedureId, dossierId)
+      .pipe(map((res: DSDossierResult) => res.dossier));
   }
 }
 

@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { map, mergeMap } from "rxjs/operators";
+import { mergeMap } from "rxjs/operators";
 import { DSDossier } from "../../demarche-simplifiee";
 import { logger } from "../../util";
 import { asTimestamp } from "../../util/converter";
@@ -15,22 +15,6 @@ class DossierService {
     procedureId: string
   ): Observable<DossierRecord[]> {
     return dossierRepository.findAllByProcedureIn([procedureId]);
-  }
-
-  public findOne(
-    procedureId: string,
-    dossierId: string
-  ): Observable<DossierRecord | null> {
-    return dossierRepository
-      .findByDSKey(this.getDSKey(procedureId, dossierId))
-      .pipe(
-        map((res: DossierRecord[]) => {
-          if (res.length === 0) {
-            return null;
-          }
-          return res[0];
-        })
-      );
   }
 
   public saveOrUpdate(
@@ -77,10 +61,6 @@ class DossierService {
         }
       })
     );
-  }
-
-  private getDSKey(procedureId: string, dossierId: string) {
-    return `${procedureId}-${dossierId}`;
   }
 }
 

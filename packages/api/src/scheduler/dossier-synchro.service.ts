@@ -1,29 +1,27 @@
-import { mergeMap, tap } from "rxjs/operators";
+import { combineLatest, of } from "rxjs";
+import { map, mergeMap, tap } from "rxjs/operators";
 import {
   DossierRecord,
   dossierService,
-  dsProcedureConfigService
+  dsProcedureConfigService,
+  ProcedureConfig
 } from "../collector";
-import { demarcheSimplifieeService, DSDossier } from "../demarche-simplifiee";
+import { demarcheSimplifieeService } from "../demarche-simplifiee";
 import { asNumber, logger } from "../util";
 
 export const dossierSynchroService = {
-  syncDossier: (procedureId: string, dossierId: string) => {
-    return demarcheSimplifieeService.getDSDossier(procedureId, dossierId).pipe(
-      mergeMap(
-        (dsDossier: { dossier: DSDossier; procedureId: string }) =>
-          dsProcedureConfigService.findByProcedureId(
-            asNumber(dsDossier.procedureId, 0)
-          ),
-        (dsDossier, configs) => ({ ...dsDossier, group: configs[0].group })
-      ),
-      mergeMap(
-        (param: { dossier: DSDossier; procedureId: string; group: any }) =>
-          dossierService.saveOrUpdate(
-            param.group,
-            param.procedureId,
-            param.dossier
-          )
+  syncDossier: (
+    procedureId: string,
+    dossierId: string,
+    procedureConfig?: ProcedureConfig
+  ) => {
+    return combineLatest(
+      getProcedureConfig(procedureId, procedureConfig),
+      of(procedureId),
+      demarcheSimplifieeService.getDSDossier(procedureId, dossierId)
+    ).pipe(
+      mergeMap(([config, procId, dossier]) =>
+        dossierService.saveOrUpdate(config.group, procId, dossier)
       ),
       tap((dossier: DossierRecord) =>
         logger.info(
@@ -33,3 +31,14 @@ export const dossierSynchroService = {
     );
   }
 };
+
+function getProcedureConfig(
+  procedureId: string,
+  procedureConfig?: ProcedureConfig
+) {
+  return procedureConfig
+    ? of(procedureConfig)
+    : dsProcedureConfigService
+        .findByProcedureId(asNumber(procedureId, 0))
+        .pipe(map((res: ProcedureConfig[]) => res[0]));
+}
