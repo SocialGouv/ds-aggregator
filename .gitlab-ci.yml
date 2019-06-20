@@ -66,15 +66,15 @@ Get Github Id (dev):
   <<: *get_github_id_stage
   environment:
     name: $DEV_ENVIRONMENT_NAME
-  except:
-    - master
+  only:
+    - branches
 
 Get Github Id (prod):
   <<: *get_github_id_stage
   environment:
     name: $PROD_ENVIRONMENT_NAME
   only:
-    - master
+    - tags
 
 ###########################################
 ###       REGISTER DOCKER IMAGES        ###
@@ -132,8 +132,8 @@ Deploy @ds-aggregator/api (dev):
     PORT: $API_PORT
   environment:
     name: $DEV_ENVIRONMENT_NAME
-  except:
-    - master
+  only:
+    - branches
 
 Deploy @ds-aggregator/postgres (dev):
   <<: *deploy_stage
@@ -143,8 +143,8 @@ Deploy @ds-aggregator/postgres (dev):
     PORT: $POSTGRES_PORT
   environment:
     name: $DEV_ENVIRONMENT_NAME
-  except:
-    - master
+  only:
+    - branches
 
 Deploy @ds-aggregator/memcached (dev):
   <<: *deploy_stage
@@ -154,8 +154,8 @@ Deploy @ds-aggregator/memcached (dev):
     PORT: $MEMCACHED_PORT
   environment:
     name: $DEV_ENVIRONMENT_NAME
-  except:
-    - master
+  only:
+    - branches
 
 Deploy @ds-aggregator/kinto (dev):
   <<: *deploy_stage
@@ -166,8 +166,8 @@ Deploy @ds-aggregator/kinto (dev):
     CACHE_PORT: $MEMCACHED_PORT
   environment:
     name: $DEV_ENVIRONMENT_NAME
-  except:
-    - master
+  only:
+    - branches
 
 # Prod Environment
 
@@ -180,7 +180,7 @@ Deploy @ds-aggregator/api (prod):
   environment:
     name: $PROD_ENVIRONMENT_NAME
   only:
-    - master
+    - tags
 
 Deploy @ds-aggregator/memcached (prod):
   <<: *deploy_stage
@@ -191,7 +191,7 @@ Deploy @ds-aggregator/memcached (prod):
   environment:
     name: $PROD_ENVIRONMENT_NAME
   only:
-    - master
+    - tags
 
 Deploy @ds-aggregator/kinto (pro):
   <<: *deploy_stage
@@ -203,7 +203,7 @@ Deploy @ds-aggregator/kinto (pro):
   environment:
     name: $PROD_ENVIRONMENT_NAME
   only:
-    - master
+    - tags
 
 ###########################################
 ###         SEND URL TO GITHUB          ###
@@ -229,8 +229,8 @@ Send deployment url to Github (dev):
     - export URL=http://$HASH_BRANCH_NAME-ds-aggregator.${CI_ENVIRONMENT_NAME}.social.gouv.fr/
   environment:
     name: $DEV_ENVIRONMENT_NAME
-  except:
-    - master
+  only:
+    - branches
 
 Send deployment url to Github (prod):
   <<: *send_url_to_github_stage
@@ -239,7 +239,7 @@ Send deployment url to Github (prod):
   environment:
     name: $PROD_ENVIRONMENT_NAME
   only:
-    - master
+    - tags
 
 ###########################################
 ###     DELETE USELESS K8S OBJECTS      ###
@@ -257,4 +257,4 @@ Delete useless k8s objects:
   environment:
     name: $DEV_ENVIRONMENT_NAME
   only:
-    - master
+    - tags
