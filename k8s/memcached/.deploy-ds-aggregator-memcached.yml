@@ -14,6 +14,20 @@
   - kubectl apply -f k8s/memcached/service-ds-aggregator.yml
   allow_failure: false
 
+.deploy-ds-aggregator-memcached-k8s-beta:
+  image:
+    name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
+    entrypoint: [""]
+  before_script:
+  - /apps/create-kubeconfig.sh
+  - export HASH_BRANCH_NAME=-beta
+  - envsubst < k8s/memcached/deployment.yml > k8s/memcached/deployment-ds-aggregator.yml
+  - envsubst < k8s/memcached/service.yml > k8s/memcached/service-ds-aggregator.yml
+  script:
+  - kubectl apply -f k8s/memcached/deployment-ds-aggregator.yml
+  - kubectl apply -f k8s/memcached/service-ds-aggregator.yml
+  allow_failure: false
+
 .deploy-ds-aggregator-memcached-k8s-prod:
   image:
     name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
