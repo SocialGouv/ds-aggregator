@@ -16,6 +16,22 @@
   - k8s/scripts/init-kinto.sh $HASH_BRANCH_NAME
   allow_failure: false
 
+.deploy-ds-aggregator-kinto-k8s-beta:
+  image:
+    name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
+    entrypoint: [""]
+  before_script:
+  - /apps/create-kubeconfig.sh
+  - export HASH_BRANCH_NAME=-beta
+  - envsubst < k8s/kinto/deployment.yml > k8s/kinto/deployment-ds-aggregator.yml
+  - envsubst < k8s/kinto/service.yml > k8s/kinto/service-ds-aggregator.yml
+  - envsubst < k8s/kinto/job-init-kinto.yml > k8s/kinto/job-init-kinto-ds-aggregator.yml
+  script:
+  - kubectl apply -f k8s/kinto/deployment-ds-aggregator.yml
+  - kubectl apply -f k8s/kinto/service-ds-aggregator.yml
+  - k8s/scripts/init-kinto.sh $HASH_BRANCH_NAME
+  allow_failure: false
+
 .deploy-ds-aggregator-kinto-k8s-prod:
   image:
     name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest

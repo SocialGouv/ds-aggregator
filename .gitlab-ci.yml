@@ -20,7 +20,9 @@ variables:
 stages:
   - "Code Quality"
   - "Registration"
-  - "Deploy"
+  - "Deploy dev"
+  - "Deploy beta"
+  - "Deploy prod"
   - "Send Url to GitHub"
   - "Delete K8S objects"
 
@@ -49,7 +51,6 @@ Quality tests:
 
 #
 .get_github_id_stage: &get_github_id_stage
-  stage: "Deploy"
   image:
     name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
     entrypoint: [""]
@@ -64,13 +65,25 @@ Quality tests:
 
 Get Github Id (dev):
   <<: *get_github_id_stage
+  stage: "Deploy dev"
   environment:
     name: $DEV_ENVIRONMENT_NAME
   only:
     - branches
+  except:
+    - master
+
+Get Github Id (beta):
+  <<: *get_github_id_stage
+  stage: "Deploy beta"
+  environment:
+    name: $DEV_ENVIRONMENT_NAME
+  only:
+    - master
 
 Get Github Id (prod):
   <<: *get_github_id_stage
+  stage: "Deploy prod"
   environment:
     name: $PROD_ENVIRONMENT_NAME
   only:
@@ -115,17 +128,17 @@ Register init kinto image:
 
 #
 .deploy_stage: &deploy_stage
-  stage: "Deploy"
   dependencies: []
   variables: &deploy_stage_variables
     DS_AGGREGATOR_REGISTRY: $CI_REGISTRY_IMAGE
     IMAGE_TAG: $CI_COMMIT_SHA
 #
 
-# Dev Environment
+# Feature branch
 
 Deploy @ds-aggregator/api (dev):
   <<: *deploy_stage
+  stage: "Deploy dev"
   extends: .deploy-ds-aggregator-api-k8s-dev
   variables:
     <<: *deploy_stage_variables
@@ -134,9 +147,13 @@ Deploy @ds-aggregator/api (dev):
     name: $DEV_ENVIRONMENT_NAME
   only:
     - branches
+  except:
+    - master
+
 
 Deploy @ds-aggregator/postgres (dev):
   <<: *deploy_stage
+  stage: "Deploy dev"
   extends: .deploy-ds-aggregator-postgres-k8s-dev
   variables:
     <<: *deploy_stage_variables
@@ -145,9 +162,13 @@ Deploy @ds-aggregator/postgres (dev):
     name: $DEV_ENVIRONMENT_NAME
   only:
     - branches
+  except:
+    - master
+
 
 Deploy @ds-aggregator/memcached (dev):
   <<: *deploy_stage
+  stage: "Deploy dev"
   extends: .deploy-ds-aggregator-memcached-k8s-dev
   variables:
     <<: *deploy_stage_variables
@@ -156,9 +177,13 @@ Deploy @ds-aggregator/memcached (dev):
     name: $DEV_ENVIRONMENT_NAME
   only:
     - branches
+  except:
+    - master
+
 
 Deploy @ds-aggregator/kinto (dev):
   <<: *deploy_stage
+  stage: "Deploy dev"
   extends: .deploy-ds-aggregator-kinto-k8s-dev
   variables:
     <<: *deploy_stage_variables
@@ -168,11 +193,66 @@ Deploy @ds-aggregator/kinto (dev):
     name: $DEV_ENVIRONMENT_NAME
   only:
     - branches
+  except:
+    - master
+
+
+# deploy beta
+
+Deploy @ds-aggregator/api (beta):
+  <<: *deploy_stage
+  stage: "Deploy beta"
+  extends: .deploy-ds-aggregator-api-k8s-beta
+  variables:
+    <<: *deploy_stage_variables
+    PORT: $API_PORT
+  environment:
+    name: $DEV_ENVIRONMENT_NAME
+  only:
+    - master
+
+Deploy @ds-aggregator/postgres (beta):
+  <<: *deploy_stage
+  stage: "Deploy beta"
+  extends: .deploy-ds-aggregator-postgres-k8s-beta
+  variables:
+    <<: *deploy_stage_variables
+    PORT: $POSTGRES_PORT
+  environment:
+    name: $DEV_ENVIRONMENT_NAME
+  only:
+    - master
+
+Deploy @ds-aggregator/memcached (beta):
+  <<: *deploy_stage
+  stage: "Deploy beta"
+  extends: .deploy-ds-aggregator-memcached-k8s-beta
+  variables:
+    <<: *deploy_stage_variables
+    PORT: $MEMCACHED_PORT
+  environment:
+    name: $DEV_ENVIRONMENT_NAME
+  only:
+    - master
+
+Deploy @ds-aggregator/kinto (beta):
+  <<: *deploy_stage
+  stage: "Deploy beta"
+  extends: .deploy-ds-aggregator-kinto-k8s-beta
+  variables:
+    <<: *deploy_stage_variables
+    PORT: $KINTO_PORT
+    CACHE_PORT: $MEMCACHED_PORT
+  environment:
+    name: $DEV_ENVIRONMENT_NAME
+  only:
+    - master
 
 # Prod Environment
 
 Deploy @ds-aggregator/api (prod):
   <<: *deploy_stage
+  stage: "Deploy prod"
   extends: .deploy-ds-aggregator-api-k8s-prod
   variables:
     <<: *deploy_stage_variables
@@ -184,6 +264,7 @@ Deploy @ds-aggregator/api (prod):
 
 Deploy @ds-aggregator/memcached (prod):
   <<: *deploy_stage
+  stage: "Deploy prod"
   extends: .deploy-ds-aggregator-memcached-k8s-prod
   variables:
     <<: *deploy_stage_variables
@@ -193,8 +274,9 @@ Deploy @ds-aggregator/memcached (prod):
   only:
     - tags
 
-Deploy @ds-aggregator/kinto (pro):
+Deploy @ds-aggregator/kinto (prod):
   <<: *deploy_stage
+  stage: "Deploy prod"
   extends: .deploy-ds-aggregator-kinto-k8s-prod
   variables:
     <<: *deploy_stage_variables
@@ -231,6 +313,17 @@ Send deployment url to Github (dev):
     name: $DEV_ENVIRONMENT_NAME
   only:
     - branches
+  except:
+    - master
+
+Send deployment url to Github (beta):
+  <<: *send_url_to_github_stage
+  before_script:
+    - export URL=http://beta-ds-aggregator.${CI_ENVIRONMENT_NAME}.social.gouv.fr/
+  environment:
+    name: $DEV_ENVIRONMENT_NAME
+  only:
+    - master
 
 Send deployment url to Github (prod):
   <<: *send_url_to_github_stage

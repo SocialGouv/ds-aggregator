@@ -14,3 +14,17 @@
   - kubectl apply -f k8s/postgres/service-ds-aggregator.yml
   allow_failure: false
 
+.deploy-ds-aggregator-postgres-k8s-beta:
+  image:
+    name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
+    entrypoint: [""]
+  before_script:
+  - /apps/create-kubeconfig.sh
+  - export HASH_BRANCH_NAME=-beta
+  - envsubst < k8s/postgres/deployment.yml > k8s/postgres/deployment-ds-aggregator.yml
+  - envsubst < k8s/postgres/service.yml > k8s/postgres/service-ds-aggregator.yml
+  script:
+  - kubectl apply -f k8s/postgres/deployment-ds-aggregator.yml
+  - kubectl apply -f k8s/postgres/service-ds-aggregator.yml
+  allow_failure: false
+
