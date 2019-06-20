@@ -22,6 +22,11 @@ spec:
           ports:
             - containerPort: ${PORT}
           env:
+            - name: ENVIRONMENT_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: ds-aggregator-secret
+                  key: ENVIRONMENT_TYPE
             - name: API_PORT
               value: "${PORT}"
             - name: API_PREFIX
@@ -31,8 +36,6 @@ spec:
                   key: API_PREFIX
             - name: KINTO_URL
               value: "http://kinto${HASH_BRANCH_NAME}:8888"
-            - name: KINTO_BUCKET
-              value: "ds-aggregator"
             - name: KINTO_LOGIN
               valueFrom:
                 secretKeyRef:
@@ -48,44 +51,8 @@ spec:
                 secretKeyRef:
                   name: ds-aggregator-secret
                   key: DS_TOKEN
-            - name: MAIL_USE_TLS
-              value: "true"
-            - name: MAIL_PORT
-              value: "465"
-            - name: MAIL_FROM
-              value: "ds-aggregator <contact@ds-aggregator.beta.gouv.fr>"
-            - name: MAIL_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: MAIL_HOST
-            - name: MAIL_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: MAIL_USERNAME
-            - name: MAIL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: MAIL_PASSWORD
-            - name: SENTRY_ENABLED
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: SENTRY_ENABLED
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
                   name: ds-aggregator-secret
                   key: SENTRY_DSN
-            - name: SCHEDULER_CRON_TASK
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: SCHEDULER_CRON_TASK
-            - name: SCHEDULER_CRON_DS
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: SCHEDULER_CRON_DS
