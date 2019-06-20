@@ -1,4 +1,4 @@
-type EnvironmentType = "prod" | "dev.factory" | "dev.local";
+type EnvironmentType = "env.prod" | "env.dev-factory" | "env.local";
 
 const asString = (
   env: typeof process.env,
@@ -39,19 +39,19 @@ const asBoolean = (
 const configByEnvironment: {
   [key in EnvironmentType]: any;
 } = {
-  "dev.factory": () => ({
-    schedulerCronDS: "0 0 * * *",
-    schedulerCronTask: "0 */10 * * *",
+  "env.dev-factory": () => ({
+    schedulerCronDS: "0 0 * * * *",
+    schedulerCronTask: "0 */10 * * * *",
     sentryEnabled: false
   }),
-  "dev.local": (env: typeof process.env) => ({
+  "env.local": (env: typeof process.env) => ({
     schedulerCronDS: asString(env, "SCHEDULER_CRON_DS", "0 0 * * *"),
     schedulerCronTask: asString(env, "SCHEDULER_CRON_TASK", "0 */10 * * *"),
     sentryEnabled: asBoolean(env, "SENTRY_ENABLED", false)
   }),
-  prod: () => ({
-    schedulerCronDS: "0 0 * * *",
-    schedulerCronTask: "0 */10 * * *",
+  "env.prod": () => ({
+    schedulerCronDS: "0 0 * * * *",
+    schedulerCronTask: "0 */10 * * * *",
     sentryEnabled: true
   })
 };
