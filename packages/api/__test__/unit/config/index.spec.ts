@@ -6,6 +6,7 @@ const validEnv = {
   API_PORT: "123456",
   API_PREFIX: "API_PREFIX",
   DS_TOKEN: "DS_TOKEN",
+  ENVIRONMENT_TYPE: "dev.local",
   KINTO_LOGIN: "KINTO_LOGIN",
   KINTO_PASSWORD: "KINTO_PASSWORD",
   KINTO_URL: "KINTO_URL",
@@ -36,12 +37,4 @@ it("should return the env configuration", () => {
 it("sentryEnabled should be false is not 'true'", () => {
   const env = { ...validEnv, SENTRY_ENABLED: "lol" };
   expect(getConfiguration(env).sentryEnabled).toBeFalsy();
-});
-
-// tslint:disable-next-line: arrow-parens
-it.each(Object.keys(validEnv))("fails if missing %s", x => {
-  const env = { ...validEnv, [x]: undefined };
-  expect(() => getConfiguration(env)).toThrowError(
-    /env variable \w+ is required/
-  );
 });
