@@ -61,29 +61,46 @@ router.post(
   }
 );
 
-// get sum(dossier_total)
 router.get(
-  `/${configuration.apiPrefix}/dossiers/check`,
+  `/${configuration.apiPrefix}/procedures/check`,
   async (ctx: Koa.Context) => {
-    procedureService.all().pipe(
-      flatMap((x: ProcedureRecord[]) => x),
-      mergeMap(
-        (x: ProcedureRecord) =>
-          dossierService.allByMetadataProcedureId(x.ds_data.id || "0"),
-        (procedure, dossiers) => ({ procedure, dossiers })
-      ),
-      tap(
-        (param: { procedure: ProcedureRecord; dossiers: DossierRecord[] }) => {
-          const total_dossier = param.procedure.ds_data.total_dossier;
-          const dossiersNb = param.dossiers.length;
-          if (total_dossier !== dossiersNb) {
-            logger.info(
-              `[Check Result] DS#${param.procedure.ds_data.id} with ${total_dossier} dossiers: ${dossiersNb} saved`
-            );
+    logger.info(`[check procedures] check is starting`);
+    procedureService
+      .all()
+      .pipe(
+        flatMap((x: ProcedureRecord[]) => x),
+        mergeMap(
+          (x: ProcedureRecord) =>
+            dossierService.allByMetadataProcedureId(x.ds_data.id || "0"),
+          (procedure, dossiers) => ({ procedure, dossiers })
+        ),
+        tap(
+          (param: {
+            procedure: ProcedureRecord;
+            dossiers: DossierRecord[];
+          }) => {
+            const total_dossier = param.procedure.ds_data.total_dossier;
+            const dossiersNb = param.dossiers.length;
+            if (total_dossier !== dossiersNb) {
+              logger.info(
+                `[check procedures] DS#${param.procedure.ds_data.id} has ${total_dossier} dossiers but ${dossiersNb} saved`
+              );
+            } else {
+              logger.info(
+                `[check procedures] DS#${param.procedure.ds_data.id} is complete`
+              );
+            }
           }
-        }
+        )
       )
-    );
+      .subscribe({
+        complete: () => logger.info(`[check procedures] check is finished`),
+        error: (err: Error) =>
+          logger.error(
+            `[check procedures] error while checking procedures`,
+            err
+          )
+      });
     ctx.status = 200;
     ctx.body = {
       message: "Result will be displayed in console"
