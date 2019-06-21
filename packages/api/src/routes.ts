@@ -57,7 +57,7 @@ router.post(
       )
       .toPromise();
     ctx.status = 200;
-    ctx.message = ctx.message = "ds configs initialized";
+    ctx.message = "ds configs initialized";
   }
 );
 
@@ -65,36 +65,29 @@ router.post(
 router.get(
   `/${configuration.apiPrefix}/dossiers/check`,
   async (ctx: Koa.Context) => {
-    const res: any[] = [];
-    await procedureService
-      .all()
-      .pipe(
-        flatMap((x: ProcedureRecord[]) => x),
-        mergeMap(
-          (x: ProcedureRecord) =>
-            dossierService.allByMetadataProcedureId(x.ds_data.id || "0"),
-          (procedure, dossiers) => ({ procedure, dossiers })
-        ),
-        tap(
-          (param: {
-            procedure: ProcedureRecord;
-            dossiers: DossierRecord[];
-          }) => {
-            const total_dossier = param.procedure.ds_data.total_dossier;
-            const dossiersNb = param.dossiers.length;
-            if (total_dossier !== dossiersNb) {
-              res.push({
-                nb_dossiers: dossiersNb,
-                procedure: param.procedure.ds_data.id,
-                total_dossier
-              });
-            }
+    procedureService.all().pipe(
+      flatMap((x: ProcedureRecord[]) => x),
+      mergeMap(
+        (x: ProcedureRecord) =>
+          dossierService.allByMetadataProcedureId(x.ds_data.id || "0"),
+        (procedure, dossiers) => ({ procedure, dossiers })
+      ),
+      tap(
+        (param: { procedure: ProcedureRecord; dossiers: DossierRecord[] }) => {
+          const total_dossier = param.procedure.ds_data.total_dossier;
+          const dossiersNb = param.dossiers.length;
+          if (total_dossier !== dossiersNb) {
+            logger.info(
+              `[Check Result] DS#${param.procedure.ds_data.id} with ${total_dossier} dossiers: ${dossiersNb} saved`
+            );
           }
-        )
+        }
       )
-      .toPromise();
+    );
     ctx.status = 200;
-    ctx.body = res;
+    ctx.body = {
+      message: "Result will be displayed in console"
+    };
   }
 );
 
