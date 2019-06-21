@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/SocialGouv/ds-aggregator/compare/v1.2.0...v1.2.1) (2019-06-21)
+
+
+### Bug Fixes
+
+* **check-procedure:** subscribe to the observable to start checking ([2785f55](https://github.com/SocialGouv/ds-aggregator/commit/2785f55))
+
+
+
+
+
 # [1.2.0](https://github.com/SocialGouv/ds-aggregator/compare/v1.1.0...v1.2.0) (2019-06-21)
 
 
