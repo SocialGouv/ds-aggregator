@@ -6,6 +6,8 @@ const _account = name => `${kintoURL}/accounts/${name}`;
 const _buckets = () => `${kintoURL}/buckets`;
 const _bucket = bucketName => _buckets() + `/${bucketName}`;
 const _collections = bucketName => _bucket(bucketName) + `/collections`;
+const _records = (bucketName, collectionName) =>
+  _collections(bucketName) + `/${collectionName}/records`;
 const _requestOptions = (method, authorization, body) => {
   return {
     method: method,
@@ -61,6 +63,18 @@ module.exports.createCollection = async function(bucket, collection) {
   const body = { data: { id: collection } };
   return api(
     _collections(bucket),
+    _requestOptions(
+      "POST",
+      `${configs.adminLogin}:${configs.adminPassword}`,
+      body
+    )
+  );
+};
+
+module.exports.createRecord = async function(bucket, collection, data) {
+  const body = { data };
+  return api(
+    _records(bucket, collection),
     _requestOptions(
       "POST",
       `${configs.adminLogin}:${configs.adminPassword}`,
