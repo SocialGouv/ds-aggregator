@@ -45,7 +45,7 @@ curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/ds_configs/init
 Lister les démarches simplifiés pour lesquelless le nombre de dossiers importés est différent du nombre de dossiers renseigné dans la démarche simplifiée
 
 ```bash
-curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/dossiers/check
+curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/procedures/check
 ```
 
 récupération des statistiques pour un groupe
