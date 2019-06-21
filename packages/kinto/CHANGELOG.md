@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/SocialGouv/ds-aggregator/compare/v1.1.0...v1.2.0) (2019-06-21)
+
+
+### Bug Fixes
+
+* **env:** fix env variables ([#26](https://github.com/SocialGouv/ds-aggregator/issues/26)) ([5605104](https://github.com/SocialGouv/ds-aggregator/commit/5605104))
+
+
+### Features
+
+* **config:** add ENVIRONMENT_TYPE to define default values by enviro… ([#29](https://github.com/SocialGouv/ds-aggregator/issues/29)) ([75a1a79](https://github.com/SocialGouv/ds-aggregator/commit/75a1a79))
+* **kinto:** init kinto with ds config in dev.* environment ([8d2e5e9](https://github.com/SocialGouv/ds-aggregator/commit/8d2e5e9))
+
+
+
+
+
 # 1.1.0 (2019-06-14)
 
 
