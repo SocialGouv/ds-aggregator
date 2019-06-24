@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v1.3.0...v2.0.0) (2019-06-24)
+
+
+### Bug Fixes
+
+* **kinto:** double quote ds_key for column filtering ([273552e](https://github.com/SocialGouv/ds-aggregator/commit/273552e))
+
+
+### Features
+
+* **api:** add end point to synchronise one specific procedure ([e3e1ef3](https://github.com/SocialGouv/ds-aggregator/commit/e3e1ef3))
+
+
+
+
+
 # [1.3.0](https://github.com/SocialGouv/ds-aggregator/compare/v1.2.1...v1.3.0) (2019-06-24)
 
 
