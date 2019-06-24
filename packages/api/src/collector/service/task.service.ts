@@ -4,8 +4,8 @@ import { taskRepository } from "../repository";
 
 class TaskService {
   public addTask(
-    procedureId: string,
-    dossierId: string,
+    procedureId: number,
+    dossierId: number,
     state: string,
     updatedAt: Date
   ): Observable<Task> {

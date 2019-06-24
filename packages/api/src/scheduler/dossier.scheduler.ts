@@ -63,13 +63,13 @@ export const dossierScheduler = {
 };
 
 interface PageOption {
-  procedureId: string;
+  procedureId: number;
   resultPerPage: number;
   page: number;
 }
 interface DossierItemInfo {
-  procedureId: string;
-  dossierId: string;
+  procedureId: number;
+  dossierId: number;
   updatedDate: number;
 }
 
@@ -132,7 +132,7 @@ function buildPages(res: ProcedureRecord): PageOption[] {
       `[SyncService.buildPages] procedure #${res.ds_data.id} - add params: ` +
         `page ${page} / ${maxPageNumber}, resultPerPage ${resultPerPage}`
     );
-    result.push({ procedureId: res.ds_data.id || "", resultPerPage, page });
+    result.push({ procedureId: res.ds_data.id, resultPerPage, page });
   }
   return result;
 }

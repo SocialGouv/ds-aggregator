@@ -23,6 +23,7 @@ export type DossierStateType =
 // email_insructeurs: email de l'instructeur qui a donné la décision pour le dossier
 
 export interface DSProcedure extends IIdentifiable {
+  id: number;
   label: string;
   description: string;
   organisation: string;
@@ -52,6 +53,7 @@ export interface DSTypeChamp {
 }
 
 export interface DSDossierItem extends IIdentifiable {
+  id: number;
   nom_projet: string;
   updated_at: string;
   initiated_at: string;
@@ -59,6 +61,7 @@ export interface DSDossierItem extends IIdentifiable {
 }
 
 export interface DSDossier extends IIdentifiable {
+  id: number;
   state: DossierStateType;
   created_at: string;
   updated_at: string;

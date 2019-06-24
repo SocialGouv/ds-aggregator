@@ -23,7 +23,7 @@ class DossierRepository {
   }
 
   public findAllByProcedureIn(
-    procedureIds: string[]
+    procedureIds: number[]
   ): Observable<DossierRecord[]> {
     return this.collection().search(`in_metadata.procedure_id=${procedureIds}`);
   }

@@ -14,7 +14,7 @@ class ProcedureRepository {
     return this.collection().update(recordId, record);
   }
 
-  public findByDSKey(dsKey: string): Observable<ProcedureRecord[]> {
+  public findByDSKey(dsKey: number): Observable<ProcedureRecord[]> {
     return this.collection().search(`ds_key=${dsKey}`);
   }
 

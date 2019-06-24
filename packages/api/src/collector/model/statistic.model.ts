@@ -17,6 +17,7 @@ export interface StatisticBlock {
 }
 
 export interface Statistic extends IIdentifiable {
+  id?: string;
   group: {
     id: string;
     label: string;

@@ -29,14 +29,12 @@ class DemarcheSimplifieeAPI {
     this.client = new RestClient(api, configuration.dsToken || "");
   }
 
-  public getDSProcedure(
-    procedureId: string | number
-  ): Observable<DSProcedureResult> {
+  public getDSProcedure(procedureId: number): Observable<DSProcedureResult> {
     return this.client.get<any>(`/api/v1/procedures/${procedureId}`);
   }
 
   public getDSDossiers(
-    procedureId: string | number,
+    procedureId: number,
     page: number,
     resultPerPage: number
   ): Observable<DSDossierListResult> {
@@ -46,8 +44,8 @@ class DemarcheSimplifieeAPI {
   }
 
   public getDSDossier(
-    procedureId: string | number,
-    DSdossierId: string | number
+    procedureId: number,
+    DSdossierId: number
   ): Observable<DSDossierResult> {
     return this.client.get<DSDossierResult>(
       `/api/v1/procedures/${procedureId}/dossiers/${DSdossierId}`

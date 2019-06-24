@@ -5,37 +5,45 @@ import { DSDossierResult, DSProcedureResult } from "../api/ds.api";
 import { DSDossier, DSDossierItem, DSProcedure } from "../model";
 
 class DemarcheSimplifieeService {
-  public getDSProcedure(procedureId: string): Observable<DSProcedure> {
+  public getDSProcedure(procedureId: number): Observable<DSProcedure> {
     return demarcheSimplifieeAPI
       .getDSProcedure(procedureId)
       .pipe(map((res: DSProcedureResult) => res.procedure));
   }
 
   public getDSDossiers(
-    procedureId: string,
+    procedureId: number,
     page: number,
     resultPerPage: number
   ): Observable<DossierListResult> {
-    return of({ procedureId, page, resultPerPage }).pipe(
+    const input: {
+      procedureId: number;
+      page: number;
+      resultPerPage: number;
+    } = { procedureId, page, resultPerPage };
+    return of(input).pipe(
       mergeMap(
-        (ctx: any) =>
+        (ctx: { procedureId: number; page: number; resultPerPage: number }) =>
           demarcheSimplifieeAPI.getDSDossiers(
             ctx.procedureId,
             ctx.page,
             ctx.resultPerPage
           ),
-        (ctx, res) => ({ ctx, res })
+        (ctx, res) => ({
+          dossierItems: res.dossiers,
+          procedureId: ctx.procedureId
+        })
       ),
-      map(({ ctx, res }) => ({
-        dossiers: res.dossiers,
-        procedureId: ctx.procedureId
+      map((res: { procedureId: number; dossierItems: DSDossierItem[] }) => ({
+        dossiers: res.dossierItems,
+        procedureId: res.procedureId
       }))
     );
   }
 
   public getDSDossier(
-    procedureId: string,
-    dossierId: string
+    procedureId: number,
+    dossierId: number
   ): Observable<DSDossier> {
     return demarcheSimplifieeAPI
       .getDSDossier(procedureId, dossierId)
@@ -45,7 +53,7 @@ class DemarcheSimplifieeService {
 
 export interface DossierListResult {
   dossiers: DSDossierItem[];
-  procedureId: string;
+  procedureId: number;
 }
 
 export default new DemarcheSimplifieeService();

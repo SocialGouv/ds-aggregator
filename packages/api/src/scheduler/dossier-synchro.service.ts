@@ -7,12 +7,12 @@ import {
   ProcedureConfig
 } from "../collector";
 import { demarcheSimplifieeService } from "../demarche-simplifiee";
-import { asNumber, logger } from "../util";
+import { logger } from "../util";
 
 export const dossierSynchroService = {
   syncDossier: (
-    procedureId: string,
-    dossierId: string,
+    procedureId: number,
+    dossierId: number,
     procedureConfig?: ProcedureConfig
   ) => {
     return combineLatest(
@@ -33,12 +33,12 @@ export const dossierSynchroService = {
 };
 
 function getProcedureConfig(
-  procedureId: string,
+  procedureId: number,
   procedureConfig?: ProcedureConfig
 ) {
   return procedureConfig
     ? of(procedureConfig)
     : dsProcedureConfigService
-        .findByProcedureId(asNumber(procedureId, 0))
+        .findByProcedureId(procedureId)
         .pipe(map((res: ProcedureConfig[]) => res[0]));
 }

@@ -12,14 +12,14 @@ class DossierService {
   }
 
   public allByMetadataProcedureId(
-    procedureId: string
+    procedureId: number
   ): Observable<DossierRecord[]> {
     return dossierRepository.findAllByProcedureIn([procedureId]);
   }
 
   public saveOrUpdate(
     group: { id: string; label: string },
-    procedureId: string,
+    procedureId: number,
     dossier: DSDossier
   ): Observable<DossierRecord> {
     const wifDossier: DossierRecord = {
@@ -27,7 +27,7 @@ class DossierService {
       ds_key: `${procedureId}-${dossier.id}`,
       metadata: {
         group,
-        procedure_id: procedureId,
+        procedure_id: procedureId as number,
         state: dossier.state,
         // tslint:disable-next-line: object-literal-sort-keys
         created_at: asTimestamp(dossier.created_at) || 0,
@@ -54,7 +54,8 @@ class DossierService {
             record,
             wifDossier
           );
-          Object.assign(record, wifDossier);
+          record.ds_data = wifDossier.ds_data;
+          record.metadata = wifDossier.metadata;
           record.metadata.instructors_history = instructorsHistory;
 
           return dossierRepository.update(record.id || "", record);

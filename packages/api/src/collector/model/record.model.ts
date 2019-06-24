@@ -7,17 +7,19 @@ import { IIdentifiable } from "../../util";
 
 export interface Record<T extends IIdentifiable> {
   id?: string;
-  ds_key: string;
   ds_data: T;
 }
 
 // tslint:disable-next-line: no-empty-interface
-export interface ProcedureRecord extends Record<DSProcedure> {}
+export interface ProcedureRecord extends Record<DSProcedure> {
+  ds_key: number;
+}
 
 export interface DossierRecord extends Record<DSDossier> {
+  ds_key: string;
   metadata: {
     state: DossierStateType;
-    procedure_id: string;
+    procedure_id: number;
     group: {
       id: string;
       label: string;

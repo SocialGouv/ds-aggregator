@@ -1,5 +1,5 @@
 export interface IIdentifiable {
-  id?: string;
+  id?: string | number;
 }
 
 export const assertPersistent = (o: IIdentifiable) => {

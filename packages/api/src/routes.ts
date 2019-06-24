@@ -77,7 +77,7 @@ router.get(
         flatMap((x: ProcedureRecord[]) => x),
         mergeMap(
           (x: ProcedureRecord) =>
-            dossierService.allByMetadataProcedureId(x.ds_data.id || "0"),
+            dossierService.allByMetadataProcedureId(x.ds_data.id),
           (procedure, dossiers) => ({ procedure, dossiers })
         ),
         tap(
@@ -117,7 +117,7 @@ router.get(
 router.post(
   `/${configuration.apiPrefix}/procedures/:procedureId/sync`,
   async (ctx: Koa.Context) => {
-    const procedureId = ctx.params.procedureId;
+    const procedureId: number = parseInt(ctx.params.procedureId, 10);
     demarcheSimplifieeService
       .getDSDossiers(procedureId, 1, 500)
       .pipe(
@@ -128,7 +128,7 @@ router.post(
           }))
         ),
         concatMap(({ dossier, procId }) => {
-          return dossierSynchroService.syncDossier(procId, dossier.id || "0");
+          return dossierSynchroService.syncDossier(procId, dossier.id);
         })
       )
       .subscribe({
