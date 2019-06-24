@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 import * as Router from "koa-router";
-import { flatMap, map, mergeMap, tap } from "rxjs/operators";
+import { concatMap, flatMap, map, mergeMap, tap } from "rxjs/operators";
 import {
   DossierRecord,
   dossierService,
@@ -12,6 +12,12 @@ import {
 } from "./collector";
 import { statisticService } from "./collector/service/statistic.service";
 import { configuration } from "./config";
+import {
+  demarcheSimplifieeService,
+  DSDossierItem
+} from "./demarche-simplifiee";
+import { DossierListResult } from "./demarche-simplifiee/service/ds.service";
+import { dossierSynchroService } from "./scheduler/dossier-synchro.service";
 import { logger } from "./util";
 import { dsConfigs } from "./util/ds-config";
 
@@ -104,6 +110,36 @@ router.get(
     ctx.status = 200;
     ctx.body = {
       message: "Result will be displayed in console"
+    };
+  }
+);
+
+router.post(
+  `/${configuration.apiPrefix}/procedures/:procedureId/sync`,
+  async (ctx: Koa.Context) => {
+    const procedureId = ctx.params.procedureId;
+    demarcheSimplifieeService
+      .getDSDossiers(procedureId, 1, 500)
+      .pipe(
+        flatMap((x: DossierListResult) =>
+          x.dossiers.map((ds: DSDossierItem) => ({
+            dossier: ds,
+            procId: x.procedureId
+          }))
+        ),
+        concatMap(({ dossier, procId }) => {
+          return dossierSynchroService.syncDossier(procId, dossier.id || "0");
+        })
+      )
+      .subscribe({
+        complete: () =>
+          logger.info(`[sync procedure] procedure ${procedureId} complete`),
+        error: (err: Error) => logger.error(`[sync procedure] error `, err)
+      });
+
+    ctx.status = 200;
+    ctx.body = {
+      message: `launched procedure #${procedureId} synch`
     };
   }
 );
