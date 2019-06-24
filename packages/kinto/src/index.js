@@ -41,19 +41,27 @@ const addDSConfig = async () => {
     };
     const res = await api.createRecord("ds_collector", "ds_configs", dsConfig);
     console.log("[init kinto] add ds_configs record:  ", res);
+  } else {
+    console.log(
+      `[init kinto] ENVIRONMENT_TYPE=  "${
+        configs.environmentType
+      }, no 'ds_configs' record has been created.`
+    );
   }
 };
 const init = async () => {
-  await api.createAdmin(configs.adminLogin, configs.adminPassword).then(async (res) => {
-    if (res.data) {
-      console.log("[init kinto] admin created", res);
+  await api
+    .createAdmin(configs.adminLogin, configs.adminPassword)
+    .then(async res => {
+      if (res.data) {
+        console.log("[init kinto] admin created", res);
 
-      await addCollections();
-      await addDSConfig();
-    } else {
-      console.log("[init kinto] kinto already initialised... ", res);
-    }
-  });
+        await addCollections();
+        await addDSConfig();
+      } else {
+        console.log("[init kinto] kinto already initialised... ", res);
+      }
+    });
 };
 
 init();
