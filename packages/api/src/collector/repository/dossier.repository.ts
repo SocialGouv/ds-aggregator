@@ -1,4 +1,5 @@
 import { Observable } from "rxjs";
+import { DeletedData } from "../../lib";
 import { DossierRecord } from "../model";
 import { kintoClientInstance } from "./kinto-client-instance";
 
@@ -26,6 +27,12 @@ class DossierRepository {
     procedureIds: number[]
   ): Observable<DossierRecord[]> {
     return this.collection().search(`in_metadata.procedure_id=${procedureIds}`);
+  }
+
+  public deleteAllByMetadataProcedureId(
+    procedureIds: number
+  ): Observable<DeletedData[]> {
+    return this.collection().delete(`metadata.procedure_id=${procedureIds}`);
   }
 
   private collection() {

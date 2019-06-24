@@ -118,9 +118,12 @@ router.post(
   `/${configuration.apiPrefix}/procedures/:procedureId/sync`,
   async (ctx: Koa.Context) => {
     const procedureId: number = parseInt(ctx.params.procedureId, 10);
-    demarcheSimplifieeService
-      .getDSDossiers(procedureId, 1, 500)
+    dossierService
+      .deleteByProcedureId(procedureId)
       .pipe(
+        mergeMap(() =>
+          demarcheSimplifieeService.getDSDossiers(procedureId, 1, 500)
+        ),
         flatMap((x: DossierListResult) =>
           x.dossiers.map((ds: DSDossierItem) => ({
             dossier: ds,

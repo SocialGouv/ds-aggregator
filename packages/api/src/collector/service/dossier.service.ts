@@ -1,6 +1,7 @@
 import { Observable } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { DSDossier } from "../../demarche-simplifiee";
+import { DeletedData } from "../../lib";
 import { logger } from "../../util";
 import { asTimestamp } from "../../util/converter";
 import { DossierRecord } from "../model";
@@ -15,6 +16,10 @@ class DossierService {
     procedureId: number
   ): Observable<DossierRecord[]> {
     return dossierRepository.findAllByProcedureIn([procedureId]);
+  }
+
+  public deleteByProcedureId(procedureId: number): Observable<DeletedData[]> {
+    return dossierRepository.deleteAllByMetadataProcedureId(procedureId);
   }
 
   public saveOrUpdate(
