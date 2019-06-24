@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/SocialGouv/ds-aggregator/compare/v1.2.1...v1.3.0) (2019-06-24)
+
+
+### Features
+
+* **timezone:** set timezone ([#34](https://github.com/SocialGouv/ds-aggregator/issues/34)) ([f041a4a](https://github.com/SocialGouv/ds-aggregator/commit/f041a4a))
+
+
+
+
+
 ## [1.2.1](https://github.com/SocialGouv/ds-aggregator/compare/v1.2.0...v1.2.1) (2019-06-21)
 
 
