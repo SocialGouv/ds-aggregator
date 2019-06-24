@@ -17,13 +17,9 @@ import {
 } from "../collector";
 import { statisticService } from "../collector/service/statistic.service";
 import { configuration } from "../config";
-import {
-  demarcheSimplifieeService,
-  DSDossierItem,
-  DSProcedure
-} from "../demarche-simplifiee";
-import { DossierListResult } from "../demarche-simplifiee/service/ds.service";
-import { asTimestamp, logger } from "../util";
+import { demarcheSimplifieeService, DSProcedure } from "../demarche-simplifiee";
+import { DossierItemInfo, syncService } from "../sync";
+import { logger } from "../util";
 import { dossierSynchroService } from "./dossier-synchro.service";
 import { handleScheduler } from "./scheduler.service";
 
@@ -62,17 +58,6 @@ export const dossierScheduler = {
   }
 };
 
-interface PageOption {
-  procedureId: number;
-  resultPerPage: number;
-  page: number;
-}
-interface DossierItemInfo {
-  procedureId: number;
-  dossierId: number;
-  updatedDate: number;
-}
-
 function syncProcedures(): Observable<ProcedureRecord> {
   return allDemarcheSimlifieeProcedures().pipe(
     concatMap(procedureService.saveOrUpdate)
@@ -94,17 +79,8 @@ function allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
 
 function allDemarcheSimplifieeDossierItems(): Observable<DossierItemInfo> {
   return syncProcedures().pipe(
-    flatMap(buildPages),
-    concatMap((pageOption: PageOption) =>
-      demarcheSimplifieeService.getDSDossiers(
-        pageOption.procedureId,
-        pageOption.page,
-        pageOption.resultPerPage
-      )
-    ),
-    flatMap(
-      (res: DossierListResult) => res.dossiers,
-      (res, dossier) => buildDossierUpdateInfo(res, dossier)
+    concatMap((record: ProcedureRecord) =>
+      syncService.allDossierItemInfos(record)
     )
   );
 }
@@ -120,33 +96,4 @@ function allDossierItemInfosWithUpdatedDateGreatherThan(
       )
     )
   );
-}
-
-function buildPages(res: ProcedureRecord): PageOption[] {
-  const resultPerPage = 500;
-  const maxPageNumber = Math.ceil(res.ds_data.total_dossier / resultPerPage);
-  const result: PageOption[] = [];
-
-  for (let page = 1; page <= maxPageNumber; page++) {
-    logger.debug(
-      `[SyncService.buildPages] procedure #${res.ds_data.id} - add params: ` +
-        `page ${page} / ${maxPageNumber}, resultPerPage ${resultPerPage}`
-    );
-    result.push({ procedureId: res.ds_data.id, resultPerPage, page });
-  }
-  return result;
-}
-
-function buildDossierUpdateInfo(
-  res: DossierListResult,
-  dossier: DSDossierItem
-): DossierItemInfo {
-  if (!dossier.id) {
-    throw new Error("id should not be null.");
-  }
-  return {
-    dossierId: dossier.id,
-    procedureId: res.procedureId,
-    updatedDate: asTimestamp(dossier.updated_at) || 0
-  };
 }

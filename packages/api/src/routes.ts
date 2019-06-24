@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 import * as Router from "koa-router";
-import { concatMap, flatMap, map, mergeMap, tap } from "rxjs/operators";
+import { concatMap, filter, flatMap, map, mergeMap, tap } from "rxjs/operators";
 import {
   DossierRecord,
   dossierService,
@@ -12,12 +12,8 @@ import {
 } from "./collector";
 import { statisticService } from "./collector/service/statistic.service";
 import { configuration } from "./config";
-import {
-  demarcheSimplifieeService,
-  DSDossierItem
-} from "./demarche-simplifiee";
-import { DossierListResult } from "./demarche-simplifiee/service/ds.service";
 import { dossierSynchroService } from "./scheduler/dossier-synchro.service";
+import { DossierItemInfo, syncService } from "./sync";
 import { logger } from "./util";
 import { dsConfigs } from "./util/ds-config";
 
@@ -121,17 +117,14 @@ router.post(
     dossierService
       .deleteByProcedureId(procedureId)
       .pipe(
-        mergeMap(() =>
-          demarcheSimplifieeService.getDSDossiers(procedureId, 1, 500)
+        mergeMap(() => procedureService.all()),
+        flatMap((records: ProcedureRecord[]) => records),
+        filter((record: ProcedureRecord) => record.ds_key === procedureId),
+        mergeMap((record: ProcedureRecord) =>
+          syncService.allDossierItemInfos(record)
         ),
-        flatMap((x: DossierListResult) =>
-          x.dossiers.map((ds: DSDossierItem) => ({
-            dossier: ds,
-            procId: x.procedureId
-          }))
-        ),
-        concatMap(({ dossier, procId }) => {
-          return dossierSynchroService.syncDossier(procId, dossier.id);
+        concatMap((x: DossierItemInfo) => {
+          return dossierSynchroService.syncDossier(x.procedureId, x.dossierId);
         })
       )
       .subscribe({
