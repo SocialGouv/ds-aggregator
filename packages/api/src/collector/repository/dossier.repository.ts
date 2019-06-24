@@ -15,7 +15,7 @@ class DossierRepository {
   }
 
   public findByDSKey(dsKey: string): Observable<DossierRecord[]> {
-    return this.collection().search(`ds_key=${dsKey}`);
+    return this.collection().search(`ds_key="${dsKey}"`);
   }
 
   public all(): Observable<DossierRecord[]> {
