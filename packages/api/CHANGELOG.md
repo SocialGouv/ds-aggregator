@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v2.0.0...v3.0.0) (2019-06-24)
+
+
+### Bug Fixes
+
+* **data-type:** use number type for dossier.metadata.procedure_id ([abf36fe](https://github.com/SocialGouv/ds-aggregator/commit/abf36fe))
+
+
+
+
+
 # [2.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v1.3.0...v2.0.0) (2019-06-24)
 
 
