@@ -48,6 +48,12 @@ Lister les démarches simplifiés pour lesquelless le nombre de dossiers import�
 curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/procedures/check
 ```
 
+Forcer le resynchronisation complète d'un' procédure
+
+```bash
+curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/procedures/${procedureId}/sync
+```
+
 récupération des statistiques pour un groupe
 
  ```bash
