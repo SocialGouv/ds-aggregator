@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.0.0...v3.1.0) (2019-06-25)
+
+
+### Features
+
+* **procedure-sync:** delete dossiers before re-synchronising ([1c3a965](https://github.com/SocialGouv/ds-aggregator/commit/1c3a965))
+
+
+
+
+
 # [3.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v2.0.0...v3.0.0) (2019-06-24)
 
 
