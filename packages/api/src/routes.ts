@@ -124,7 +124,12 @@ router.post(
           syncService.allDossierItemInfos(record)
         ),
         concatMap((x: DossierItemInfo) => {
-          return dossierSynchroService.syncDossier(x.procedureId, x.dossierId);
+          return dossierSynchroService.syncDossier(
+            x.procedureId,
+            x.dossierId,
+            null,
+            null
+          );
         })
       )
       .subscribe({

@@ -1,6 +1,6 @@
 import { Observable, of } from "rxjs";
 import { concatMap, flatMap, mergeMap } from "rxjs/operators";
-import { DossierRecord, Task, taskService } from "../collector";
+import { DossierRecord, dossierService, Task, taskService } from "../collector";
 import { configuration } from "../config";
 import { dossierSynchroService } from "./dossier-synchro.service";
 import { handleScheduler } from "./scheduler.service";
@@ -13,14 +13,24 @@ export const taskScheduler = {
   }
 };
 
-function syncDossierAndCompleteTask(task: Task) {
-  return of(task).pipe(
+function syncDossierAndCompleteTask(taskToTreat: Task) {
+  return of(taskToTreat).pipe(
     mergeMap(
-      (t: Task) =>
-        dossierSynchroService.syncDossier(t.procedure_id, t.dossier_id),
-      (outer, inner) => ({ task: outer, dossier: inner })
+      (task: Task) =>
+        dossierService.findByDsKey(`${task.procedure_id}-${task.dossier_id}`),
+      (task: Task, record: DossierRecord | null) => ({ task, record })
     ),
-    mergeMap((res: { task: Task; dossier: DossierRecord }) =>
+    mergeMap(
+      (input: { task: Task; record: DossierRecord | null }) =>
+        dossierSynchroService.syncDossier(
+          input.task.procedure_id,
+          input.task.dossier_id,
+          input.record,
+          null
+        ),
+      (input, record) => ({ task: input.task, record })
+    ),
+    mergeMap((res: { task: Task; record: DossierRecord }) =>
       taskService.markAsCompleted(res.task)
     )
   );

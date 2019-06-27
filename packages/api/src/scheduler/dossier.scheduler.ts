@@ -1,5 +1,7 @@
+import { addDays } from "date-fns";
 import { combineLatest, Observable } from "rxjs";
 import {
+  bufferCount,
   concatMap,
   exhaustMap,
   filter,
@@ -31,7 +33,7 @@ export const dossierScheduler = {
       (start: number) => {
         return combineLatest(
           dsProcedureConfigService.all(),
-          allDossierItemInfosWithUpdatedDateGreatherThan(start)
+          allDossierItemInfosToUpdate(start)
         ).pipe(
           mergeMap(
             ([configs, res]) => {
@@ -41,7 +43,8 @@ export const dossierScheduler = {
               return dossierSynchroService.syncDossier(
                 res.procedureId,
                 res.dossierId,
-                procedureConfig
+                res.record || null,
+                procedureConfig || null
               );
             },
             undefined,
@@ -85,11 +88,31 @@ function allDemarcheSimplifieeDossierItems(): Observable<DossierItemInfo> {
   );
 }
 
-function allDossierItemInfosWithUpdatedDateGreatherThan(
-  start: number = 0
+function allDossierItemInfosToUpdate(
+  start: number
 ): Observable<DossierItemInfo> {
   return allDemarcheSimplifieeDossierItems().pipe(
-    filter((res: DossierItemInfo) => res.updatedDate > start),
+    filter((item: DossierItemInfo) => {
+      // optimisation to eliminate most of dossiers
+      const startLess2Days = addDays(new Date(start), -2).getTime();
+      return item.updatedDate > startLess2Days;
+    }),
+    bufferCount(100),
+    concatMap((res: DossierItemInfo[]) =>
+      syncService.associateDossierRecord(res)
+    ),
+    flatMap((res: DossierItemInfo[]) => res),
+    filter((res: DossierItemInfo) => {
+      // filter to keep only dossier to update
+      if (!res.record) {
+        return true;
+      }
+      const recordUpdateAt = res.record.metadata.updated_at;
+      if (!recordUpdateAt) {
+        return true;
+      }
+      return res.updatedDate > recordUpdateAt;
+    }),
     tap((res: DossierItemInfo) =>
       logger.info(
         `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${res.dossierId} will be synchronised`

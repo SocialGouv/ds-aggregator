@@ -1,6 +1,7 @@
 import { Observable, of } from "rxjs";
-import { concatMap, flatMap } from "rxjs/operators";
-import { ProcedureRecord } from "../collector/model";
+import { concatMap, flatMap, map, mergeMap } from "rxjs/operators";
+import { dossierService } from "../collector";
+import { DossierRecord, ProcedureRecord } from "../collector/model";
 import {
   demarcheSimplifieeService,
   DSDossierItem
@@ -28,6 +29,31 @@ class SyncService {
     );
   }
 
+  public associateDossierRecord(
+    dossierItemInfos: DossierItemInfo[]
+  ): Observable<DossierItemInfo[]> {
+    return of(dossierItemInfos).pipe(
+      mergeMap(
+        (res: DossierItemInfo[]) => {
+          const dsKeys = res.map((x: DossierItemInfo) => x.dsKey);
+          return dossierService.allByDsKeyIn(dsKeys);
+        },
+        (items: DossierItemInfo[], records: DossierRecord[]) => ({
+          items,
+          records
+        })
+      ),
+      map((input: { items: DossierItemInfo[]; records: DossierRecord[] }) => {
+        input.items.forEach((item: DossierItemInfo) => {
+          item.record = input.records.find(
+            (record: DossierRecord) => record.ds_key === item.dsKey
+          );
+        });
+        return input.items;
+      })
+    );
+  }
+
   private buildPages(res: ProcedureRecord): PageOption[] {
     const resultPerPage = 500;
     const maxPageNumber = Math.ceil(res.ds_data.total_dossier / resultPerPage);
@@ -52,6 +78,7 @@ class SyncService {
     }
     return {
       dossierId: dossier.id,
+      dsKey: `${res.procedureId}-${dossier.id}`,
       procedureId: res.procedureId,
       updatedDate: asTimestamp(dossier.updated_at) || 0
     };
@@ -66,7 +93,9 @@ interface PageOption {
 export interface DossierItemInfo {
   procedureId: number;
   dossierId: number;
+  dsKey: string;
   updatedDate: number;
+  record?: DossierRecord;
 }
 
 export const syncService = new SyncService();

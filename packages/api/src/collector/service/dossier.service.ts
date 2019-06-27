@@ -1,8 +1,7 @@
 import { Observable } from "rxjs";
-import { mergeMap } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 import { DSDossier } from "../../demarche-simplifiee";
 import { DeletedData } from "../../lib";
-import { logger } from "../../util";
 import { asTimestamp } from "../../util/converter";
 import { DossierRecord } from "../model";
 import { dossierRepository } from "../repository";
@@ -10,6 +9,22 @@ import { dossierRepository } from "../repository";
 class DossierService {
   public all(): Observable<DossierRecord[]> {
     return dossierRepository.all();
+  }
+
+  public allByDsKeyIn(dsKeys: string[]): Observable<DossierRecord[]> {
+    return dossierRepository.findAllByDsKeyIn(dsKeys);
+  }
+
+  public findByDsKey(dsKey: string): Observable<DossierRecord | null> {
+    return dossierRepository.findByDSKey(dsKey).pipe(
+      map((dossiers: DossierRecord[]) => {
+        if (dossiers.length === 0) {
+          return null;
+        } else {
+          return dossiers[0];
+        }
+      })
+    );
   }
 
   public allByMetadataProcedureId(
@@ -22,7 +37,35 @@ class DossierService {
     return dossierRepository.deleteAllByMetadataProcedureId(procedureId);
   }
 
-  public saveOrUpdate(
+  public update(
+    record: DossierRecord,
+    dossier: DSDossier
+  ): Observable<DossierRecord> {
+    if (!record.id) {
+      throw new Error("Trying to update reord without id!!");
+    }
+
+    const instructorsHistory = buildInstructorsHistory(
+      record.metadata.instructors_history,
+      dossier.instructeurs
+    );
+    record.ds_data = dossier;
+    record.metadata = {
+      ...record.metadata,
+      created_at: asTimestamp(dossier.created_at) || 0,
+      initiated_at: asTimestamp(dossier.initiated_at),
+      instructors_history: dossier.instructeurs ? dossier.instructeurs : [],
+      processed_at: asTimestamp(dossier.processed_at),
+      received_at: asTimestamp(dossier.received_at),
+      state: dossier.state,
+      updated_at: asTimestamp(dossier.updated_at)
+    };
+    record.metadata.instructors_history = instructorsHistory;
+
+    return dossierRepository.update(record.id, record);
+  }
+
+  public save(
     group: { id: string; label: string },
     procedureId: number,
     dossier: DSDossier
@@ -44,26 +87,18 @@ class DossierService {
       }
     };
     return dossierRepository.findByDSKey(wifDossier.ds_key).pipe(
-      mergeMap((res: DossierRecord[]) => {
-        if (res.length === 0) {
-          logger.debug(
-            `[DossierService.saveOrUpdate] add dossier for ds_key ${wifDossier.ds_key}`
-          );
+      mergeMap((dossiers: DossierRecord[]) => {
+        if (dossiers.length === 0) {
           return dossierRepository.add(wifDossier);
         } else {
-          const record: DossierRecord = res[0];
-          logger.debug(
-            `[DossierService.saveOrUpdate] update dossier for ds_key ${wifDossier.ds_key}`
+          const loadedRecord = dossiers[0];
+          loadedRecord.ds_data = wifDossier.ds_data;
+          loadedRecord.metadata = wifDossier.metadata;
+          loadedRecord.metadata.instructors_history = buildInstructorsHistory(
+            loadedRecord.metadata.instructors_history,
+            wifDossier.metadata.instructors_history
           );
-          const instructorsHistory = buildInstructorsHistory(
-            record,
-            wifDossier
-          );
-          record.ds_data = wifDossier.ds_data;
-          record.metadata = wifDossier.metadata;
-          record.metadata.instructors_history = instructorsHistory;
-
-          return dossierRepository.update(record.id || "", record);
+          return dossierRepository.update(loadedRecord.id || "0", loadedRecord);
         }
       })
     );
@@ -73,14 +108,12 @@ class DossierService {
 export const dossierService = new DossierService();
 
 const buildInstructorsHistory = (
-  record: DossierRecord,
-  newRecord: DossierRecord
+  instructeurs: string[],
+  newinstructeurs: string[]
 ) => {
   const instructeursHistory: string[] = [];
-  record.metadata.instructors_history.forEach((i: string) =>
-    instructeursHistory.push(i)
-  );
-  newRecord.metadata.instructors_history.forEach((i: string) => {
+  instructeurs.forEach((i: string) => instructeursHistory.push(i));
+  newinstructeurs.forEach((i: string) => {
     if (!instructeursHistory.includes(i)) {
       instructeursHistory.push(i);
     }

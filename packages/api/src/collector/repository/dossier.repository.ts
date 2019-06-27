@@ -29,6 +29,10 @@ class DossierRepository {
     return this.collection().search(`in_metadata.procedure_id=${procedureIds}`);
   }
 
+  public findAllByDsKeyIn(dsKeys: string[]): Observable<DossierRecord[]> {
+    return this.collection().search(`in_ds_key=${dsKeys}`);
+  }
+
   public deleteAllByMetadataProcedureId(
     procedureIds: number
   ): Observable<DeletedData[]> {

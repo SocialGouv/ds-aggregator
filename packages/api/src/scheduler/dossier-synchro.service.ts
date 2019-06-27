@@ -13,16 +13,21 @@ export const dossierSynchroService = {
   syncDossier: (
     procedureId: number,
     dossierId: number,
-    procedureConfig?: ProcedureConfig
+    record: DossierRecord | null,
+    procedureConfig: ProcedureConfig | null
   ) => {
     return combineLatest(
       getProcedureConfig(procedureId, procedureConfig),
       of(procedureId),
+      of(record),
       demarcheSimplifieeService.getDSDossier(procedureId, dossierId)
     ).pipe(
-      mergeMap(([config, procId, dossier]) =>
-        dossierService.saveOrUpdate(config.group, procId, dossier)
-      ),
+      mergeMap(([config, procId, dossierRecord, dossier]) => {
+        if (dossierRecord == null) {
+          return dossierService.save(config.group, procId, dossier);
+        }
+        return dossierService.update(dossierRecord, dossier);
+      }),
       tap((dossier: DossierRecord) =>
         logger.info(
           `[SyncService.syncDossier] dossier ${dossier.ds_key} synchronised`
@@ -34,7 +39,7 @@ export const dossierSynchroService = {
 
 function getProcedureConfig(
   procedureId: number,
-  procedureConfig?: ProcedureConfig
+  procedureConfig: ProcedureConfig | null
 ) {
   return procedureConfig
     ? of(procedureConfig)
