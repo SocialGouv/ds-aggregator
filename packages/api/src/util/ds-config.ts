@@ -72,7 +72,7 @@ export const dsConfigs = [
   {
     group: {
       id: "63",
-      label: "63 - Bas-Rhin"
+      label: "63 - Puy-de-Dôme"
     },
     procedures: [17073, 17076]
   },
