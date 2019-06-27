@@ -1,10 +1,24 @@
 export const dsConfigs = [
   {
     group: {
+      id: "10",
+      label: "10 - Aube"
+    },
+    procedures: [16146, 16148]
+  },
+  {
+    group: {
       id: "13",
       label: "13 - Bouches du Rhône"
     },
     procedures: [12858, 12859]
+  },
+  {
+    group: {
+      id: "25",
+      label: "25 - Doubs"
+    },
+    procedures: [18274, 18275]
   },
   {
     group: {
