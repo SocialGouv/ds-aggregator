@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/SocialGouv/ds-aggregator/compare/v3.1.1...v3.1.2) (2019-06-27)
+
+
+### Bug Fixes
+
+* **sync:** compare update_at between dossier item and record to find dossier to update ([632c0d7](https://github.com/SocialGouv/ds-aggregator/commit/632c0d7))
+
+
+
+
+
 ## [3.1.1](https://github.com/SocialGouv/ds-aggregator/compare/v3.1.0...v3.1.1) (2019-06-25)
 
 **Note:** Version bump only for package ds-aggregator
