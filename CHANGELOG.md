@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.2.1...v3.3.0) (2019-06-28)
+
+
+### Features
+
+* **sync:** introduce apiResult entity to improve synchronisation ([#37](https://github.com/SocialGouv/ds-aggregator/issues/37)) ([62517d3](https://github.com/SocialGouv/ds-aggregator/commit/62517d3))
+
+
+
+
+
 ## [3.2.1](https://github.com/SocialGouv/ds-aggregator/compare/v3.2.0...v3.2.1) (2019-06-27)
 
 
