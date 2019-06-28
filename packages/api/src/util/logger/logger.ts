@@ -65,7 +65,7 @@ const logger = {
       captureException(err);
     }
   },
-  info: (message: string) => wLogger.info(message)
+  info: (message: string, ...meta: any[]) => wLogger.info(message, meta)
 };
 
 export default logger;

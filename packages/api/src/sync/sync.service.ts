@@ -1,18 +1,15 @@
 import { Observable, of } from "rxjs";
-import { concatMap, flatMap, map, mergeMap } from "rxjs/operators";
-import { dossierService } from "../collector";
-import { DossierRecord, ProcedureRecord } from "../collector/model";
+import { concatMap, flatMap, reduce } from "rxjs/operators";
+import { ProcedureRecord } from "../collector/model";
 import {
   demarcheSimplifieeService,
   DSDossierItem
 } from "../demarche-simplifiee";
 import { DossierListResult } from "../demarche-simplifiee/service/ds.service";
-import { asTimestamp, logger } from "../util";
+import { logger } from "../util";
 
 class SyncService {
-  public allDossierItemInfos(
-    record: ProcedureRecord
-  ): Observable<DossierItemInfo> {
+  public allDossierItems(record: ProcedureRecord): Observable<DSDossierItem[]> {
     return of(this.buildPages(record)).pipe(
       flatMap((x: PageOption[]) => x),
       concatMap((pageOption: PageOption) =>
@@ -22,35 +19,10 @@ class SyncService {
           pageOption.resultPerPage
         )
       ),
-      flatMap(
-        (res: DossierListResult) => res.dossiers,
-        (res, dossier) => this.buildDossierUpdateInfo(res, dossier)
-      )
-    );
-  }
-
-  public associateDossierRecord(
-    dossierItemInfos: DossierItemInfo[]
-  ): Observable<DossierItemInfo[]> {
-    return of(dossierItemInfos).pipe(
-      mergeMap(
-        (res: DossierItemInfo[]) => {
-          const dsKeys = res.map((x: DossierItemInfo) => x.dsKey);
-          return dossierService.allByDsKeyIn(dsKeys);
-        },
-        (items: DossierItemInfo[], records: DossierRecord[]) => ({
-          items,
-          records
-        })
-      ),
-      map((input: { items: DossierItemInfo[]; records: DossierRecord[] }) => {
-        input.items.forEach((item: DossierItemInfo) => {
-          item.record = input.records.find(
-            (record: DossierRecord) => record.ds_key === item.dsKey
-          );
-        });
-        return input.items;
-      })
+      reduce((acc: DSDossierItem[], dossieristResult: DossierListResult) => {
+        Array.prototype.push.apply(acc, dossieristResult.dossiers);
+        return acc;
+      }, [])
     );
   }
 
@@ -68,34 +40,12 @@ class SyncService {
     }
     return result;
   }
-
-  private buildDossierUpdateInfo(
-    res: DossierListResult,
-    dossier: DSDossierItem
-  ): DossierItemInfo {
-    if (!dossier.id) {
-      throw new Error("id should not be null.");
-    }
-    return {
-      dossierId: dossier.id,
-      dsKey: `${res.procedureId}-${dossier.id}`,
-      procedureId: res.procedureId,
-      updatedDate: asTimestamp(dossier.updated_at) || 0
-    };
-  }
 }
 
 interface PageOption {
   procedureId: number;
   resultPerPage: number;
   page: number;
-}
-export interface DossierItemInfo {
-  procedureId: number;
-  dossierId: number;
-  dsKey: string;
-  updatedDate: number;
-  record?: DossierRecord;
 }
 
 export const syncService = new SyncService();

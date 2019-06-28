@@ -1,65 +1,107 @@
-import { addDays } from "date-fns";
 import { combineLatest, Observable } from "rxjs";
+import { concatMap, flatMap, map, mergeMap, tap } from "rxjs/operators";
 import {
-  bufferCount,
-  concatMap,
-  exhaustMap,
-  filter,
-  flatMap,
-  mergeMap,
-  reduce,
-  tap
-} from "rxjs/operators";
-import {
-  DossierRecord,
+  apiResultService,
   dsProcedureConfigService,
   ProcedureConfig,
   ProcedureRecord,
-  procedureService
+  procedureService,
+  taskService
 } from "../collector";
-import { statisticService } from "../collector/service/statistic.service";
+import { APIResult, SynchroAction } from "../collector/model/api-result.model";
 import { configuration } from "../config";
-import { demarcheSimplifieeService, DSProcedure } from "../demarche-simplifiee";
-import { DossierItemInfo, syncService } from "../sync";
+import {
+  demarcheSimplifieeService,
+  DSDossierItem,
+  DSProcedure
+} from "../demarche-simplifiee";
+import { syncService } from "../sync";
 import { logger } from "../util";
-import { dossierSynchroService } from "./dossier-synchro.service";
 import { handleScheduler } from "./scheduler.service";
+
+interface SyncContext {
+  items: DSDossierItem[];
+  apiResult: APIResult;
+}
 
 export const dossierScheduler = {
   start: () => {
-    handleScheduler(
-      configuration.schedulerCronDS,
-      "dossier-synchro",
-      (start: number) => {
-        return combineLatest(
-          dsProcedureConfigService.all(),
-          allDossierItemInfosToUpdate(start)
-        ).pipe(
-          mergeMap(
-            ([configs, res]) => {
-              const procedureConfig = configs.find((c: ProcedureConfig) =>
-                c.procedures.includes(res.procedureId)
-              );
-              return dossierSynchroService.syncDossier(
-                res.procedureId,
-                res.dossierId,
-                res.record || null,
-                procedureConfig || null
-              );
-            },
-            undefined,
-            2
-          ),
-          reduce((acc: DossierRecord[], record: DossierRecord) => {
-            acc.push(record);
-            return acc;
-          }, []),
-          exhaustMap(() => statisticService.statistic())
-        );
-      }
-    );
+    handleScheduler(configuration.schedulerCronDS, "dossier-synchro", () => {
+      return syncProcedures().pipe(
+        mergeMap((x: ProcedureRecord) => buildSyncContext(x)),
+        map((x: SyncContext) => {
+          const actions = getSynchroActions(x.items, x.apiResult);
+          x.apiResult.items = x.items;
+          x.apiResult.actions = actions;
+          return x.apiResult;
+        }),
+        flatMap((x: APIResult) =>
+          x.actions.map((a: SynchroAction) => ({ action: a, apiResult: x }))
+        ),
+        mergeMap(
+          (input: { action: SynchroAction; apiResult: APIResult }) => {
+            return taskService.addTask(
+              input.action.action,
+              input.action.procedure,
+              input.action.item.id,
+              input.action.item.state,
+              input.action.item.updated_at
+            );
+          },
+          (input: { action: SynchroAction; apiResult: APIResult }) =>
+            input.apiResult,
+          5
+        ),
+        mergeMap((apiResult: APIResult) => {
+          return apiResultService.update(apiResult);
+        })
+      );
+    });
   }
 };
+
+function getSynchroActions(items: DSDossierItem[], apiResult: APIResult) {
+  const actions: SynchroAction[] = [];
+  items.forEach((fetchedItem: DSDossierItem) => {
+    const loadedItem = apiResult.items.find(
+      (i: DSDossierItem) => i.id === fetchedItem.id
+    );
+    if (!loadedItem) {
+      actions.push({
+        action: "add_or_update",
+        item: fetchedItem,
+        procedure: apiResult.procedure
+      });
+    } else if (loadedItem.updated_at !== fetchedItem.updated_at) {
+      actions.push({
+        action: "add_or_update",
+        item: loadedItem,
+        procedure: apiResult.procedure
+      });
+    }
+  });
+
+  apiResult.items.forEach((loadedItem: DSDossierItem) => {
+    const fetchedItem = items.find(
+      (i: DSDossierItem) => i.id === loadedItem.id
+    );
+    if (!fetchedItem) {
+      actions.push({
+        action: "delete",
+        item: loadedItem,
+        procedure: apiResult.procedure
+      });
+    }
+  });
+  return actions;
+}
+
+function buildSyncContext(x: ProcedureRecord): Observable<SyncContext> {
+  return combineLatest(
+    syncService.allDossierItems(x),
+    apiResultService.findByProcedureId(x.ds_key)
+  ).pipe(map(([items, apiResult]) => ({ items, apiResult })));
+}
 
 function syncProcedures(): Observable<ProcedureRecord> {
   return allDemarcheSimlifieeProcedures().pipe(
@@ -75,47 +117,6 @@ function allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
     tap((res: DSProcedure) =>
       logger.info(
         `[SyncService.allDemarcheSimlifieeProcedures] procedure#${res.id} - ${res.total_dossier} dossiers`
-      )
-    )
-  );
-}
-
-function allDemarcheSimplifieeDossierItems(): Observable<DossierItemInfo> {
-  return syncProcedures().pipe(
-    concatMap((record: ProcedureRecord) =>
-      syncService.allDossierItemInfos(record)
-    )
-  );
-}
-
-function allDossierItemInfosToUpdate(
-  start: number
-): Observable<DossierItemInfo> {
-  return allDemarcheSimplifieeDossierItems().pipe(
-    filter((item: DossierItemInfo) => {
-      // optimisation to eliminate most of dossiers
-      const startLess2Days = addDays(new Date(start), -2).getTime();
-      return item.updatedDate > startLess2Days;
-    }),
-    bufferCount(100),
-    concatMap((res: DossierItemInfo[]) =>
-      syncService.associateDossierRecord(res)
-    ),
-    flatMap((res: DossierItemInfo[]) => res),
-    filter((res: DossierItemInfo) => {
-      // filter to keep only dossier to update
-      if (!res.record) {
-        return true;
-      }
-      const recordUpdateAt = res.record.metadata.updated_at;
-      if (!recordUpdateAt) {
-        return true;
-      }
-      return res.updatedDate > recordUpdateAt;
-    }),
-    tap((res: DossierItemInfo) =>
-      logger.info(
-        `[SyncService.allDossierItemInfos] dossier ${res.procedureId}-${res.dossierId} will be synchronised`
       )
     )
   );

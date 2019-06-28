@@ -39,6 +39,10 @@ class DossierRepository {
     return this.collection().delete(`metadata.procedure_id=${procedureIds}`);
   }
 
+  public deleteByDsKey(dsKey: string): Observable<DeletedData[]> {
+    return this.collection().delete(`ds_key="${dsKey}"`);
+  }
+
   private collection() {
     return kintoClientInstance.collection<DossierRecord>("dossiers");
   }

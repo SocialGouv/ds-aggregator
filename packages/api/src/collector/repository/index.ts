@@ -4,3 +4,4 @@ export * from "./dossier.repository";
 export * from "./ds-config.repository";
 export * from "./statistic.repository";
 export * from "./synchro-history.repository";
+export * from "./api-result.repository";
