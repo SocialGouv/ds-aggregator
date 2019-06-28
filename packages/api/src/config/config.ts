@@ -50,8 +50,8 @@ const configByEnvironment: {
     sentryEnabled: asBoolean(env, "SENTRY_ENABLED", false)
   }),
   prod: () => ({
-    schedulerCronDS: "0 0 * * * *",
-    schedulerCronTask: "0 5 * * * *",
+    schedulerCronDS: "0 30 * * * *",
+    schedulerCronTask: "0 */10 * * * *",
     sentryEnabled: true
   })
 };
