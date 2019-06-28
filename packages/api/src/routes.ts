@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 import * as Router from "koa-router";
-import { concatMap, filter, flatMap, map, mergeMap, tap } from "rxjs/operators";
+import { flatMap, map, mergeMap, tap } from "rxjs/operators";
 import {
   DossierRecord,
   dossierService,
@@ -12,8 +12,6 @@ import {
 } from "./collector";
 import { statisticService } from "./collector/service/statistic.service";
 import { configuration } from "./config";
-import { dossierSynchroService } from "./scheduler/dossier-synchro.service";
-import { DossierItemInfo, syncService } from "./sync";
 import { logger } from "./util";
 import { dsConfigs } from "./util/ds-config";
 
@@ -30,7 +28,7 @@ router.post(`/${configuration.apiPrefix}/webhook`, async (ctx: Koa.Context) => {
   const state = ctx.query.state;
   const updated_at = ctx.query.updated_at;
   const res = await taskService
-    .addTask(procedureId, dossierId, state, updated_at)
+    .addTask("add_or_update", procedureId, dossierId, state, updated_at)
     .toPromise();
   ctx.body = res;
   ctx.status = 201;
@@ -106,41 +104,6 @@ router.get(
     ctx.status = 200;
     ctx.body = {
       message: "Result will be displayed in console"
-    };
-  }
-);
-
-router.post(
-  `/${configuration.apiPrefix}/procedures/:procedureId/sync`,
-  async (ctx: Koa.Context) => {
-    const procedureId: number = parseInt(ctx.params.procedureId, 10);
-    dossierService
-      .deleteByProcedureId(procedureId)
-      .pipe(
-        mergeMap(() => procedureService.all()),
-        flatMap((records: ProcedureRecord[]) => records),
-        filter((record: ProcedureRecord) => record.ds_key === procedureId),
-        mergeMap((record: ProcedureRecord) =>
-          syncService.allDossierItemInfos(record)
-        ),
-        concatMap((x: DossierItemInfo) => {
-          return dossierSynchroService.syncDossier(
-            x.procedureId,
-            x.dossierId,
-            null,
-            null
-          );
-        })
-      )
-      .subscribe({
-        complete: () =>
-          logger.info(`[sync procedure] procedure ${procedureId} complete`),
-        error: (err: Error) => logger.error(`[sync procedure] error `, err)
-      });
-
-    ctx.status = 200;
-    ctx.body = {
-      message: `launched procedure #${procedureId} synch`
     };
   }
 );

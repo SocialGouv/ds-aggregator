@@ -25,6 +25,9 @@ const addCollections = async () => {
 
   res = await api.createCollection("ds_collector", "tasks");
   console.log("[init kinto] collection creation (task):  ", res);
+
+  res = await api.createCollection("ds_collector", "api_results");
+  console.log("[init kinto] collection creation (api_results):  ", res);
 };
 
 const addDSConfig = async () => {
@@ -53,10 +56,9 @@ const init = async () => {
   await api
     .createAdmin(configs.adminLogin, configs.adminPassword)
     .then(async res => {
+      await addCollections();
       if (res.data) {
         console.log("[init kinto] admin created", res);
-
-        await addCollections();
         await addDSConfig();
       } else {
         console.log("[init kinto] kinto already initialised... ", res);

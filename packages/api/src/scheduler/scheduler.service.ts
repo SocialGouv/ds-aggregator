@@ -9,7 +9,7 @@ const schedulerStates = new Map<string, boolean>();
 export const handleScheduler = (
   cron: string,
   scheduler: string,
-  process: (start: number, end: number) => Observable<any>
+  process: (syncHistory: SynchroHistory) => Observable<any>
 ) => {
   schedule(cron, () => {
     if (schedulerStates.get(scheduler)) {
@@ -29,9 +29,7 @@ export const handleScheduler = (
             )} > ${endDate}`
           )
         ),
-        exhaustMap((syncHistory: SynchroHistory) =>
-          process(syncHistory.last_synchro, end)
-        )
+        exhaustMap((syncHistory: SynchroHistory) => process(syncHistory))
       );
     runScheduler$
       .pipe(

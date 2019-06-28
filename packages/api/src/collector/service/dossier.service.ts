@@ -32,9 +32,15 @@ class DossierService {
   ): Observable<DossierRecord[]> {
     return dossierRepository.findAllByProcedureIn([procedureId]);
   }
-
   public deleteByProcedureId(procedureId: number): Observable<DeletedData[]> {
     return dossierRepository.deleteAllByMetadataProcedureId(procedureId);
+  }
+
+  public deleteByProcedureIdAndDossierId(
+    procedureId: number,
+    dossierId: number
+  ): Observable<DeletedData[]> {
+    return dossierRepository.deleteByDsKey(`${procedureId}-${dossierId}`);
   }
 
   public update(
