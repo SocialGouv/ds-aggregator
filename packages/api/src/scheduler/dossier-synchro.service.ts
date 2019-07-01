@@ -23,16 +23,23 @@ export const dossierSynchroService = {
       demarcheSimplifieeService.getDSDossier(procedureId, dossierId)
     ).pipe(
       mergeMap(([config, procId, dossierRecord, dossier]) => {
-        if (dossierRecord == null) {
+        if (dossier == null) {
+          logger.info(
+            `[SyncService.syncDossier] dossier ${procId}-${dossierId} not found`
+          );
+          return of(null);
+        } else if (dossierRecord == null) {
           return dossierService.save(config.group, procId, dossier);
         }
         return dossierService.update(dossierRecord, dossier);
       }),
-      tap((dossier: DossierRecord) =>
-        logger.info(
-          `[SyncService.syncDossier] dossier ${dossier.ds_key} synchronised`
-        )
-      )
+      tap((dossier: DossierRecord | null) => {
+        if (dossier) {
+          logger.info(
+            `[SyncService.syncDossier] dossier ${dossier.ds_key} synchronised`
+          );
+        }
+      })
     );
   }
 };

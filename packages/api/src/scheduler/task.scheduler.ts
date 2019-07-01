@@ -28,7 +28,12 @@ export const taskScheduler = {
           acc.push(record);
           return acc;
         }, []),
-        exhaustMap(() => statisticService.statistic())
+        exhaustMap((tasks: Task[]) => {
+          if (tasks.length > 0) {
+            return statisticService.statistic();
+          }
+          return of();
+        })
       );
     });
   }

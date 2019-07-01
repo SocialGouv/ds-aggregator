@@ -1,5 +1,6 @@
 import { Observable, of } from "rxjs";
-import { map, mergeMap } from "rxjs/operators";
+import { catchError, map, mergeMap } from "rxjs/operators";
+import { Http404Error } from "../../lib/rest";
 import { demarcheSimplifieeAPI } from "../api";
 import { DSDossierResult, DSProcedureResult } from "../api/ds.api";
 import { DSDossier, DSDossierItem, DSProcedure } from "../model";
@@ -44,10 +45,16 @@ class DemarcheSimplifieeService {
   public getDSDossier(
     procedureId: number,
     dossierId: number
-  ): Observable<DSDossier> {
-    return demarcheSimplifieeAPI
-      .getDSDossier(procedureId, dossierId)
-      .pipe(map((res: DSDossierResult) => res.dossier));
+  ): Observable<DSDossier | null> {
+    return demarcheSimplifieeAPI.getDSDossier(procedureId, dossierId).pipe(
+      map((res: DSDossierResult) => res.dossier),
+      catchError((err: any) => {
+        if (err instanceof Http404Error) {
+          return of(null);
+        }
+        throw err;
+      })
+    );
   }
 }
 

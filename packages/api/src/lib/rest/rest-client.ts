@@ -3,6 +3,7 @@ import { catchError, map } from "rxjs/operators";
 import * as handlers from "typed-rest-client/Handlers";
 import * as rm from "typed-rest-client/RestClient";
 import { logger } from "../../util";
+import { Http404Error } from "./http-error";
 
 export class RestClient {
   private client: rm.RestClient;
@@ -73,6 +74,9 @@ export class RestClient {
   private handleResult(res: rm.IRestResponse<any>) {
     if ([200, 201].includes(res.statusCode)) {
       return res.result;
+    }
+    if (res.statusCode === 404) {
+      throw new Http404Error();
     }
     throw Error(`[RestClient] http status ${res.statusCode}`);
   }
