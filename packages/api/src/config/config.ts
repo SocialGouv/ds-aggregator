@@ -40,8 +40,8 @@ const configByEnvironment: {
   [key in EnvironmentType]: any;
 } = {
   "dev.factory": () => ({
-    schedulerCronDS: "0 0 * * * *",
-    schedulerCronTask: "0 */10 * * * *",
+    schedulerCronDS: "0 */10 * * * *",
+    schedulerCronTask: "0 */5 * * * *",
     sentryEnabled: false
   }),
   "dev.local": (env: typeof process.env) => ({
