@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.1](https://github.com/SocialGouv/ds-aggregator/compare/v3.4.0...v3.4.1) (2019-07-01)
+
+
+### Bug Fixes
+
+* **stat:** compute stat for last 12 months ([05a316e](https://github.com/SocialGouv/ds-aggregator/commit/05a316e))
+
+
+
+
+
 # [3.4.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.3.1...v3.4.0) (2019-07-01)
 
 
