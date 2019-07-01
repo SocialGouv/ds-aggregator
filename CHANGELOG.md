@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.3.1...v3.4.0) (2019-07-01)
+
+
+### Bug Fixes
+
+* **api:** handle 404 if dossier not found ([601e49a](https://github.com/SocialGouv/ds-aggregator/commit/601e49a))
+* **stat:** refresh stat after processing tasks ([a988ecf](https://github.com/SocialGouv/ds-aggregator/commit/a988ecf))
+* **task:** sort tasks to complete by last_modified ascending ([b73d6a3](https://github.com/SocialGouv/ds-aggregator/commit/b73d6a3))
+
+
+### Features
+
+* **api:** change get('api/stat') response to be compatible with ds-dashboard' ([2df7b8b](https://github.com/SocialGouv/ds-aggregator/commit/2df7b8b))
+
+
+
+
+
 ## [3.3.1](https://github.com/SocialGouv/ds-aggregator/compare/v3.3.0...v3.3.1) (2019-06-28)
 
 **Note:** Version bump only for package ds-aggregator
