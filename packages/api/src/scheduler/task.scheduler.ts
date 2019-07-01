@@ -1,5 +1,5 @@
 import { combineLatest, Observable, of } from "rxjs";
-import { concatMap, flatMap, mergeMap } from "rxjs/operators";
+import { exhaustMap, flatMap, mergeMap, reduce } from "rxjs/operators";
 import {
   dossierService,
   dsProcedureConfigService,
@@ -7,6 +7,7 @@ import {
   Task,
   taskService
 } from "../collector";
+import { statisticService } from "../collector/service/statistic.service";
 import { configuration } from "../config";
 import { dossierSynchroService } from "./dossier-synchro.service";
 import { handleScheduler } from "./scheduler.service";
@@ -17,7 +18,18 @@ export const taskScheduler = {
       return combineLatest(
         allTasksToComplete(),
         dsProcedureConfigService.all()
-      ).pipe(concatMap(([task, procedures]) => processTask(task, procedures)));
+      ).pipe(
+        mergeMap(
+          ([task, procedures]) => processTask(task, procedures),
+          undefined,
+          5
+        ),
+        reduce((acc: Task[], record: Task) => {
+          acc.push(record);
+          return acc;
+        }, []),
+        exhaustMap(() => statisticService.statistic())
+      );
     });
   }
 };

@@ -22,6 +22,13 @@ export const dsConfigs = [
   },
   {
     group: {
+      id: "33",
+      label: "33 - Gironde"
+    },
+    procedures: [17034, 19561]
+  },
+  {
+    group: {
       id: "35",
       label: "35 - Ille-et-Vilaine"
     },
@@ -40,6 +47,13 @@ export const dsConfigs = [
       label: "45 - Loiret"
     },
     procedures: [11959, 11968]
+  },
+  {
+    group: {
+      id: "51",
+      label: "51 - Marne"
+    },
+    procedures: [18472, 18473]
   },
   {
     group: {

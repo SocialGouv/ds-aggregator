@@ -1,5 +1,13 @@
 import { combineLatest, Observable } from "rxjs";
-import { concatMap, flatMap, map, mergeMap, tap } from "rxjs/operators";
+import {
+  concatMap,
+  exhaustMap,
+  flatMap,
+  map,
+  mergeMap,
+  reduce,
+  tap
+} from "rxjs/operators";
 import {
   apiResultService,
   dsProcedureConfigService,
@@ -9,6 +17,7 @@ import {
   taskService
 } from "../collector";
 import { APIResult, SynchroAction } from "../collector/model/api-result.model";
+import { statisticService } from "../collector/service/statistic.service";
 import { configuration } from "../config";
 import {
   demarcheSimplifieeService,
@@ -54,7 +63,12 @@ export const dossierScheduler = {
         ),
         mergeMap((apiResult: APIResult) => {
           return apiResultService.update(apiResult);
-        })
+        }),
+        reduce((acc: APIResult[], record: APIResult) => {
+          acc.push(record);
+          return acc;
+        }, []),
+        exhaustMap(() => statisticService.statistic())
       );
     });
   }
