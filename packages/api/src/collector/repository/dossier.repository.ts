@@ -29,6 +29,15 @@ class DossierRepository {
     return this.collection().search(`in_metadata.procedure_id=${procedureIds}`);
   }
 
+  public findAllByMetadataCreatedAtGTAndProcedureIn(
+    createdAt: number,
+    procedureIds: number[]
+  ): Observable<DossierRecord[]> {
+    return this.collection().search(
+      `gt_metadata.created_at=${createdAt}&in_metadata.procedure_id=${procedureIds}`
+    );
+  }
+
   public findAllByDsKeyIn(dsKeys: string[]): Observable<DossierRecord[]> {
     return this.collection().search(`in_ds_key=${dsKeys}`);
   }

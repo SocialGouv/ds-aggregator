@@ -1,4 +1,4 @@
-import { differenceInDays, format } from "date-fns";
+import { differenceInDays, format, subMonths } from "date-fns";
 import { Observable } from "rxjs";
 import {
   concatMap,
@@ -47,37 +47,40 @@ class StatisticService {
   }
 
   private statisticByProcedure(param: ProcedureConfig) {
-    return dossierRepository.findAllByProcedureIn(param.procedures).pipe(
-      map((dossiers: DossierRecord[]) => {
-        return dossiers.reduce((acc: Statistic, current) => {
-          const dossier = current.ds_data;
-          const state = current.metadata.state;
+    const oneYearAgo = subMonths(new Date(), 12).getTime();
+    return dossierRepository
+      .findAllByMetadataCreatedAtGTAndProcedureIn(oneYearAgo, param.procedures)
+      .pipe(
+        map((dossiers: DossierRecord[]) => {
+          return dossiers.reduce((acc: Statistic, current) => {
+            const dossier = current.ds_data;
+            const state = current.metadata.state;
 
-          const monthlyStat = this.getMonthlyStatistic(
-            acc,
-            new Date(dossier.created_at)
-          );
+            const monthlyStat = this.getMonthlyStatistic(
+              acc,
+              new Date(dossier.created_at)
+            );
 
-          acc.count++;
-          acc.status[state].count++;
+            acc.count++;
+            acc.status[state].count++;
 
-          monthlyStat.count++;
-          monthlyStat.status[state].count++;
+            monthlyStat.count++;
+            monthlyStat.status[state].count++;
 
-          if (DS_STATUSES_COMPLETED.indexOf(dossier.state) > -1) {
-            const delayInDays = computeDuration(dossier);
+            if (DS_STATUSES_COMPLETED.indexOf(dossier.state) > -1) {
+              const delayInDays = computeDuration(dossier);
 
-            this.updateDuration(acc, delayInDays);
-            this.updateDuration(monthlyStat, delayInDays);
-          }
+              this.updateDuration(acc, delayInDays);
+              this.updateDuration(monthlyStat, delayInDays);
+            }
 
-          return acc;
-        }, initStatistic(param.group));
-      }),
-      switchMap((stat: Statistic) => {
-        return this.saveOrUpdate(stat);
-      })
-    );
+            return acc;
+          }, initStatistic(param.group));
+        }),
+        switchMap((stat: Statistic) => {
+          return this.saveOrUpdate(stat);
+        })
+      );
   }
 
   private saveOrUpdate(stat: Statistic): Observable<Statistic> {
