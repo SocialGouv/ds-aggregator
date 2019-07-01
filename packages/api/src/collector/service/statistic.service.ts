@@ -23,10 +23,15 @@ import { dsProcedureConfigService } from "./ds-config.service";
 const DS_STATUSES_COMPLETED = ["closed", "refused", "without_continuation"];
 
 class StatisticService {
-  public findByGroupId(groupId: string): Observable<Statistic> {
-    return statisticRepository
-      .findByGroupId(groupId)
-      .pipe(map((res: Statistic[]) => res[0]));
+  public findByGroupId(groupId: string): Observable<Statistic | null> {
+    return statisticRepository.findByGroupId(groupId).pipe(
+      map((res: Statistic[]) => {
+        if (res.length > 0) {
+          return res[0];
+        }
+        return null;
+      })
+    );
   }
 
   public statistic(): Observable<any> {
