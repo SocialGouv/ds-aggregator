@@ -22,7 +22,7 @@ class TaskRepository {
   }
 
   public getTaskToComplete(): Observable<Task[]> {
-    return this.collection.search("task_state=to_complete");
+    return this.collection.search("task_state=to_complete&_sort=last_modified");
   }
 }
 
