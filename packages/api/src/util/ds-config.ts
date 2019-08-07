@@ -1,6 +1,13 @@
 export const dsConfigs = [
   {
     group: {
+      id: "02",
+      label: "02 - Aisne"
+    },
+    procedures: [19147, 19142]
+  },
+  {
+    group: {
       id: "10",
       label: "10 - Aube"
     },
@@ -82,6 +89,20 @@ export const dsConfigs = [
       label: "57 - Moselle"
     },
     procedures: [15749, 15750]
+  },
+  {
+    group: {
+      id: "59",
+      label: "59 - Nord"
+    },
+    procedures: [18829, 18830]
+  },
+  {
+    group: {
+      id: "62",
+      label: "62 - Pas-de-Calais"
+    },
+    procedures: [18826, 18828]
   },
   {
     group: {
