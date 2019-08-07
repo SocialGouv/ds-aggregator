@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.4.2...v3.5.0) (2019-08-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency lerna to ^3.16.1 ([#43](https://github.com/SocialGouv/ds-aggregator/issues/43)) ([e7b8868](https://github.com/SocialGouv/ds-aggregator/commit/e7b8868))
+* **deps:** update dependency lerna to ^3.16.2 ([#46](https://github.com/SocialGouv/ds-aggregator/issues/46)) ([9e0d71d](https://github.com/SocialGouv/ds-aggregator/commit/9e0d71d))
+* **deps:** update dependency lerna to ^3.16.3 ([#47](https://github.com/SocialGouv/ds-aggregator/issues/47)) ([920e538](https://github.com/SocialGouv/ds-aggregator/commit/920e538))
+* **deps:** update dependency lerna to ^3.16.4 ([#48](https://github.com/SocialGouv/ds-aggregator/issues/48)) ([d8f3dcb](https://github.com/SocialGouv/ds-aggregator/commit/d8f3dcb))
+
+
+### Features
+
+* **dept:** add depts 02, 59, 62 ([2c0812e](https://github.com/SocialGouv/ds-aggregator/commit/2c0812e))
+
+
+
+
+
 ## [3.4.2](https://github.com/SocialGouv/ds-aggregator/compare/v3.4.1...v3.4.2) (2019-07-02)
 
 **Note:** Version bump only for package ds-aggregator
