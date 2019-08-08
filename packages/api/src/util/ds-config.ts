@@ -99,6 +99,13 @@ export const dsConfigs = [
   },
   {
     group: {
+      id: "60",
+      label: "60 - Oise"
+    },
+    procedures: [19149, 19152]
+  },
+  {
+    group: {
       id: "62",
       label: "62 - Pas-de-Calais"
     },
@@ -159,6 +166,13 @@ export const dsConfigs = [
       label: "78 - Yvelines"
     },
     procedures: [15275, 15276]
+  },
+  {
+    group: {
+      id: "80",
+      label: "80 - Somme"
+    },
+    procedures: [19160, 19168]
   },
   {
     group: {
