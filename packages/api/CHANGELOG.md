@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.5.0...v3.6.0) (2019-08-16)
+
+
+### Features
+
+* **dept:** add depts 60 et 80 ([5cb380b](https://github.com/SocialGouv/ds-aggregator/commit/5cb380b))
+
+
+
+
+
 # [3.5.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.4.2...v3.5.0) (2019-08-07)
 
 
