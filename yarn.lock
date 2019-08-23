@@ -1130,10 +1130,10 @@
     universal-user-agent "^3.0.0"
     url-template "^2.0.8"
 
-"@socialgouv/tslint-config-recommended@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@socialgouv/tslint-config-recommended/-/tslint-config-recommended-0.9.3.tgz#dcb5d3cfb312c9b4afe7d37ef241fabc85fac809"
-  integrity sha512-/egD6vsQmaiwskMapm3yX8cY2Nmr6cz8m6aOXTv0a0ZIer9Flu+7DU++Lxg8CyIICVwNVAbq/Gh7p66P6Nix1A==
+"@socialgouv/tslint-config-recommended@^0.9.5":
+  version "0.9.5"
+  resolved "https://registry.yarnpkg.com/@socialgouv/tslint-config-recommended/-/tslint-config-recommended-0.9.5.tgz#a4a2d5703b57655a161695202e9a65359f5d99a1"
+  integrity sha512-c07FWAqz2/p0RTGvN3UuE9hL5xPmBFd7UmM1Dw37rjeFFuexRSubB+DW83IOAbXcnGx19c4tJGVmsW3BaTlv0A==
   dependencies:
     tslint-config-prettier "~1.18.0"
     tslint-plugin-prettier "~2.0.1"
