@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.7.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.6.0...v3.7.0) (2019-09-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency dotenv to ^8.1.0 ([#54](https://github.com/SocialGouv/ds-aggregator/issues/54)) ([552ccaa](https://github.com/SocialGouv/ds-aggregator/commit/552ccaa))
+
+
+
+
+
 # [3.3.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.2.1...v3.3.0) (2019-06-28)
 
 
