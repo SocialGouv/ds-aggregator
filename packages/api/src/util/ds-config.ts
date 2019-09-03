@@ -43,6 +43,13 @@ export const dsConfigs = [
   },
   {
     group: {
+      id: "36",
+      label: "36 - Indre"
+    },
+    procedures: [20837, 20738]
+  },
+  {
+    group: {
       id: "42",
       label: "42 - Loire"
     },
