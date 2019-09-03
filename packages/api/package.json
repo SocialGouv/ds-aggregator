@@ -41,7 +41,7 @@
     "koa-router": "^7.4.0",
     "node-cron": "^2.0.3",
     "raven": "^2.6.4",
-    "rxjs": "^6.5.2",
+    "rxjs": "^6.5.3",
     "typed-rest-client": "^1.5.0",
     "winston": "^3.2.1"
   }
