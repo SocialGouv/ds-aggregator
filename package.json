@@ -8,7 +8,7 @@
     "coverage": "lerna run test --parallel -- --coverage"
   },
   "dependencies": {
-    "lerna": "^3.16.5"
+    "lerna": "^3.17.0"
   },
   "workspaces": [
     "packages/*"
