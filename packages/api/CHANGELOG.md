@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.8.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.7.0...v3.8.0) (2019-10-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency dotenv to ^8.2.0 ([#77](https://github.com/SocialGouv/ds-aggregator/issues/77)) ([ccf68e2](https://github.com/SocialGouv/ds-aggregator/commit/ccf68e2))
+* **deps:** update dependency koa to ^2.10.0 ([#38](https://github.com/SocialGouv/ds-aggregator/issues/38)) ([1f44d37](https://github.com/SocialGouv/ds-aggregator/commit/1f44d37))
+* **deps:** update dependency koa to ^2.11.0 ([#82](https://github.com/SocialGouv/ds-aggregator/issues/82)) ([1ba6790](https://github.com/SocialGouv/ds-aggregator/commit/1ba6790))
+* **deps:** update dependency rxjs to ^6.5.3 ([#63](https://github.com/SocialGouv/ds-aggregator/issues/63)) ([52e2838](https://github.com/SocialGouv/ds-aggregator/commit/52e2838))
+
+
+### Features
+
+* **dep:** add UD 74 ([59b9e0b](https://github.com/SocialGouv/ds-aggregator/commit/59b9e0b))
+
+
+
+
+
 # [3.7.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.6.0...v3.7.0) (2019-09-03)
 
 
