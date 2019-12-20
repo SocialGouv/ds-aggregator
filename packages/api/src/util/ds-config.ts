@@ -22,6 +22,13 @@ export const dsConfigs = [
   },
   {
     group: {
+      id: "21",
+      label: "21 - Côte-d'or"
+    },
+    procedures: [22884, 22885]
+  },
+  {
+    group: {
       id: "25",
       label: "25 - Doubs"
     },
