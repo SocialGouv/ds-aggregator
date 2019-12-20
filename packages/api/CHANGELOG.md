@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.8.0...v3.9.0) (2019-12-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency typed-rest-client to ^1.7.1 ([#108](https://github.com/SocialGouv/ds-aggregator/issues/108)) ([363b70a](https://github.com/SocialGouv/ds-aggregator/commit/363b70a))
+
+
+### Features
+
+* **departement:** add UD21 ([c9d7c9d](https://github.com/SocialGouv/ds-aggregator/commit/c9d7c9d))
+
+
+
+
+
 # [3.8.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.7.0...v3.8.0) (2019-10-30)
 
 
