@@ -24,7 +24,7 @@
     "@types/node-cron": "^2.0.2",
     "@types/raven": "^2.5.3",
     "@types/rx": "^4.1.1",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "ts-jest": "^24.3.0",
