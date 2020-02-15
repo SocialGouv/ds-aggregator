@@ -38,7 +38,7 @@
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
-    "koa-router": "^8.0.7",
+    "koa-router": "^8.0.8",
     "node-cron": "^2.0.3",
     "raven": "^2.6.4",
     "rxjs": "^6.5.4",
