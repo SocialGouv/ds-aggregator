@@ -9,12 +9,16 @@ include:
   - project: SocialGouv/gitlab-ci-yml
     file: /base_docker_kubectl_image_stage.yml
     ref: v4.6.0
+  - project: SocialGouv/gitlab-ci-yml
+    file: /base_register_stage.yml
+    ref: v4.6.0
 #  - "/k8s/api/.deploy-ds-aggregator-api.yml"
 #  - "/k8s/postgres/.deploy-ds-aggregator-postgres.yml"
 #  - "/k8s/memcached/.deploy-ds-aggregator-memcached.yml"
 #  - "/k8s/kinto/.deploy-ds-aggregator-kinto.yml"
 
 variables:
+  PROJECT: ds-aggregator
   DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://localhost:2375
   DOCKER_VERSION: "18.06"
@@ -118,103 +122,31 @@ Backup before deploy to prod:
     variables:
       - $PRODUCTION
 
+################################ REGISTRATION ################################
+
+.register_stage: &register_stage
+  extends: .base_register_stage
+  stage: Registration
+  except:
+    variables:
+      - $PRODUCTION
+
+#
+Register api image:
+  <<: *register_stage
+  variables:
+    CONTEXT: .
+    DOCKER_BUILD_ARGS: -f packages/api/Dockerfile
+    IMAGE_NAME: ${CI_REGISTRY_IMAGE}/api
+
+Register init kinto image:
+  <<: *register_stage
+  variables:
+    CONTEXT: packages/kinto
+    DOCKERFILE_PATH: packages/kinto/Dockerfile
+    IMAGE_NAME: ${CI_REGISTRY_IMAGE}/kinto
 
 
-##
-#.quality_stage: &quality_stage
-#  stage: "Code Quality"
-#  image: node:13-alpine
-#  before_script:
-#    - yarn --frozen-lockfile
-##
-#
-#Quality tests:
-#  <<: *quality_stage
-#  cache:
-#    key: ${CI_COMMIT_REF_SLUG}
-#    paths:
-#      - node_modules/
-#  script:
-#    - yarn build
-#    - yarn lint
-#    - yarn test
-#
-############################################
-####               PREPARE               ###
-############################################
-#
-##
-#.get_github_id_stage: &get_github_id_stage
-#  image:
-#    name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
-#    entrypoint: [""]
-#  before_script:
-#    - envsubst < k8s/scripts/get-deploy-id.sh > k8s/scripts/get-github-deploy-id.sh
-#  script:
-#    - sh k8s/scripts/get-github-deploy-id.sh
-#  artifacts:
-#    paths:
-#      - github_deploy_id
-##
-#
-#Get Github Id (dev):
-#  <<: *get_github_id_stage
-#  stage: "Deploy dev"
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - branches
-#  except:
-#    - master
-#
-#Get Github Id (beta):
-#  <<: *get_github_id_stage
-#  stage: "Deploy beta"
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - master
-#
-#Get Github Id (prod):
-#  <<: *get_github_id_stage
-#  stage: "Deploy prod"
-#  environment:
-#    name: $PROD_ENVIRONMENT_NAME
-#  only:
-#    - tags
-#
-############################################
-####       REGISTER DOCKER IMAGES        ###
-############################################
-#
-##
-#.register_stage: &register_stage
-#  stage: "Registration"
-#  image: docker:$DOCKER_VERSION
-#  services:
-#    - docker:$DOCKER_VERSION-dind
-#  before_script:
-#    - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u gitlab-ci-token --password-stdin
-#    - docker pull $IMAGE_NAME:$CI_COMMIT_BEFORE_SHA || true
-#  script:
-#    - echo "Build $IMAGE_NAME:$CI_COMMIT_SHA from $IMAGE_NAME:$CI_COMMIT_BEFORE_SHA"
-#    - docker build --cache-from $IMAGE_NAME:$CI_COMMIT_BEFORE_SHA -t $IMAGE_NAME:$CI_COMMIT_SHA -f $DOCKERFILE_PATH $CONTEXT
-#    - docker push $IMAGE_NAME
-##
-#
-#Register api image:
-#  <<: *register_stage
-#  variables:
-#    CONTEXT: .
-#    DOCKERFILE_PATH: packages/api/Dockerfile
-#    IMAGE_NAME: $CI_REGISTRY_IMAGE/api
-#
-#Register init kinto image:
-#  <<: *register_stage
-#  variables:
-#    CONTEXT: packages/kinto
-#    DOCKERFILE_PATH: packages/kinto/Dockerfile
-#    IMAGE_NAME: $CI_REGISTRY_IMAGE/kinto
 #
 ############################################
 ####            DEPLOY TO K8S            ###
