@@ -21,9 +21,9 @@ include:
   - project: SocialGouv/gitlab-ci-yml
     file: /base_docker_helm_image_stage.yml
     ref: v4.6.0
-#  - "/k8s/postgres/.deploy-ds-aggregator-postgres.yml"
-#  - "/k8s/memcached/.deploy-ds-aggregator-memcached.yml"
-#  - "/k8s/kinto/.deploy-ds-aggregator-kinto.yml"
+  - project: SocialGouv/gitlab-ci-yml
+    file: /base_delete_useless_k8s_ns_stage.yml
+    ref: v4.6.0
 
 variables:
   PROJECT: ds-aggregator
@@ -443,233 +443,21 @@ Make a new release and deploy to preprod environment:
   only:
     - master
   when: manual
-#
-############################################
-####            DEPLOY TO K8S            ###
-############################################
-#
-##
-#.deploy_stage: &deploy_stage
-#  dependencies: []
-#  variables: &deploy_stage_variables
-#    DS_AGGREGATOR_REGISTRY: $CI_REGISTRY_IMAGE
-#    IMAGE_TAG: $CI_COMMIT_SHA
-##
-#
-## Feature branch
-#
-#Deploy @ds-aggregator/api (dev):
-#  <<: *deploy_stage
-#  stage: "Deploy dev"
-#  extends: .deploy-ds-aggregator-api-k8s-dev
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $API_PORT
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - branches
-#  except:
-#    - master
-#
-#
-#Deploy @ds-aggregator/postgres (dev):
-#  <<: *deploy_stage
-#  stage: "Deploy dev"
-#  extends: .deploy-ds-aggregator-postgres-k8s-dev
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $POSTGRES_PORT
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - branches
-#  except:
-#    - master
-#
-#
-#Deploy @ds-aggregator/memcached (dev):
-#  <<: *deploy_stage
-#  stage: "Deploy dev"
-#  extends: .deploy-ds-aggregator-memcached-k8s-dev
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $MEMCACHED_PORT
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - branches
-#  except:
-#    - master
-#
-#
-#Deploy @ds-aggregator/kinto (dev):
-#  <<: *deploy_stage
-#  stage: "Deploy dev"
-#  extends: .deploy-ds-aggregator-kinto-k8s-dev
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $KINTO_PORT
-#    CACHE_PORT: $MEMCACHED_PORT
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - branches
-#  except:
-#    - master
-#
-#
-## deploy beta
-#
-#Deploy @ds-aggregator/api (beta):
-#  <<: *deploy_stage
-#  stage: "Deploy beta"
-#  extends: .deploy-ds-aggregator-api-k8s-beta
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $API_PORT
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - master
-#
-#Deploy @ds-aggregator/postgres (beta):
-#  <<: *deploy_stage
-#  stage: "Deploy beta"
-#  extends: .deploy-ds-aggregator-postgres-k8s-beta
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $POSTGRES_PORT
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - master
-#
-#Deploy @ds-aggregator/memcached (beta):
-#  <<: *deploy_stage
-#  stage: "Deploy beta"
-#  extends: .deploy-ds-aggregator-memcached-k8s-beta
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $MEMCACHED_PORT
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - master
-#
-#Deploy @ds-aggregator/kinto (beta):
-#  <<: *deploy_stage
-#  stage: "Deploy beta"
-#  extends: .deploy-ds-aggregator-kinto-k8s-beta
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $KINTO_PORT
-#    CACHE_PORT: $MEMCACHED_PORT
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - master
-#
-## Prod Environment
-#
-#Deploy @ds-aggregator/api (prod):
-#  <<: *deploy_stage
-#  stage: "Deploy prod"
-#  extends: .deploy-ds-aggregator-api-k8s-prod
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $API_PORT
-#  environment:
-#    name: $PROD_ENVIRONMENT_NAME
-#  only:
-#    - tags
-#
-#Deploy @ds-aggregator/memcached (prod):
-#  <<: *deploy_stage
-#  stage: "Deploy prod"
-#  extends: .deploy-ds-aggregator-memcached-k8s-prod
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $MEMCACHED_PORT
-#  environment:
-#    name: $PROD_ENVIRONMENT_NAME
-#  only:
-#    - tags
-#
-#Deploy @ds-aggregator/kinto (prod):
-#  <<: *deploy_stage
-#  stage: "Deploy prod"
-#  extends: .deploy-ds-aggregator-kinto-k8s-prod
-#  variables:
-#    <<: *deploy_stage_variables
-#    PORT: $KINTO_PORT
-#    CACHE_PORT: $MEMCACHED_PORT
-#  environment:
-#    name: $PROD_ENVIRONMENT_NAME
-#  only:
-#    - tags
-#
-############################################
-####         SEND URL TO GITHUB          ###
-############################################
-#
-##
-#.send_url_to_github_stage: &send_url_to_github_stage
-#  stage: "Send Url to GitHub"
-#  image:
-#    name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
-#    entrypoint: [""]
-#  script:
-#    - export DEPLOY_ID=$(cat github_deploy_id)
-#    - envsubst < k8s/scripts/send-url.sh > k8s/scripts/send-url-to-github.sh
-#    - sh k8s/scripts/send-url-to-github.sh $CI_COMMIT_REF_NAME
-##
-#
-#Send deployment url to Github (dev):
-#  <<: *send_url_to_github_stage
-#  before_script:
-#    - HASH_BRANCH_NAME=$(printf "$CI_COMMIT_REF_NAME" | sha1sum | cut -c1-5)
-#    - export HASH_BRANCH_NAME=$HASH_BRANCH_NAME
-#    - export URL=http://$HASH_BRANCH_NAME-ds-aggregator.${CI_ENVIRONMENT_NAME}.social.gouv.fr/
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - branches
-#  except:
-#    - master
-#
-#Send deployment url to Github (beta):
-#  <<: *send_url_to_github_stage
-#  before_script:
-#    - export URL=http://beta-ds-aggregator.${CI_ENVIRONMENT_NAME}.social.gouv.fr/
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - master
-#
-#Send deployment url to Github (prod):
-#  <<: *send_url_to_github_stage
-#  before_script:
-#    - export URL=http://ds-aggregator.${CI_ENVIRONMENT_NAME}.social.gouv.fr/
-#  environment:
-#    name: $PROD_ENVIRONMENT_NAME
-#  only:
-#    - tags
-#
-############################################
-####     DELETE USELESS K8S OBJECTS      ###
-############################################
-#
-#Delete useless k8s objects:
-#  stage: "Delete K8S objects"
-#  image:
-#    name: $CI_REGISTRY/$IMAGE_INFRA_BASE_NAME/docker-kube:latest
-#    entrypoint: [""]
-#  before_script:
-#    - /apps/create-kubeconfig.sh
-#  script:
-#    - python3 k8s/scripts/delete-k8s-objects.py
-#  environment:
-#    name: $DEV_ENVIRONMENT_NAME
-#  only:
-#    - tags
+
+
+################################# NOTIFY ###############################
+
+Notify Fail:
+  extends: .base_notify_fail_stage
+  stage: Notify Finished Deployment
+  dependencies:
+    - Notify Starting Deployment
+
+Notify Success:
+  extends: .base_notify_success_stage
+  stage: Notify Finished Deployment
+  dependencies:
+    - Notify Starting Deployment
+
+Delete useless k8s namespaces:
+  extends: .base_delete_useless_k8s_ns_stage
