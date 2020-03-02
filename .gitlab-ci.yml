@@ -61,6 +61,11 @@ variables:
   POSTGRES_RESOURCE_MEMORY_LIMIT: "256Mi"
   POSTGRES_RESOURCE_CPU_REQUEST: "25m"
   POSTGRES_RESOURCE_MEMORY_REQUEST: "128Mi"
+  # Quotas Memcached
+  MEMCACHED_RESOURCE_CPU_LIMIT: "50m"
+  MEMCACHED_RESOURCE_MEMORY_LIMIT: "64Mi"
+  MEMCACHED_RESOURCE_CPU_REQUEST: "10m"
+  MEMCACHED_RESOURCE_MEMORY_REQUEST: "32Mi"
 
 stages:
   - "Code Quality"
@@ -293,6 +298,55 @@ Deploy postgres (prod):
     name: ${PROD_ENVIRONMENT_NAME}
   after_script:
     - kubectl apply -f k8s/postgres/backup-cronjob.yml -n ${K8S_NAMESPACE}
+  only:
+    refs:
+      - triggers
+    variables:
+      - $PRODUCTION
+
+
+############################################
+####              MEMCACHED             ####
+############################################
+
+#
+.deploy_memcached: &deploy_memcached
+  stage: "Deploy"
+  image: registry.gitlab.factory.social.gouv.fr/socialgouv/docker/helm:${HELM_VERSION}
+  variables: &deploy_memcached_variables
+    HELM_RENDER_ARGS: ""
+    CONTEXT: wif-bo
+  script:
+    - helm init --client-only
+    - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
+    - curl -L https://github.com/SocialGouv/helm-charts/releases/download/v2.11.0/helm-just-linux-2.11.0.tgz | tar -C $(helm home) -xzv
+    - helm repo add socialgouv https://github.com/SocialGouv/helm-charts/releases/download/v2.11.0
+    - helm just fetch "stable/memcached#${MEMCACHED_CHART_VERSION}"
+    - envsubst < k8s/memcached/values.yml > ./values.yaml
+    - helm just render ${CONTEXT}-${BRANCH_HASH} memcached
+      ${HELM_RENDER_ARGS}
+      --values ./values.yaml
+    - helm just apply ${CONTEXT}-${BRANCH_HASH}
+#
+
+Deploy memcached:
+  <<: *deploy_memcached
+  environment:
+    name: ${DEV_ENVIRONMENT_NAME}
+  except:
+    variables:
+      - $PRODUCTION
+
+Deploy memcached (prod):
+  <<: *deploy_memcached
+  variables:
+    <<: *deploy_memcached_variables
+    MEMCACHED_RESOURCE_CPU_LIMIT: "500m"
+    MEMCACHED_RESOURCE_MEMORY_LIMIT: "256Mi"
+    MEMCACHED_RESOURCE_CPU_REQUEST: "10m"
+    MEMCACHED_RESOURCE_MEMORY_REQUEST: "32Mi"
+  environment:
+    name: ${PROD_ENVIRONMENT_NAME}
   only:
     refs:
       - triggers
