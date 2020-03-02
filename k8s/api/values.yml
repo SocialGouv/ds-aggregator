@@ -1,0 +1,85 @@
+image:
+  repository: ${CI_REGISTRY_IMAGE}/api
+  tag: ${IMAGE_TAG}
+
+deployment:
+  port: ${PORT}
+
+  resources:
+    limits:
+      cpu: ${API_RESOURCE_CPU_LIMIT}
+      memory: ${API_RESOURCE_MEMORY_LIMIT}
+    requests:
+      cpu: ${API_RESOURCE_CPU_REQUEST}
+      memory: ${API_RESOURCE_MEMORY_REQUEST}
+
+  livenessProbe:
+    path: /api/liveness
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    port: ${PORT}
+  readinessProbe:
+    path: /api/readiness
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    port: ${PORT}
+
+  env:
+    - name: ENVIRONMENT_TYPE
+      valueFrom:
+        secretKeyRef:
+          name: ds-aggregator-secret
+          key: ENVIRONMENT_TYPE
+    - name: API_PORT
+      value: "${PORT}"
+    - name: API_PREFIX
+      valueFrom:
+        secretKeyRef:
+          name: ds-aggregator-secret
+          key: API_PREFIX
+    - name: KINTO_URL
+      value: "http://kinto:8888"
+    - name: KINTO_LOGIN
+      valueFrom:
+        secretKeyRef:
+          name: ds-aggregator-secret
+          key: KINTO_LOGIN
+    - name: KINTO_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: ds-aggregator-secret
+          key: KINTO_PASSWORD
+    - name: DS_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: ds-aggregator-secret
+          key: DS_TOKEN
+    - name: SENTRY_DSN
+      valueFrom:
+        secretKeyRef:
+          name: ds-aggregator-secret
+          key: SENTRY_DSN
+
+ingress:
+  enabled: true
+  annotations:
+    appgw.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/ingress.class: "azure/application-gateway"
+  hosts:
+    - host: ${DOMAIN}
+      paths:
+        - path: /
+          servicePort: ${PORT}
+  tls:
+    - hosts:
+        - ${DOMAIN}
+      secretName: wildcard-crt
+
+service:
+  port: ${PORT}
+  targetPort: ${PORT}
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 1

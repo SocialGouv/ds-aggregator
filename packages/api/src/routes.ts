@@ -21,6 +21,16 @@ const routeOptions: Router.IRouterOptions = {
 
 const router = new Router(routeOptions);
 
+router.get("/liveness", (ctx, next) => {
+  ctx.body = "Live OK";
+  next();
+});
+
+router.get("/readiness", (ctx, next) => {
+  ctx.body = "Readi OK";
+  next();
+});
+
 // https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/webhook
 router.post(`/${configuration.apiPrefix}/webhook`, async (ctx: Koa.Context) => {
   const procedureId = ctx.query.procedure_id;

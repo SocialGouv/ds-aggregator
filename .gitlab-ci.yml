@@ -12,7 +12,15 @@ include:
   - project: SocialGouv/gitlab-ci-yml
     file: /base_register_stage.yml
     ref: v4.6.0
-#  - "/k8s/api/.deploy-ds-aggregator-api.yml"
+  - project: SocialGouv/gitlab-ci-yml
+    file: /base_deploy_hpa_chart_stage.yml
+    ref: v4.6.0
+  - project: SocialGouv/gitlab-ci-yml
+    file: /base_notify_github_stage.yml
+    ref: v4.6.0
+  - project: SocialGouv/gitlab-ci-yml
+    file: /base_docker_helm_image_stage.yml
+    ref: v4.6.0
 #  - "/k8s/postgres/.deploy-ds-aggregator-postgres.yml"
 #  - "/k8s/memcached/.deploy-ds-aggregator-memcached.yml"
 #  - "/k8s/kinto/.deploy-ds-aggregator-kinto.yml"
@@ -23,12 +31,28 @@ variables:
   DOCKER_HOST: tcp://localhost:2375
   DOCKER_VERSION: "18.06"
   IMAGE_INFRA_BASE_NAME: "infra/images-docker"
-  DEV_ENVIRONMENT_NAME: "dev.factory"
+  DEV_ENVIRONMENT_NAME: "ds-aggregator-dev"
   PROD_ENVIRONMENT_NAME: "incubateur"
+  # Image Version
+  DOCKER_VERSION: "18.06"
+  NODE_VERSION: "10"
+  CURL_VERSION: "7.67.0"
+  HELM_VERSION: "0.20.0"
+  KUBECTL_VERSION: "0.7.0"
+  KINTO_VERSION: "13.1.1"
+  MEMCACHED_VERSION: "1.5.12-alpine"
+  POSTGRES_VERSION: "11-debian-9"
+  POSTGRES_JOB_VERSION: "11-alpine"
+  #Ports
   API_PORT: 4000
   KINTO_PORT: 8888
   POSTGRES_PORT: 5432
   MEMCACHED_PORT: 11212
+  # Quotas api
+  API_RESOURCE_CPU_LIMIT: "50m"
+  API_RESOURCE_MEMORY_LIMIT: "96Mi"
+  API_RESOURCE_CPU_REQUEST: "5m"
+  API_RESOURCE_MEMORY_REQUEST: "80Mi"
 
 stages:
   - "Code Quality"
@@ -98,7 +122,6 @@ Code quality:
 
 ################################ PREPARE ####################################
 
-
 Create namespace:
   stage: Prepare
   extends: .base_create_namespace_stage
@@ -121,6 +144,7 @@ Backup before deploy to prod:
       - triggers
     variables:
       - $PRODUCTION
+
 
 ################################ REGISTRATION ################################
 
@@ -149,7 +173,7 @@ Register init kinto image:
 
 ################################ CREATE SECRET ################################
 
-Create wif/secret:
+Create ds-aggregator/secret:
   stage: Create Secret
   image: ${CI_REGISTRY}/socialgouv/docker/kubectl:${KUBECTL_VERSION}
   environment:
@@ -158,6 +182,60 @@ Create wif/secret:
     - envsubst < ./k8s/secret/secret-dev.yml > k8s/secret/secret-dev-${PROJECT}.yml
     - kubectl apply -f k8s/secret/secret-dev-${PROJECT}.yml -n ${K8S_NAMESPACE}
   except:
+    variables:
+      - $PRODUCTION
+
+
+################################# DEPLOY ###############################
+
+Notify Starting Deployment:
+  extends: .base_notify_pending_stage
+  stage: Deploy
+
+#
+
+.deploy_with_hpa_chart: &deploy_with_hpa_chart
+  stage: Deploy
+  extends: .base_deploy_hpa_chart_stage
+  dependencies: []
+  variables: &deploy_with_hpa_chart_variables
+    REGISTRY: ${CI_REGISTRY_IMAGE}
+
+
+############################################
+####                API                 ####
+############################################
+
+Deploy api:
+  <<: *deploy_with_hpa_chart
+  variables:
+    <<: *deploy_with_hpa_chart_variables
+    CONTEXT: api
+    PORT: ${API_PORT}
+    VALUES_FILE: ./k8s/api/values.yml
+  environment:
+    name: ${DEV_ENVIRONMENT_NAME}
+  except:
+    variables:
+      - $PRODUCTION
+#
+
+Deploy api (prod):
+  <<: *deploy_with_hpa_chart
+  variables:
+    <<: *deploy_with_hpa_chart_variables
+    CONTEXT: api
+    PORT: ${API_PORT}
+    VALUES_FILE: ./k8s/api/values.yml
+    API_RESOURCE_CPU_LIMIT: "250m"
+    API_RESOURCE_MEMORY_LIMIT: "256Mi"
+    API_RESOURCE_CPU_REQUEST: "5m"
+    API_RESOURCE_MEMORY_REQUEST: "16Mi"
+  environment:
+    name: ${PROD_ENVIRONMENT_NAME}
+  only:
+    refs:
+      - triggers
     variables:
       - $PRODUCTION
 
