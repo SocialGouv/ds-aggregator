@@ -3,6 +3,12 @@ include:
   - project: SocialGouv/gitlab-ci-yml
     file: /base_yarn_stage.yml
     ref: v4.6.0
+  - project: SocialGouv/gitlab-ci-yml
+    file: /base_create_namespace_stage.yml
+    ref: v4.6.0
+  - project: SocialGouv/gitlab-ci-yml
+    file: /base_docker_kubectl_image_stage.yml
+    ref: v4.6.0
 #  - "/k8s/api/.deploy-ds-aggregator-api.yml"
 #  - "/k8s/postgres/.deploy-ds-aggregator-postgres.yml"
 #  - "/k8s/memcached/.deploy-ds-aggregator-memcached.yml"
@@ -22,12 +28,12 @@ variables:
 
 stages:
   - "Code Quality"
+  - "Prepare"
   - "Registration"
-  - "Deploy dev"
-  - "Deploy beta"
-  - "Deploy prod"
-  - "Send Url to GitHub"
-  - "Delete K8S objects"
+  - "Create Secret"
+  - "Deploy"
+  - "Release"
+  - "Notify Finished Deployment"
 
 
 .resolve_env: &resolve_env |-
@@ -84,6 +90,34 @@ Code quality:
     variables:
       - $PRODUCTION
   allow_failure: false
+
+
+################################ PREPARE ####################################
+
+
+Create namespace:
+  stage: Prepare
+  extends: .base_create_namespace_stage
+  except:
+    variables:
+      - $PRODUCTION
+
+
+Backup before deploy to prod:
+  stage: Prepare
+  image: ${CI_REGISTRY}/socialgouv/docker/kubectl:${KUBECTL_VERSION}
+  script:
+    - kubectl delete job 	backup-job -n ${K8S_NAMESPACE} || true;
+    - kubectl apply -f k8s/postgres/backup-job.yml -n ${K8S_NAMESPACE}
+    - kubectl wait --for=condition=complete job/backup-job --timeout=600s -n ${K8S_NAMESPACE}
+  environment:
+    name: ${PROD_ENVIRONMENT_NAME}
+  only:
+    refs:
+      - triggers
+    variables:
+      - $PRODUCTION
+
 
 
 ##
