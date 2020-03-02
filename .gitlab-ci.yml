@@ -43,6 +43,9 @@ variables:
   MEMCACHED_VERSION: "1.5.12-alpine"
   POSTGRES_VERSION: "11-debian-9"
   POSTGRES_JOB_VERSION: "11-alpine"
+  # Helm Chart Version
+  POSTGRES_CHART_VERSION: "6.5.6"
+  MEMCACHED_CHART_VERSION: "3.1.0"
   #Ports
   API_PORT: 4000
   KINTO_PORT: 8888
@@ -53,6 +56,11 @@ variables:
   API_RESOURCE_MEMORY_LIMIT: "96Mi"
   API_RESOURCE_CPU_REQUEST: "5m"
   API_RESOURCE_MEMORY_REQUEST: "80Mi"
+  # Quotas Postgres
+  POSTGRES_RESOURCE_CPU_LIMIT: "50m"
+  POSTGRES_RESOURCE_MEMORY_LIMIT: "256Mi"
+  POSTGRES_RESOURCE_CPU_REQUEST: "25m"
+  POSTGRES_RESOURCE_MEMORY_REQUEST: "128Mi"
 
 stages:
   - "Code Quality"
@@ -239,6 +247,57 @@ Deploy api (prod):
     variables:
       - $PRODUCTION
 
+############################################
+####              POSTGRES              ####
+############################################
+
+#
+.deploy_postgres: &deploy_postgres
+  stage: "Deploy"
+  image: registry.gitlab.factory.social.gouv.fr/socialgouv/docker/helm:${HELM_VERSION}
+  variables: &deploy_postgres_variables
+    HELM_RENDER_ARGS: ""
+    CONTEXT: ds-aggregator
+  script:
+    - export POSTGRESQL_PASSWORD=$(kubectl get secret ds-aggregator-secret -n ${K8S_NAMESPACE} -o jsonpath='{.data.DB_PASSWORD}' | base64 --decode)
+    - helm init --client-only
+    - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
+    - curl -L https://github.com/SocialGouv/helm-charts/releases/download/v2.11.0/helm-just-linux-2.11.0.tgz | tar -C $(helm home) -xzv
+    - helm repo add socialgouv https://github.com/SocialGouv/helm-charts/releases/download/v2.11.0
+    - helm just fetch "stable/postgresql#${POSTGRES_CHART_VERSION}"
+    - envsubst < k8s/postgres/values.yml > ./values.yaml
+    - helm just render ${CONTEXT}-${BRANCH_HASH}-pg postgresql
+      ${HELM_RENDER_ARGS}
+      --values ./values.yaml
+    - helm just apply ${CONTEXT}-${BRANCH_HASH}-pg
+#
+
+Deploy postgres:
+  <<: *deploy_postgres
+  environment:
+    name: ${DEV_ENVIRONMENT_NAME}
+  except:
+    variables:
+      - $PRODUCTION
+
+Deploy postgres (prod):
+  <<: *deploy_postgres
+  variables:
+    <<: *deploy_postgres_variables
+    ENABLE_PERSISTENT_VOLUME: "true"
+    POSTGRES_RESOURCE_CPU_LIMIT: "500m"
+    POSTGRES_RESOURCE_MEMORY_LIMIT: "512Mi"
+    POSTGRES_RESOURCE_CPU_REQUEST: "25m"
+    POSTGRES_RESOURCE_MEMORY_REQUEST: "128Mi"
+  environment:
+    name: ${PROD_ENVIRONMENT_NAME}
+  after_script:
+    - kubectl apply -f k8s/postgres/backup-cronjob.yml -n ${K8S_NAMESPACE}
+  only:
+    refs:
+      - triggers
+    variables:
+      - $PRODUCTION
 #
 ############################################
 ####            DEPLOY TO K8S            ###
