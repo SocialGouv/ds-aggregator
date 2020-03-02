@@ -147,6 +147,20 @@ Register init kinto image:
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/kinto
 
 
+################################ CREATE SECRET ################################
+
+Create wif/secret:
+  stage: Create Secret
+  image: ${CI_REGISTRY}/socialgouv/docker/kubectl:${KUBECTL_VERSION}
+  environment:
+    name: ${DEV_ENVIRONMENT_NAME}
+  script:
+    - envsubst < ./k8s/secret/secret-dev.yml > k8s/secret/secret-dev-${PROJECT}.yml
+    - kubectl apply -f k8s/secret/secret-dev-${PROJECT}.yml -n ${K8S_NAMESPACE}
+  except:
+    variables:
+      - $PRODUCTION
+
 #
 ############################################
 ####            DEPLOY TO K8S            ###
