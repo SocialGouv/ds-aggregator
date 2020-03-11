@@ -18,16 +18,10 @@ spec:
                   key: ENVIRONMENT_TYPE
             - name: KINTO_BASE_URL
               value: "kinto"
-            - name: KINTO_LOGIN
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: KINTO_LOGIN
-            - name: KINTO_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: KINTO_PASSWORD
+            - name: DS-AGGREGATOR_PG_USER
+              value: ${DS_AGGREGATOR_PG_USER}
+            - name: DS-AGGREGATOR_PG_PASSWORD
+              value: ${DS_AGGREGATOR_PG_PASSWORD}
           resources:
             requests:
               cpu: ${INIT_KINTO_RESOURCE_CPU_REQUEST}

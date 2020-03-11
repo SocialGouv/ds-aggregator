@@ -2,28 +2,28 @@
 include:
   - project: SocialGouv/gitlab-ci-yml
     file: /base_yarn_stage.yml
-    ref: v4.6.0
+    ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
     file: /base_create_namespace_stage.yml
-    ref: v4.6.0
+    ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
     file: /base_docker_kubectl_image_stage.yml
-    ref: v4.6.0
+    ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
     file: /base_register_stage.yml
-    ref: v4.6.0
+    ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
     file: /base_deploy_hpa_chart_stage.yml
-    ref: v4.6.0
+    ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
     file: /base_notify_github_stage.yml
-    ref: v4.6.0
+    ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
     file: /base_docker_helm_image_stage.yml
-    ref: v4.6.0
+    ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
     file: /base_delete_useless_k8s_ns_stage.yml
-    ref: v4.6.0
+    ref: v8.0.0
 
 variables:
   PROJECT: ds-aggregator
@@ -56,11 +56,6 @@ variables:
   API_RESOURCE_MEMORY_LIMIT: "96Mi"
   API_RESOURCE_CPU_REQUEST: "5m"
   API_RESOURCE_MEMORY_REQUEST: "80Mi"
-  # Quotas Postgres
-  POSTGRES_RESOURCE_CPU_LIMIT: "50m"
-  POSTGRES_RESOURCE_MEMORY_LIMIT: "256Mi"
-  POSTGRES_RESOURCE_CPU_REQUEST: "25m"
-  POSTGRES_RESOURCE_MEMORY_REQUEST: "128Mi"
   # Quotas Memcached
   MEMCACHED_RESOURCE_CPU_LIMIT: "50m"
   MEMCACHED_RESOURCE_MEMORY_LIMIT: "64Mi"
@@ -153,20 +148,20 @@ Create namespace:
       - $PRODUCTION
 
 
-Backup before deploy to prod:
-  stage: Prepare
-  image: ${CI_REGISTRY}/socialgouv/docker/kubectl:${KUBECTL_VERSION}
-  script:
-    - kubectl delete job 	backup-job -n ${K8S_NAMESPACE} || true;
-    - kubectl apply -f k8s/postgres/backup-job.yml -n ${K8S_NAMESPACE}
-    - kubectl wait --for=condition=complete job/backup-job --timeout=600s -n ${K8S_NAMESPACE}
-  environment:
-    name: ${PROD_ENVIRONMENT_NAME}
-  only:
-    refs:
-      - triggers
-    variables:
-      - $PRODUCTION
+#Backup before deploy to prod:
+#  stage: Prepare
+#  image: ${CI_REGISTRY}/socialgouv/docker/kubectl:${KUBECTL_VERSION}
+#  script:
+#    - kubectl delete job 	backup-job -n ${K8S_NAMESPACE} || true;
+#    - kubectl apply -f k8s/postgres/backup-job.yml -n ${K8S_NAMESPACE}
+#    - kubectl wait --for=condition=complete job/backup-job --timeout=600s -n ${K8S_NAMESPACE}
+#  environment:
+#    name: ${PROD_ENVIRONMENT_NAME}
+#  only:
+#    refs:
+#      - triggers
+#    variables:
+#      - $PRODUCTION
 
 
 ################################ REGISTRATION ################################
@@ -266,53 +261,53 @@ Deploy api (prod):
 ####              POSTGRES              ####
 ############################################
 
+##
+#.deploy_postgres: &deploy_postgres
+#  stage: "Deploy"
+#  image: registry.gitlab.factory.social.gouv.fr/socialgouv/docker/helm:${HELM_VERSION}
+#  variables: &deploy_postgres_variables
+#    HELM_RENDER_ARGS: ""
+#    CONTEXT: ds-aggregator
+#  script:
+#    - export POSTGRESQL_PASSWORD=$(kubectl get secret ds-aggregator-secret -n ${K8S_NAMESPACE} -o jsonpath='{.data.DB_PASSWORD}' | base64 --decode)
+#    - helm init --client-only
+#    - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
+#    - curl -L https://github.com/SocialGouv/helm-charts/releases/download/v2.11.0/helm-just-linux-2.11.0.tgz | tar -C $(helm home) -xzv
+#    - helm repo add socialgouv https://github.com/SocialGouv/helm-charts/releases/download/v2.11.0
+#    - helm just fetch "stable/postgresql#${POSTGRES_CHART_VERSION}"
+#    - envsubst < k8s/postgres/values.yml > ./values.yaml
+#    - helm just render ${CONTEXT}-${BRANCH_HASH}-pg postgresql
+#      ${HELM_RENDER_ARGS}
+#      --values ./values.yaml
+#    - helm just apply ${CONTEXT}-${BRANCH_HASH}-pg
+##
 #
-.deploy_postgres: &deploy_postgres
-  stage: "Deploy"
-  image: registry.gitlab.factory.social.gouv.fr/socialgouv/docker/helm:${HELM_VERSION}
-  variables: &deploy_postgres_variables
-    HELM_RENDER_ARGS: ""
-    CONTEXT: ds-aggregator
-  script:
-    - export POSTGRESQL_PASSWORD=$(kubectl get secret ds-aggregator-secret -n ${K8S_NAMESPACE} -o jsonpath='{.data.DB_PASSWORD}' | base64 --decode)
-    - helm init --client-only
-    - kubectl config set-context --current --namespace=${K8S_NAMESPACE}
-    - curl -L https://github.com/SocialGouv/helm-charts/releases/download/v2.11.0/helm-just-linux-2.11.0.tgz | tar -C $(helm home) -xzv
-    - helm repo add socialgouv https://github.com/SocialGouv/helm-charts/releases/download/v2.11.0
-    - helm just fetch "stable/postgresql#${POSTGRES_CHART_VERSION}"
-    - envsubst < k8s/postgres/values.yml > ./values.yaml
-    - helm just render ${CONTEXT}-${BRANCH_HASH}-pg postgresql
-      ${HELM_RENDER_ARGS}
-      --values ./values.yaml
-    - helm just apply ${CONTEXT}-${BRANCH_HASH}-pg
+#Deploy postgres:
+#  <<: *deploy_postgres
+#  environment:
+#    name: ${DEV_ENVIRONMENT_NAME}
+#  except:
+#    variables:
+#      - $PRODUCTION
 #
-
-Deploy postgres:
-  <<: *deploy_postgres
-  environment:
-    name: ${DEV_ENVIRONMENT_NAME}
-  except:
-    variables:
-      - $PRODUCTION
-
-Deploy postgres (prod):
-  <<: *deploy_postgres
-  variables:
-    <<: *deploy_postgres_variables
-    ENABLE_PERSISTENT_VOLUME: "true"
-    POSTGRES_RESOURCE_CPU_LIMIT: "500m"
-    POSTGRES_RESOURCE_MEMORY_LIMIT: "512Mi"
-    POSTGRES_RESOURCE_CPU_REQUEST: "25m"
-    POSTGRES_RESOURCE_MEMORY_REQUEST: "128Mi"
-  environment:
-    name: ${PROD_ENVIRONMENT_NAME}
-  after_script:
-    - kubectl apply -f k8s/postgres/backup-cronjob.yml -n ${K8S_NAMESPACE}
-  only:
-    refs:
-      - triggers
-    variables:
-      - $PRODUCTION
+#Deploy postgres (prod):
+#  <<: *deploy_postgres
+#  variables:
+#    <<: *deploy_postgres_variables
+#    ENABLE_PERSISTENT_VOLUME: "true"
+#    POSTGRES_RESOURCE_CPU_LIMIT: "500m"
+#    POSTGRES_RESOURCE_MEMORY_LIMIT: "512Mi"
+#    POSTGRES_RESOURCE_CPU_REQUEST: "25m"
+#    POSTGRES_RESOURCE_MEMORY_REQUEST: "128Mi"
+#  environment:
+#    name: ${PROD_ENVIRONMENT_NAME}
+#  after_script:
+#    - kubectl apply -f k8s/postgres/backup-cronjob.yml -n ${K8S_NAMESPACE}
+#  only:
+#    refs:
+#      - triggers
+#    variables:
+#      - $PRODUCTION
 
 
 ############################################
@@ -375,7 +370,11 @@ Deploy memcached (prod):
   variables: &deploy_kinto_variables
     PORT: ${KINTO_PORT}
   script:
-    - export POSTGRESQL_PASSWORD=$(kubectl get secret ds-aggregator-secret -n ${K8S_NAMESPACE} -o jsonpath='{.data.DB_PASSWORD}' | base64 --decode)
+    - export PG_HOST=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.PG_HOST}' | base64 --decode)
+    - export PG_USER_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_USER_ENCODED}' | base64 --decode)
+    - export PG_PASSWORD_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_PASSWORD_ENCODED}' | base64 --decode)
+    - export DS_AGGREGATOR_PG_USER=$(kubectl get secret azure-pg-ds-aggregator-user -n ds-aggregator-secret -ojsonpath='{.data.DS-AGGREGATOR_PG_USER_ENCODED}' | base64 --decode)
+    - export DS_AGGREGATOR_PG_PASSWORD=$(kubectl get secret azure-pg-ds-aggregator-user -n ds-aggregator-secret -ojsonpath='{.data.DS-AGGREGATOR_PG_PASSWORD_ENCODED}' | base64 --decode)
     - envsubst < k8s/kinto/deployment.yml > k8s/kinto/deployment-${PROJECT}.yml
     - envsubst < k8s/kinto/service.yml > k8s/kinto/service-${PROJECT}.yml
     - envsubst < k8s/kinto/job-init-kinto.yml > k8s/kinto/job-init-kinto-${PROJECT}.yml
