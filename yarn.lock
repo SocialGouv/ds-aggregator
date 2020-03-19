@@ -2371,12 +2371,7 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.12.1:
-  version "2.20.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
-  integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
-
-commander@~2.20.3:
+commander@^2.12.1, commander@~2.20.3:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -7487,10 +7482,10 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
-tunnel@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/tunnel/-/tunnel-0.0.4.tgz#2d3785a158c174c9a16dc2c046ec5fc5f1742213"
-  integrity sha1-LTeFoVjBdMmhbcLARuxfxfF0IhM=
+tunnel@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/tunnel/-/tunnel-0.0.6.tgz#72f1314b34a5b192db012324df2cc587ca47f92c"
+  integrity sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
@@ -7527,13 +7522,13 @@ type-is@^1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typed-rest-client@^1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/typed-rest-client/-/typed-rest-client-1.7.1.tgz#932e837fca4ab1ba64c23b1a67f2e11931c05c4f"
-  integrity sha512-fZRDWFtUp3J2E0jOiCJYZ9LDrYZHpjY95su//ekqXERS7C1qojP6movh7M4JGURJnBuTVsO0g2N4vEoW5o3Djw==
+typed-rest-client@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/typed-rest-client/-/typed-rest-client-1.7.2.tgz#5be96f5bbff703e3527ffd6e2661d2074056f7e7"
+  integrity sha512-6ENgPdTH7s2Xcd6mBaahyMLBoXPi0LNe75E1T0RFOdhqN9ENpZmf3P5iloOlJUDaHYrucPPzMrBybr6BdS2URg==
   dependencies:
     qs "^6.9.1"
-    tunnel "0.0.4"
+    tunnel "0.0.6"
     underscore "1.8.3"
 
 typedarray-to-buffer@^3.1.5:
