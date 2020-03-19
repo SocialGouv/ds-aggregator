@@ -32,7 +32,7 @@ variables:
   DOCKER_VERSION: "18.06"
   IMAGE_INFRA_BASE_NAME: "infra/images-docker"
   DEV_ENVIRONMENT_NAME: "ds-aggregator-dev"
-  PROD_ENVIRONMENT_NAME: "incubateur"
+  PROD_ENVIRONMENT_NAME: "prod"
   # Image Version
   NODE_VERSION: "10"
   CURL_VERSION: "7.67.0"
