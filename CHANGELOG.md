@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/SocialGouv/ds-aggregator/compare/v4.0.0...v4.0.1) (2020-03-19)
+
+
+### Bug Fixes
+
+* **gitlab:** deploy somethg when triggering production ([#162](https://github.com/SocialGouv/ds-aggregator/issues/162)) ([c0951ef](https://github.com/SocialGouv/ds-aggregator/commit/c0951ef))
+* **gitlab:** the production env name is prod ([a673127](https://github.com/SocialGouv/ds-aggregator/commit/a673127))
+
+
+
+
+
 # [4.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.9.0...v4.0.0) (2020-03-19)
 
 
