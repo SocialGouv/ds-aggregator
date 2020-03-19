@@ -22,12 +22,12 @@ const routeOptions: Router.IRouterOptions = {
 const router = new Router(routeOptions);
 
 router.get("/liveness", (ctx, next) => {
-  ctx.body = "Live OK";
+  ctx.body = "Alive";
   next();
 });
 
 router.get("/readiness", (ctx, next) => {
-  ctx.body = "Readi OK";
+  ctx.body = "Ready";
   next();
 });
 
