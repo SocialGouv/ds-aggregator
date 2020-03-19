@@ -73,13 +73,8 @@ ingress:
   tls:
     - hosts:
         - ${DOMAIN}
-      secretName: wildcard-crt
+      secretName: ds-aggregator-crt
 
 service:
   port: ${PORT}
   targetPort: ${PORT}
-
-autoscaling:
-  enabled: true
-  minReplicas: 1
-  maxReplicas: 1

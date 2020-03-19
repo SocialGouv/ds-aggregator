@@ -13,7 +13,7 @@ include:
     file: /base_register_stage.yml
     ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
-    file: /base_deploy_hpa_chart_stage.yml
+    file: /base_deploy_nodejs_chart_stage.yml
     ref: v8.0.0
   - project: SocialGouv/gitlab-ci-yml
     file: /base_notify_github_stage.yml
@@ -212,11 +212,11 @@ Notify Starting Deployment:
 
 #
 
-.deploy_with_hpa_chart: &deploy_with_hpa_chart
+.deploy_with_app_chart: &deploy_with_app_chart
   stage: Deploy
-  extends: .base_deploy_hpa_chart_stage
+  extends: .base_deploy_nodejs_chart_stage
   dependencies: []
-  variables: &deploy_with_hpa_chart_variables
+  variables: &deploy_with_app_chart_variables
     REGISTRY: ${CI_REGISTRY_IMAGE}
 
 
@@ -225,9 +225,9 @@ Notify Starting Deployment:
 ############################################
 
 Deploy api:
-  <<: *deploy_with_hpa_chart
+  <<: *deploy_with_app_chart
   variables:
-    <<: *deploy_with_hpa_chart_variables
+    <<: *deploy_with_app_chart_variables
     CONTEXT: api
     PORT: ${API_PORT}
     VALUES_FILE: ./k8s/api/values.yml
@@ -239,9 +239,9 @@ Deploy api:
 #
 
 Deploy api (prod):
-  <<: *deploy_with_hpa_chart
+  <<: *deploy_with_app_chart
   variables:
-    <<: *deploy_with_hpa_chart_variables
+    <<: *deploy_with_app_chart_variables
     CONTEXT: api
     PORT: ${API_PORT}
     VALUES_FILE: ./k8s/api/values.yml
