@@ -238,8 +238,6 @@ Deploy api (prod):
   environment:
     name: ${PROD_ENVIRONMENT_NAME}
   only:
-    refs:
-      - triggers
     variables:
       - $PRODUCTION
 
@@ -287,8 +285,6 @@ Deploy memcached (prod):
   environment:
     name: ${PROD_ENVIRONMENT_NAME}
   only:
-    refs:
-      - triggers
     variables:
       - $PRODUCTION
 
@@ -342,8 +338,6 @@ Deploy kinto (prod):
   environment:
     name: ${PROD_ENVIRONMENT_NAME}
   only:
-    refs:
-      - triggers
     variables:
       - $PRODUCTION
 
