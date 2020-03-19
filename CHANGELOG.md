@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.9.0...v4.0.0) (2020-03-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency koa-router to ^8.0.7 ([#141](https://github.com/SocialGouv/ds-aggregator/issues/141)) ([f88adeb](https://github.com/SocialGouv/ds-aggregator/commit/f88adeb))
+* **deps:** update dependency koa-router to ^8.0.8 ([#145](https://github.com/SocialGouv/ds-aggregator/issues/145)) ([ff5a75a](https://github.com/SocialGouv/ds-aggregator/commit/ff5a75a))
+* **deps:** update dependency koa-router to v8 ([#131](https://github.com/SocialGouv/ds-aggregator/issues/131)) ([633c6e3](https://github.com/SocialGouv/ds-aggregator/commit/633c6e3))
+* **deps:** update dependency lerna to ^3.19.0 ([#112](https://github.com/SocialGouv/ds-aggregator/issues/112)) ([19dc44d](https://github.com/SocialGouv/ds-aggregator/commit/19dc44d))
+* **deps:** update dependency lerna to ^3.20.0 ([#115](https://github.com/SocialGouv/ds-aggregator/issues/115)) ([3156d47](https://github.com/SocialGouv/ds-aggregator/commit/3156d47))
+* **deps:** update dependency lerna to ^3.20.1 ([#117](https://github.com/SocialGouv/ds-aggregator/issues/117)) ([1d0b697](https://github.com/SocialGouv/ds-aggregator/commit/1d0b697))
+* **deps:** update dependency lerna to ^3.20.2 ([#120](https://github.com/SocialGouv/ds-aggregator/issues/120)) ([0a4697f](https://github.com/SocialGouv/ds-aggregator/commit/0a4697f))
+* **deps:** update dependency rxjs to ^6.5.4 ([#116](https://github.com/SocialGouv/ds-aggregator/issues/116)) ([9c701ea](https://github.com/SocialGouv/ds-aggregator/commit/9c701ea))
+
+
+* refactor!: migrate to azure (#154) ([7d99a37](https://github.com/SocialGouv/ds-aggregator/commit/7d99a37)), closes [#154](https://github.com/SocialGouv/ds-aggregator/issues/154)
+
+
+### BREAKING CHANGES
+
+* migrate to azure
+    - the domain will change from ds-aggregator-api.incubateur.social.gouv.fr to ds-aggregator.fabrique.social.gouv.fr
+
+
+
+
+
 # [3.9.0](https://github.com/SocialGouv/ds-aggregator/compare/v3.8.0...v3.9.0) (2019-12-20)
 
 
