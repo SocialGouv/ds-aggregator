@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/SocialGouv/ds-aggregator/compare/v4.0.1...v4.0.2) (2020-03-19)
+
+
+* fix(gitlab)!: explicit wif as default production domaine ([7119168](https://github.com/SocialGouv/ds-aggregator/commit/7119168))
+
+
+### BREAKING CHANGES
+
+* explicit wif as default production domaine
+    - the domain will change from `prod.ds-aggregator.fabrique.social.gouv.fr` to `wif.ds-aggregator.fabrique.social.gouv.fr`
+
+
+
+
+
 ## [4.0.1](https://github.com/SocialGouv/ds-aggregator/compare/v4.0.0...v4.0.1) (2020-03-19)
 
 
