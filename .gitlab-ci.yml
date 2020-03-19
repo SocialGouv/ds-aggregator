@@ -149,8 +149,9 @@ Create namespace:
 
 ################################ REGISTRATION ################################
 
-.register_stage: &register_stage
-  extends: .base_register_stage
+.register_stage:
+  extends:
+    - .base_register_stage
   stage: Registration
   except:
     variables:
@@ -158,14 +159,16 @@ Create namespace:
 
 #
 Register api image:
-  <<: *register_stage
+  extends:
+    - .register_stage
   variables:
     CONTEXT: .
     DOCKER_BUILD_ARGS: -f packages/api/Dockerfile
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/api
 
 Register init kinto image:
-  <<: *register_stage
+  extends:
+    - .register_stage
   variables:
     CONTEXT: packages/kinto
     DOCKERFILE_PATH: packages/kinto/Dockerfile
@@ -195,11 +198,11 @@ Notify Starting Deployment:
 
 #
 
-.deploy_with_app_chart: &deploy_with_app_chart
+.deploy_with_app_chart:
   stage: Deploy
   extends: .base_deploy_nodejs_chart_stage
   dependencies: []
-  variables: &deploy_with_app_chart_variables
+  variables:
     REGISTRY: ${CI_REGISTRY_IMAGE}
 
 
@@ -208,9 +211,9 @@ Notify Starting Deployment:
 ############################################
 
 Deploy api:
-  <<: *deploy_with_app_chart
+  extends:
+    - .deploy_with_app_chart
   variables:
-    <<: *deploy_with_app_chart_variables
     CONTEXT: api
     PORT: ${API_PORT}
     VALUES_FILE: ./k8s/api/values.yml
@@ -222,9 +225,9 @@ Deploy api:
 #
 
 Deploy api (prod):
-  <<: *deploy_with_app_chart
+  extends:
+    - .deploy_with_app_chart
   variables:
-    <<: *deploy_with_app_chart_variables
     CONTEXT: api
     PORT: ${API_PORT}
     VALUES_FILE: ./k8s/api/values.yml
@@ -245,10 +248,10 @@ Deploy api (prod):
 ############################################
 
 #
-.deploy_memcached: &deploy_memcached
+.deploy_memcached:
   stage: "Deploy"
   image: registry.gitlab.factory.social.gouv.fr/socialgouv/docker/helm:${HELM_VERSION}
-  variables: &deploy_memcached_variables
+  variables:
     HELM_RENDER_ARGS: ""
     CONTEXT: ds-aggregator
   script:
@@ -265,7 +268,8 @@ Deploy api (prod):
 #
 
 Deploy memcached:
-  <<: *deploy_memcached
+  extends:
+    - .deploy_memcached
   environment:
     name: ${DEV_ENVIRONMENT_NAME}
   except:
@@ -273,9 +277,9 @@ Deploy memcached:
       - $PRODUCTION
 
 Deploy memcached (prod):
-  <<: *deploy_memcached
+  extends:
+    - .deploy_memcached
   variables:
-    <<: *deploy_memcached_variables
     MEMCACHED_RESOURCE_CPU_LIMIT: "500m"
     MEMCACHED_RESOURCE_MEMORY_LIMIT: "256Mi"
     MEMCACHED_RESOURCE_CPU_REQUEST: "10m"
@@ -294,10 +298,10 @@ Deploy memcached (prod):
 ############################################
 
 #
-.deploy_kinto: &deploy_kinto
+.deploy_kinto:
   stage: Deploy
   image: ${CI_REGISTRY}/socialgouv/docker/kubectl:${KUBECTL_VERSION}
-  variables: &deploy_kinto_variables
+  variables:
     PORT: ${KINTO_PORT}
   script:
     - export PG_HOST=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.PG_HOST}' | base64 --decode)
@@ -315,7 +319,8 @@ Deploy memcached (prod):
 #
 
 Deploy kinto:
-  <<: *deploy_kinto
+  extends:
+    - .deploy_kinto
   environment:
     name: ${DEV_ENVIRONMENT_NAME}
   except:
@@ -323,9 +328,9 @@ Deploy kinto:
       - $PRODUCTION
 
 Deploy kinto (prod):
-  <<: *deploy_kinto
+  extends:
+    - .deploy_kinto
   variables:
-    <<: *deploy_kinto_variables
     KINTO_RESOURCE_CPU_LIMIT: "1000m"
     KINTO_RESOURCE_MEMORY_LIMIT: "512Mi"
     KINTO_RESOURCE_CPU_REQUEST: "500m"
