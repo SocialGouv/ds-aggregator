@@ -2,16 +2,13 @@
 kind: Job
 apiVersion: batch/v1
 metadata:
-  name: ds-aggregator-init-kinto${HASH_BRANCH_NAME}
-  labels:
-    app: ds-aggregator-init-kinto
-    branch: ds-aggregator${HASH_BRANCH_NAME}
+  name: init-kinto
 spec:
   ttlSecondsAfterFinished: 100
   template:
     spec:
       containers:
-        - image: ${DS_AGGREGATOR_REGISTRY}/kinto:${IMAGE_TAG}
+        - image: ${CI_REGISTRY_IMAGE}/kinto:${IMAGE_TAG}
           name: ds-aggregator-init-kinto
           env:
             - name: ENVIRONMENT_TYPE
@@ -20,15 +17,16 @@ spec:
                   name: ds-aggregator-secret
                   key: ENVIRONMENT_TYPE
             - name: KINTO_BASE_URL
-              value: "kinto${HASH_BRANCH_NAME}"
-            - name: KINTO_LOGIN
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: KINTO_LOGIN
-            - name: KINTO_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ds-aggregator-secret
-                  key: KINTO_PASSWORD
+              value: "kinto"
+            - name: DS-AGGREGATOR_PG_USER
+              value: ${DS_AGGREGATOR_PG_USER}
+            - name: DS-AGGREGATOR_PG_PASSWORD
+              value: ${DS_AGGREGATOR_PG_PASSWORD}
+          resources:
+            requests:
+              cpu: ${INIT_KINTO_RESOURCE_CPU_REQUEST}
+              memory: ${INIT_KINTO_RESOURCE_MEMORY_REQUEST}
+            limits:
+              cpu: ${INIT_KINTO_RESOURCE_CPU_LIMIT}
+              memory: ${INIT_KINTO_RESOURCE_MEMORY_LIMIT}
       restartPolicy: Never
