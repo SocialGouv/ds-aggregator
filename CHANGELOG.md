@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/SocialGouv/ds-aggregator/compare/v4.0.3...v4.1.0) (2020-03-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency typed-rest-client to ^1.7.2 ([#151](https://github.com/SocialGouv/ds-aggregator/issues/151)) ([058932f](https://github.com/SocialGouv/ds-aggregator/commit/058932f))
+
+
+### Features
+
+* **api:** add sentry ([#164](https://github.com/SocialGouv/ds-aggregator/issues/164)) ([6b8f776](https://github.com/SocialGouv/ds-aggregator/commit/6b8f776))
+
+
+
+
+
 ## [4.0.3](https://github.com/SocialGouv/ds-aggregator/compare/v4.0.2...v4.0.3) (2020-03-19)
 
 **Note:** Version bump only for package ds-aggregator
