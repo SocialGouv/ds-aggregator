@@ -1,11 +1,11 @@
 import { format } from "logform";
-import { captureException, config } from "raven";
 import { createLogger, transports } from "winston";
 import { configuration } from "../../config";
+import { initializeSentry, notifyMessage, notifyException } from "../sentry";
 
-if (configuration.sentryEnabled) {
-  config(configuration.sentryDSN).install();
-}
+initializeSentry(configuration);
+export const captureException = notifyException(configuration);
+export const captureMessage = notifyMessage(configuration);
 
 const appendErrorInfo = (info: any, error: Error) => {
   return {
@@ -62,7 +62,7 @@ const logger = {
   error: (message: string, err: Error) => {
     wLogger.error(message, err);
     if (configuration.sentryEnabled) {
-      captureException(err);
+      captureMessage(message);
     }
   },
   info: (message: string, ...meta: any[]) => wLogger.info(message, meta)

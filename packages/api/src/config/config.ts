@@ -65,12 +65,14 @@ export const getConfiguration = (env: typeof process.env) => {
     apiPort: asNumber(env, "API_PORT", 4000),
     apiPrefix: asString(env, "API_PREFIX", "v1"),
     dsToken: asString(env, "DS_TOKEN", "DS_TOKEN"),
+    envType: asString(env, "ENVIRONMENT_TYPE", environmentType),
     kintoLogin: asString(env, "KINTO_LOGIN", "admin"),
     kintoPassword: asString(env, "KINTO_PASSWORD", "passw0rd"),
     kintoURL: asString(env, "KINTO_URL", "http://localhost:888/v1"),
     schedulerCronDS: envConfig.schedulerCronDS,
     schedulerCronTask: envConfig.schedulerCronTask,
     sentryDSN: asString(env, "SENTRY_DSN", ""),
-    sentryEnabled: envConfig.sentryEnabled
+    sentryEnabled: envConfig.sentryEnabled,
+    version: asString(env, "VERSION", require("../../package.json").version)
   };
 };
