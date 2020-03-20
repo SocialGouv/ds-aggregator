@@ -8,3 +8,4 @@ config({ path: "./../../.env" });
 process.env.TZ = "Europe/Paris";
 
 export const configuration = getConfiguration(process.env);
+export type Config = ReturnType<typeof getConfiguration>;

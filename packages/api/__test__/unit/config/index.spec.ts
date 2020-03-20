@@ -13,7 +13,8 @@ const validEnv = {
   SCHEDULER_CRON_DS: "SCHEDULER_CRON_DS",
   SCHEDULER_CRON_TASK: "SCHEDULER_CRON_TASK",
   SENTRY_DSN: "SENTRY_DSN",
-  SENTRY_ENABLED: "true"
+  SENTRY_ENABLED: "true",
+  VERSION: "vX.Y.Z"
 };
 
 it("should return the env configuration", () => {
@@ -23,6 +24,7 @@ it("should return the env configuration", () => {
       "apiPort": 123456,
       "apiPrefix": "API_PREFIX",
       "dsToken": "DS_TOKEN",
+      "envType": "dev.local",
       "kintoLogin": "KINTO_LOGIN",
       "kintoPassword": "KINTO_PASSWORD",
       "kintoURL": "KINTO_URL",
@@ -30,6 +32,7 @@ it("should return the env configuration", () => {
       "schedulerCronTask": "SCHEDULER_CRON_TASK",
       "sentryDSN": "SENTRY_DSN",
       "sentryEnabled": true,
+      "version": "vX.Y.Z",
     }
   `);
 });
