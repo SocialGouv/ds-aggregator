@@ -72,14 +72,12 @@ variables:
   INIT_KINTO_RESOURCE_MEMORY_REQUEST: "4Mi"
 
 stages:
-  - "Code Quality"
-  - "Prepare"
-  - "Registration"
-  - "Create Secret"
-  - "Deploy"
-  - "Release"
-  - "Notify Finished Deployment"
-
+  - Install
+  - Code Quality
+  - Registration
+  - Deploy
+  - Release
+  - Notify Finished Deployment
 
 .resolve_env: &resolve_env |-
   set -x
@@ -125,25 +123,62 @@ before_script:
 
 ################################ CODE QUALITY ###############################
 
-Code quality:
-  stage: Code Quality
-  extends:
-    - .base_yarn_quality
-    - .base_yarn_build
+Install:
+  extends: .base_yarn
   except:
     variables:
       - $PRODUCTION
-  allow_failure: false
 
+Lint:
+  extends: .base_yarn_script
+  except:
+    variables:
+      - $PRODUCTION
+  dependencies:
+    - Install
+  needs:
+    - Install
+  script:
+    - yarn lint
+  except:
+    variables:
+      - $PRODUCTION
 
-################################ PREPARE ####################################
+Test:
+  extends: .base_yarn_script
+  except:
+    variables:
+      - $PRODUCTION
+  dependencies:
+    - Install
+  needs:
+    - Install
+  script:
+    - yarn test
+
+Build:
+  extends: .base_yarn_build_next
+  except:
+    variables:
+      - $PRODUCTION
+  dependencies:
+    - Install
+  needs:
+    - Install
 
 Create namespace:
-  stage: Prepare
   extends: .base_create_namespace_stage
   except:
     variables:
       - $PRODUCTION
+  after_script:
+    - echo "kubectl get secret -n ${K8S_NAMESPACE}) ds-aggregator-secret"
+    # Skip the ds-aggregator-secret exists
+    - "[[ $(kubectl get secret -n ${K8S_NAMESPACE}) ds-aggregator-secret  ]] && exit ${CI_JOB_SKIP_EXIT_CODE:-0}"
+    #
+    #
+    - envsubst < ./k8s/secret/secret-dev.yml > k8s/secret/secret-dev-${PROJECT}.yml
+    - kubectl apply -f k8s/secret/secret-dev-${PROJECT}.yml -n ${K8S_NAMESPACE}
 
 
 ################################ REGISTRATION ################################
@@ -172,22 +207,6 @@ Register init kinto image:
     CONTEXT: packages/kinto
     DOCKERFILE_PATH: packages/kinto/Dockerfile
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/kinto
-
-
-################################ CREATE SECRET ################################
-
-Create ds-aggregator/secret:
-  stage: Create Secret
-  image: ${CI_REGISTRY}/socialgouv/docker/kubectl:${KUBECTL_VERSION}
-  environment:
-    name: ${DEV_ENVIRONMENT_NAME}
-  script:
-    - envsubst < ./k8s/secret/secret-dev.yml > k8s/secret/secret-dev-${PROJECT}.yml
-    - kubectl apply -f k8s/secret/secret-dev-${PROJECT}.yml -n ${K8S_NAMESPACE}
-  except:
-    variables:
-      - $PRODUCTION
-
 
 ################################# DEPLOY ###############################
 
