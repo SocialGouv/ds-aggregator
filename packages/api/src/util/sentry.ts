@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { init, captureMessage, Severity, captureException } from "@sentry/node";
 import { RewriteFrames } from "@sentry/integrations";
 import { Config } from "../config";
@@ -18,7 +19,7 @@ export function initializeSentry(configuration: Config) {
     return;
   }
 
-  global.__rootdir__ = __dirname || process.cwd();
+  global.__rootdir__ = resolve(__dirname, "..", "..") || process.cwd();
 
   const packageVersion = version || "";
   const isPreProduction = envType !== "prod";

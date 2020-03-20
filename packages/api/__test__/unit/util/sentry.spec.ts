@@ -8,6 +8,7 @@ import {
   notifyException
 } from "../../../src/util/sentry";
 import { Config } from "../../../src/config";
+import { resolve } from "path";
 
 //
 
@@ -57,6 +58,8 @@ test("should initialize sentry in production mode", () => {
       release: "vX.Y.Z"
     })
   );
+
+  expect(global.__rootdir__).toBe(resolve(__dirname, "../../.."));
 });
 
 test("should initialize sentry in pre-production mode", () => {
