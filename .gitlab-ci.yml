@@ -157,7 +157,7 @@ Test:
     - yarn test
 
 Build:
-  extends: .base_yarn_build_next
+  extends: .base_yarn_script
   except:
     variables:
       - $PRODUCTION
@@ -165,6 +165,12 @@ Build:
     - Install
   needs:
     - Install
+  script:
+    - yarn build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - packages/api/dist
 
 Create namespace:
   extends: .base_create_namespace_stage
@@ -172,9 +178,9 @@ Create namespace:
     variables:
       - $PRODUCTION
   after_script:
-    - echo "kubectl get secret -n ${K8S_NAMESPACE}) ds-aggregator-secret"
+    - echo "kubectl get secret -n ${K8S_NAMESPACE} ds-aggregator-secret"
     # Skip the ds-aggregator-secret exists
-    - "[[ $(kubectl get secret -n ${K8S_NAMESPACE}) ds-aggregator-secret  ]] && exit ${CI_JOB_SKIP_EXIT_CODE:-0}"
+    - "[[ $(kubectl get secret -n ${K8S_NAMESPACE} ds-aggregator-secret  ]] && exit ${CI_JOB_SKIP_EXIT_CODE:-0}"
     #
     #
     - envsubst < ./k8s/secret/secret-dev.yml > k8s/secret/secret-dev-${PROJECT}.yml
@@ -195,9 +201,14 @@ Create namespace:
 Register api image:
   extends:
     - .register_stage
+  dependencies:
+    - Build
+  needs:
+    - Build
+  before_script:
+    - cp yarn.lock packages/api
   variables:
-    CONTEXT: .
-    DOCKER_BUILD_ARGS: -f packages/api/Dockerfile
+    CONTEXT: packages/api
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/api
 
 Register init kinto image:

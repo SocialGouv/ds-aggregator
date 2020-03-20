@@ -1,19 +1,15 @@
-ARG NODE_VERSION=10.15.3
-
-FROM node:${NODE_VERSION} as builder
-WORKDIR /app
-
-COPY packages/api /app
-COPY yarn.lock /app/yarn.lock
-
-RUN yarn
-RUN yarn build
-
-FROM node:${NODE_VERSION}
+FROM node:10.15.3-alpine
 
 WORKDIR /app
-COPY --from=builder /app/dist /app/dist
-COPY --from=builder /app/node_modules /app/node_modules
-COPY --from=builder /app/package.json /app/package.json
 
-CMD [ "node", "dist/server.js"]
+COPY package.json yarn.lock ./
+
+RUN yarn --production --frozen-lockfile
+
+COPY ./dist /app/dist
+
+USER node
+
+ENV NODE_ENV=production
+
+CMD ["node", "dist/server.js"]
