@@ -174,13 +174,15 @@ Build:
 
 Create namespace:
   extends: .base_create_namespace_stage
+  stage: Install
   except:
     variables:
       - $PRODUCTION
   after_script:
+    - *resolve_env
     - echo "kubectl get secret -n ${K8S_NAMESPACE} ds-aggregator-secret"
-    # Skip the ds-aggregator-secret exists
-    - "[[ $(kubectl get secret -n ${K8S_NAMESPACE} ds-aggregator-secret  ]] && exit ${CI_JOB_SKIP_EXIT_CODE:-0}"
+    # Skip the job if the namespace exists
+    - "[[ $(kubectl get secret -n ${K8S_NAMESPACE} ds-aggregator-secret) ]] && exit ${CI_JOB_SKIP_EXIT_CODE:-0}"
     #
     #
     - envsubst < ./k8s/secret/secret-dev.yml > k8s/secret/secret-dev-${PROJECT}.yml
