@@ -3,6 +3,7 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
+    "inlineSourceMap": true,
     "inlineSources": true,
     "lib": ["es2017"],
     "module": "commonjs",
@@ -16,7 +17,6 @@
     "removeComments": false,
     "rootDir": "src",
     "skipLibCheck": true,
-    "sourceMap": true,
     "sourceRoot": "/",
     "strict": true,
     "target": "esnext"
