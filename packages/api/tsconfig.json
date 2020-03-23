@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    // "jsx": "preserve",
     "importHelpers": true,
     "inlineSources": true,
     "lib": ["es2017"],
