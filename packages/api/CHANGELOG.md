@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.1...v4.1.2) (2020-03-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency koa-bodyparser to ^4.3.0 ([#171](https://github.com/SocialGouv/ds-aggregator/issues/171)) ([a136f41](https://github.com/SocialGouv/ds-aggregator/commit/a136f41))
+
+
+### Reverts
+
+* build(api): using inlineSourceMap seems to have better result ([#170](https://github.com/SocialGouv/ds-aggregator/issues/170))" ([0d2ce3a](https://github.com/SocialGouv/ds-aggregator/commit/0d2ce3a))
+
+
+
+
+
 ## [4.1.1](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.0...v4.1.1) (2020-03-23)
 
 **Note:** Version bump only for package api
