@@ -37,7 +37,7 @@ export class RestClient {
   public get<T>(url: string): Observable<T> {
     return from(this.client.get<any>(this.buildResourcePath(url))).pipe(
       map(this.handleResult),
-      catchError((err: Error) => this.handleError(err, url))
+      catchError((err: Error) => this.handleError(err, `GET ${url}`))
     );
   }
 
@@ -46,7 +46,7 @@ export class RestClient {
       this.client.create<any>(this.buildResourcePath(url), data)
     ).pipe(
       map(this.handleResult),
-      catchError((err: Error) => this.handleError(err, url))
+      catchError((err: Error) => this.handleError(err, `CREATE ${url}`))
     );
   }
 
@@ -55,14 +55,14 @@ export class RestClient {
       this.client.update<any>(this.buildResourcePath(url), data)
     ).pipe(
       map(this.handleResult),
-      catchError((err: Error) => this.handleError(err, url))
+      catchError((err: Error) => this.handleError(err, `UPDATE ${url}`))
     );
   }
 
   public delete<T>(url: string): Observable<T> {
     return from(this.client.del<any>(this.buildResourcePath(url))).pipe(
       map(this.handleResult),
-      catchError((err: Error) => this.handleError(err, url))
+      catchError((err: Error) => this.handleError(err, `DELETE ${url}`))
     );
   }
 
@@ -83,7 +83,7 @@ export class RestClient {
 
   private buildResourcePath(url: string) {
     const resourcePath = `${this.api}/${url}`;
-    logger.debug(`[rest-client] resource path ${resourcePath}`);
+    logger.debug(`[RestClient] resource path ${resourcePath}`);
     return resourcePath;
   }
 }
