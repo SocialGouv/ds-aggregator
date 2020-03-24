@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.2...v4.1.3) (2020-03-24)
+
+
+### Features
+
+* **kinto:** update to kinto 13.2.1 ([07817b5](https://github.com/SocialGouv/ds-aggregator/commit/07817b5))
+* **kinto:** update to kinto 13.6.3 ([48805c2](https://github.com/SocialGouv/ds-aggregator/commit/48805c2))
+
+
+
+
+
 ## [4.1.2](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.1...v4.1.2) (2020-03-24)
 
 
