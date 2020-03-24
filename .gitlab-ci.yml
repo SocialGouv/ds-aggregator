@@ -140,15 +140,14 @@ Lint:
     - Install
   script:
     - yarn lint
-  except:
-    variables:
-      - $PRODUCTION
 
 Test:
   extends: .base_yarn_script
   except:
     variables:
       - $PRODUCTION
+  variables:
+    ENVIRONMENT_TYPE: dev.local
   dependencies:
     - Install
   needs:
