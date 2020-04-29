@@ -17,6 +17,7 @@ import { statisticService } from "../collector/service/statistic.service";
 import { configuration } from "../config";
 import { dossierSynchroService } from "./dossier-synchro.service";
 import { handleScheduler } from "./scheduler.service";
+import { logger } from "../util";
 
 export const taskScheduler = {
   start: () => {
@@ -72,7 +73,10 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
     mergeMap((task: Task) =>
       taskService.markAsCompleted(task).pipe(
         catchError(err => {
-          console.log(err);
+          logger.error(
+            `[task.scheduler] cannot update as completed task ${task.id}`,
+            err
+          );
           return EMPTY;
         })
       )
