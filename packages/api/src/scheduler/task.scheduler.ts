@@ -29,7 +29,7 @@ export const taskScheduler = {
         mergeMap(
           ([task, procedures]) => processTask(task, procedures),
           undefined,
-          2
+          1
         ),
         reduce((acc: Task[], record: Task) => {
           acc.push(record);
@@ -68,18 +68,21 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
           );
         }
       },
-      (task: Task) => task
+      (task: Task) => task,
+      1
     ),
-    mergeMap((task: Task) =>
-      taskService.markAsCompleted(task).pipe(
-        catchError(err => {
-          logger.error(
-            `[task.scheduler] cannot update as completed task ${task.id}`,
-            err
-          );
-          return EMPTY;
-        })
-      )
+    mergeMap(
+      (task: Task) =>
+        taskService.markAsCompleted(task).pipe(
+          catchError(err => {
+            logger.error(
+              `[task.scheduler] cannot update as completed task ${task.id}`,
+              err
+            );
+            return EMPTY;
+          })
+        ),
+      1
     )
   );
 }
