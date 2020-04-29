@@ -27,6 +27,7 @@ const header = (auth) => {
 
 const api = async (url, options) => {
   const response = await fetch(url, options);
+  if (!response.ok) throw response;
   return response.json();
 };
 

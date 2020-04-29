@@ -38,12 +38,25 @@ const addDSConfig = async () => {
     const dsConfig = {
       group: {
         id: "69",
-        label: "69 - Rhône",
+        label: "69 - Rhône"
       },
-      procedures: [6274, 6286],
+      procedures: [6274, 6286]
     };
-    const res = await api.createRecord("ds_collector", "ds_configs", dsConfig);
-    console.log("[init kinto] add ds_configs record:  ", res);
+    {
+      const res = await api.createRecord(
+        "ds_collector",
+        "ds_configs",
+        dsConfig
+      );
+      console.log("[init kinto] add ds_configs record:  ", res);
+    }
+    {
+      const res = await api.createRecord("ds_collector", "synchro_histories", {
+        scheduler: "task",
+        last_synchro: 0
+      });
+      console.log("[init kinto] add synchro_histories record:  ", res);
+    }
   } else {
     console.log(
       `[init kinto] ENVIRONMENT_TYPE=  "${configs.environmentType}, no 'ds_configs' record has been created.`
@@ -51,21 +64,25 @@ const addDSConfig = async () => {
   }
 };
 const init = async () => {
-  await api
+  const isNewUser = await api
     .createAdmin(configs.adminLogin, configs.adminPassword)
-    .then(async (res) => {
-      console.log("[haxxx] delete the ds_collector bucket");
-      await api.deleteBucket("ds_collector");
+    .then(
+      () => false,
+      res => Boolean(res.data)
+    );
 
-      await addCollections();
+  console.log("[haxxx] delete the ds_collector bucket");
+  await api.deleteBucket("ds_collector");
 
-      if (res.data) {
-        console.log("[init kinto] admin created", res);
-        await addDSConfig();
-      } else {
-        console.log("[init kinto] kinto already initialised... ", res);
-      }
-    });
+  console.log("[init kinto] addCollections");
+  await addCollections();
+
+  if (isNewUser) {
+    console.log("[init kinto] admin created");
+    await addDSConfig();
+  } else {
+    console.log("[init kinto] kinto already initialised... ");
+  }
 };
 
 init().catch(console.error);
