@@ -50,7 +50,7 @@ export const dossierScheduler = {
           },
           (input: { action: SynchroAction; apiResult: APIResult }) =>
             input.apiResult,
-          5
+          2
         ),
         mergeMap((apiResult: APIResult) => {
           return apiResultService.update(apiResult);

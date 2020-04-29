@@ -22,7 +22,7 @@ export const taskScheduler = {
         mergeMap(
           ([task, procedures]) => processTask(task, procedures),
           undefined,
-          5
+          2
         ),
         reduce((acc: Task[], record: Task) => {
           acc.push(record);
