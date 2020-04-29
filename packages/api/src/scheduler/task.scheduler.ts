@@ -1,5 +1,11 @@
-import { combineLatest, Observable, of } from "rxjs";
-import { exhaustMap, flatMap, mergeMap, reduce } from "rxjs/operators";
+import { combineLatest, Observable, of, EMPTY } from "rxjs";
+import {
+  exhaustMap,
+  flatMap,
+  mergeMap,
+  reduce,
+  catchError
+} from "rxjs/operators";
 import {
   dossierService,
   dsProcedureConfigService,
@@ -63,7 +69,14 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
       },
       (task: Task) => task
     ),
-    mergeMap((task: Task) => taskService.markAsCompleted(task))
+    mergeMap((task: Task) =>
+      taskService.markAsCompleted(task).pipe(
+        catchError(err => {
+          console.log(err);
+          return EMPTY;
+        })
+      )
+    )
   );
 }
 
