@@ -54,7 +54,7 @@ export const dossierScheduler = {
         ),
         mergeMap((apiResult: APIResult) => {
           return apiResultService.update(apiResult);
-        })
+        }, 1)
       );
     });
   }
