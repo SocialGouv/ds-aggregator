@@ -38,25 +38,27 @@ const addDSConfig = async () => {
     const dsConfig = {
       group: {
         id: "69",
-        label: "69 - Rhône"
+        label: "69 - Rhône",
       },
-      procedures: [6274, 6286]
+      procedures: [6274, 6286],
     };
     const res = await api.createRecord("ds_collector", "ds_configs", dsConfig);
     console.log("[init kinto] add ds_configs record:  ", res);
   } else {
     console.log(
-      `[init kinto] ENVIRONMENT_TYPE=  "${
-        configs.environmentType
-      }, no 'ds_configs' record has been created.`
+      `[init kinto] ENVIRONMENT_TYPE=  "${configs.environmentType}, no 'ds_configs' record has been created.`
     );
   }
 };
 const init = async () => {
   await api
     .createAdmin(configs.adminLogin, configs.adminPassword)
-    .then(async res => {
+    .then(async (res) => {
+      console.log("[haxxx] delete the ds_collector bucket");
+      await api.deleteBucket("ds_collector");
+
       await addCollections();
+
       if (res.data) {
         console.log("[init kinto] admin created", res);
         await addDSConfig();
@@ -66,4 +68,4 @@ const init = async () => {
     });
 };
 
-init();
+init().catch(console.error);
