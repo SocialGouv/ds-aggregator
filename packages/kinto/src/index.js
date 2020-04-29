@@ -64,11 +64,15 @@ const addDSConfig = async () => {
   }
 };
 const init = async () => {
+  console.log("[haxxx] delete the admin account");
+  await api
+    .deleteAdmin(configs.adminLogin, configs.adminPassword)
+    .catch(console.error);
   const isNewUser = await api
     .createAdmin(configs.adminLogin, configs.adminPassword)
     .then(
-      () => false,
-      res => Boolean(res.data)
+      res => Boolean(res.data),
+      () => false
     );
 
   console.log("[haxxx] delete the ds_collector bucket");
