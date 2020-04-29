@@ -34,16 +34,13 @@ spec:
         - name: wait-for-kinto
           image: registry.gitlab.factory.social.gouv.fr/socialgouv/docker/curl:1.12.0
           imagePullPolicy: Always
-          env:
-            - name: API_URL
-              value: "kinto"
           command:
             - sh
             - -c
             - |
               retry=300; # (60 x 1s) x 5min
               while
-                ! curl -sSL "http://${API_URL}:8888/__lbheartbeat__" &&
+                ! curl -sSL "http://kinto:8888/__lbheartbeat__" &&
                 [[ $(( retry-- )) -gt 0 ]];
               do echo "Waiting for ${API_URL} to be available ($(( retry )))" ; sleep 1s ; done ;
               [[ $(( retry )) -lt 1 ]] && exit 128;
