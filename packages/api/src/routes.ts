@@ -63,7 +63,7 @@ router.post(
       .pipe(
         map(() => dsConfigs),
         flatMap((x: ProcedureConfig[]) => x),
-        mergeMap((x: ProcedureConfig) => dsProcedureConfigRepository.add(x)),
+        mergeMap((x: ProcedureConfig) => dsProcedureConfigRepository.add(x), 1),
         tap((res: ProcedureConfig) =>
           logger.info(`ds config ${res.group.label} added`)
         )
