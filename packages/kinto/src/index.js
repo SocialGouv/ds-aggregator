@@ -63,7 +63,7 @@ const addDSConfig = async () => {
     );
   }
 };
-const cleanIt = () => {
+const cleanIt = async () => {
   console.log("[haxxx] delete the admin account");
   await api
     .deleteAdmin(configs.adminLogin, configs.adminPassword)
@@ -79,7 +79,7 @@ const cleanIt = () => {
   try {
     await api.deleteBucket("ds_collector");
   } catch {}
-}
+};
 
 const init = async () => {
   if (process.env.CLEAN_DB) {
