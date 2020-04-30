@@ -83,7 +83,7 @@ const cleanIt = async () => {
 
 const init = async () => {
   if (process.env.CLEAN_DB) {
-    cleanIt();
+    await cleanIt();
   }
   console.log("[init kinto] addCollections");
   await addCollections();
