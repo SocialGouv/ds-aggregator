@@ -1,5 +1,5 @@
 import { from, Observable, throwError } from "rxjs";
-import { catchError, map, finalize } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 import * as handlers from "typed-rest-client/Handlers";
 import * as rm from "typed-rest-client/RestClient";
 import { logger } from "../../util";
@@ -35,41 +35,33 @@ export class RestClient {
   }
 
   public get<T>(url: string): Observable<T> {
-    const _url = this.buildResourcePath(url);
-    const profiler = logger.startTimer();
-    return from(this.client.get<any>(_url)).pipe(
+    return from(this.client.get<any>(this.buildResourcePath(url))).pipe(
       map(this.handleResult),
-      finalize(() => profiler.done({ message: `[GET] -> ${_url}` })),
       catchError((err: Error) => this.handleError(err, `GET ${url}`))
     );
   }
 
   public create<T>(url: string, data: any): Observable<T> {
-    const _url = this.buildResourcePath(url);
-    const profiler = logger.startTimer();
-    return from(this.client.create<any>(_url, data)).pipe(
+    return from(
+      this.client.create<any>(this.buildResourcePath(url), data)
+    ).pipe(
       map(this.handleResult),
-      finalize(() => profiler.done({ message: `[CREATE] -> ${_url}`, data })),
       catchError((err: Error) => this.handleError(err, `CREATE ${url}`))
     );
   }
 
   public update<T>(url: string, data: any): Observable<T> {
-    const _url = this.buildResourcePath(url);
-    const profiler = logger.startTimer();
-    return from(this.client.update<any>(_url, data)).pipe(
+    return from(
+      this.client.update<any>(this.buildResourcePath(url), data)
+    ).pipe(
       map(this.handleResult),
-      finalize(() => profiler.done({ message: `[UPDATE] -> ${_url}`, data })),
       catchError((err: Error) => this.handleError(err, `UPDATE ${url}`))
     );
   }
 
   public delete<T>(url: string): Observable<T> {
-    const _url = this.buildResourcePath(url);
-    const profiler = logger.startTimer();
-    return from(this.client.del<any>(_url)).pipe(
+    return from(this.client.del<any>(this.buildResourcePath(url))).pipe(
       map(this.handleResult),
-      finalize(() => profiler.done({ message: `[DELETE] -> ${_url}` })),
       catchError((err: Error) => this.handleError(err, `DELETE ${url}`))
     );
   }
