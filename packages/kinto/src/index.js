@@ -42,28 +42,58 @@ const addDSConfig = async () => {
       },
       procedures: [6274, 6286]
     };
-    const res = await api.createRecord("ds_collector", "ds_configs", dsConfig);
-    console.log("[init kinto] add ds_configs record:  ", res);
+    {
+      const res = await api.createRecord(
+        "ds_collector",
+        "ds_configs",
+        dsConfig
+      );
+      console.log("[init kinto] add ds_configs record:  ", res);
+    }
+    {
+      const res = await api.createRecord("ds_collector", "synchro_histories", {
+        scheduler: "task",
+        last_synchro: 0
+      });
+      console.log("[init kinto] add synchro_histories record:  ", res);
+    }
   } else {
     console.log(
-      `[init kinto] ENVIRONMENT_TYPE=  "${
-        configs.environmentType
-      }, no 'ds_configs' record has been created.`
+      `[init kinto] ENVIRONMENT_TYPE=  "${configs.environmentType}, no 'ds_configs' record has been created.`
     );
   }
 };
-const init = async () => {
+const cleanIt = () => {
+  console.log("[haxxx] delete the admin account");
   await api
+    .deleteAdmin(configs.adminLogin, configs.adminPassword)
+    .catch(console.error);
+  const isNewUser = await api
     .createAdmin(configs.adminLogin, configs.adminPassword)
-    .then(async res => {
-      await addCollections();
-      if (res.data) {
-        console.log("[init kinto] admin created", res);
-        await addDSConfig();
-      } else {
-        console.log("[init kinto] kinto already initialised... ", res);
-      }
-    });
+    .then(
+      res => Boolean(res.data),
+      () => false
+    );
+
+  console.log("[haxxx] delete the ds_collector bucket");
+  try {
+    await api.deleteBucket("ds_collector");
+  } catch {}
+}
+
+const init = async () => {
+  if (process.env.CLEAN_DB) {
+    cleanIt();
+  }
+  console.log("[init kinto] addCollections");
+  await addCollections();
+
+  if (isNewUser) {
+    console.log("[init kinto] admin created");
+    await addDSConfig();
+  } else {
+    console.log("[init kinto] kinto already initialised... ");
+  }
 };
 
-init();
+init().catch(console.error);

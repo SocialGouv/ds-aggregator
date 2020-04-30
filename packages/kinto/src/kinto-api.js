@@ -27,15 +27,27 @@ const header = auth => {
 
 const api = async (url, options) => {
   const response = await fetch(url, options);
+  if (!response.ok) throw response;
   return response.json();
 };
 
-module.exports.createAdmin = async function(login, password) {
+exports.createAdmin = async function(login, password) {
   const body = { data: { password: password } };
   return api(_account(login), _requestOptions("PUT", undefined, body));
 };
 
-module.exports.createUser = async function(login, password) {
+exports.deleteAdmin = async function(login, password) {
+  return api(
+    _account(login),
+    _requestOptions(
+      "DELETE",
+      `${configs.adminLogin}:${configs.adminPassword}`,
+      {}
+    )
+  );
+};
+
+exports.createUser = async function(login, password) {
   const body = { data: { password: password } };
   return api(
     _account(login),
@@ -47,7 +59,7 @@ module.exports.createUser = async function(login, password) {
   );
 };
 
-module.exports.createBucket = async function(name) {
+exports.createBucket = async function(name) {
   const body = { data: { id: name } };
   return api(
     _buckets(),
@@ -59,7 +71,18 @@ module.exports.createBucket = async function(name) {
   );
 };
 
-module.exports.createCollection = async function(bucket, collection) {
+exports.deleteBucket = async function(name) {
+  return api(
+    _bucket(name),
+    _requestOptions(
+      "DELETE",
+      `${configs.adminLogin}:${configs.adminPassword}`,
+      {}
+    )
+  );
+};
+
+exports.createCollection = async function(bucket, collection) {
   const body = { data: { id: collection } };
   return api(
     _collections(bucket),
@@ -71,7 +94,18 @@ module.exports.createCollection = async function(bucket, collection) {
   );
 };
 
-module.exports.createRecord = async function(bucket, collection, data) {
+exports.deleteCollection = async function(bucket, name) {
+  return api(
+    `${_collections(bucket)}/${name}`,
+    _requestOptions(
+      "DELETE",
+      `${configs.adminLogin}:${configs.adminPassword}`,
+      {}
+    )
+  );
+};
+
+exports.createRecord = async function(bucket, collection, data) {
   const body = { data };
   return api(
     _records(bucket, collection),

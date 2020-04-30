@@ -32,7 +32,7 @@ export const dossierSynchroService = {
           return dossierService.save(config.group, procId, dossier);
         }
         return dossierService.update(dossierRecord, dossier);
-      }),
+      }, 1),
       tap((dossier: DossierRecord | null) => {
         if (dossier) {
           logger.info(

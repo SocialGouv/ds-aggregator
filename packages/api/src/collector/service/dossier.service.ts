@@ -106,7 +106,7 @@ class DossierService {
           );
           return dossierRepository.update(loadedRecord.id || "0", loadedRecord);
         }
-      })
+      }, 1)
     );
   }
 }
