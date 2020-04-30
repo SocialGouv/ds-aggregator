@@ -41,7 +41,7 @@ export const dossierScheduler = {
       const addAllTasks$ = apiResult$.pipe(
         tap(apiResult =>
           logger.info(
-            `[dossier.scheduler] going to add ${apiResult.actions.length} actions`
+            `[dossier.scheduler] procedure#${apiResult.procedure} - add ${apiResult.actions.length} actions`
           )
         ),
         flatMap((x: APIResult) =>
