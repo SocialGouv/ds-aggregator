@@ -27,7 +27,7 @@ interface SyncContext {
 export const dossierScheduler = {
   start: () => {
     handleScheduler(configuration.schedulerCronDS, "dossier-synchro", () => {
-      return syncProcedures().pipe(
+      const apiResult$ = syncProcedures().pipe(
         mergeMap((x: ProcedureRecord) => buildSyncContext(x)),
         map((x: SyncContext) => {
           const actions = getSynchroActions(x.items, x.apiResult);
@@ -39,7 +39,10 @@ export const dossierScheduler = {
           logger.info(
             `[dossier.scheduler] add ${apiResult.actions.length} actions`
           )
-        ),
+        )
+      );
+
+      const addAllTasks$ = apiResult$.pipe(
         flatMap((x: APIResult) =>
           x.actions.map((a: SynchroAction) => ({ action: a, apiResult: x }))
         ),
@@ -55,16 +58,16 @@ export const dossierScheduler = {
           },
           ({ apiResult }) => apiResult,
           1
-        ),
-        tap(apiResult =>
-          logger.info(
-            `[dossier.scheduler] ${apiResult.actions.length} actions added`
-          )
-        ),
+        )
+      );
+
+      const updateApiResult$ = apiResult$.pipe(
         mergeMap((apiResult: APIResult) => {
           return apiResultService.update(apiResult);
         }, 1)
       );
+
+      return combineLatest(addAllTasks$, updateApiResult$);
     });
   }
 };
