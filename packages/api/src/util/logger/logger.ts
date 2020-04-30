@@ -59,6 +59,8 @@ const wLogger = createLogger({
 
 const logger = {
   debug: (message: string) => wLogger.debug(message),
+  profile: (id: string) => wLogger.profile(id),
+  startTimer: () => wLogger.startTimer(),
   error: (message: string, err: Error) => {
     wLogger.error(message, err);
     if (configuration.sentryEnabled) {
