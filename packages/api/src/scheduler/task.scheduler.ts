@@ -5,7 +5,8 @@ import {
   mergeMap,
   reduce,
   catchError,
-  tap
+  tap,
+  take
 } from "rxjs/operators";
 import {
   dossierService,
@@ -27,6 +28,7 @@ export const taskScheduler = {
         allTasksToComplete(),
         dsProcedureConfigService.all()
       ).pipe(
+        take(50),
         mergeMap(
           ([task, procedures]) => processTask(task, procedures),
           undefined,
