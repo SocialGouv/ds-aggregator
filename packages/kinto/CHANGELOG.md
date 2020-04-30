@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.4](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.3...v4.1.4) (2020-04-30)
+
+
+### Bug Fixes
+
+* **kinto:** typo in init script ([9737b57](https://github.com/SocialGouv/ds-aggregator/commit/9737b57))
+* **kinto:** typo in init script (2) ([d234b54](https://github.com/SocialGouv/ds-aggregator/commit/d234b54))
+* **kinto:** typo in init script (3) ([f139529](https://github.com/SocialGouv/ds-aggregator/commit/f139529))
+* **task:** merge map with 1 only ([#187](https://github.com/SocialGouv/ds-aggregator/issues/187)) ([5f8c70c](https://github.com/SocialGouv/ds-aggregator/commit/5f8c70c))
+
+
+
+
+
 ## [4.1.3](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.2...v4.1.3) (2020-03-24)
 
 **Note:** Version bump only for package kinto

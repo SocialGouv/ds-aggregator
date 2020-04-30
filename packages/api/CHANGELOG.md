@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.4](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.3...v4.1.4) (2020-04-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency rxjs to ^6.5.5 ([#180](https://github.com/SocialGouv/ds-aggregator/issues/180)) ([b53b8e5](https://github.com/SocialGouv/ds-aggregator/commit/b53b8e5))
+* **deps:** update dependency typed-rest-client to ^1.7.3 ([#181](https://github.com/SocialGouv/ds-aggregator/issues/181)) ([44f6762](https://github.com/SocialGouv/ds-aggregator/commit/44f6762))
+* **deps:** update sentry monorepo to ^5.15.5 ([#182](https://github.com/SocialGouv/ds-aggregator/issues/182)) ([0ef7c66](https://github.com/SocialGouv/ds-aggregator/commit/0ef7c66))
+* **task:** merge map with 1 only ([#187](https://github.com/SocialGouv/ds-aggregator/issues/187)) ([5f8c70c](https://github.com/SocialGouv/ds-aggregator/commit/5f8c70c))
+
+
+
+
+
 ## [4.1.3](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.2...v4.1.3) (2020-03-24)
 
 **Note:** Version bump only for package api
