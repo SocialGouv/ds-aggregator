@@ -1,4 +1,4 @@
-import { combineLatest, Observable } from "rxjs";
+import { combineLatest, Observable, forkJoin } from "rxjs";
 import { concatMap, flatMap, map, mergeMap, tap } from "rxjs/operators";
 import {
   apiResultService,
@@ -67,7 +67,7 @@ export const dossierScheduler = {
         }, 1)
       );
 
-      return combineLatest(addAllTasks$, updateApiResult$);
+      return forkJoin(addAllTasks$, updateApiResult$);
     });
   }
 };
