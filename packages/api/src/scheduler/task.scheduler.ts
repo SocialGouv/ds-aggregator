@@ -4,7 +4,8 @@ import {
   flatMap,
   mergeMap,
   reduce,
-  catchError
+  catchError,
+  tap
 } from "rxjs/operators";
 import {
   dossierService,
@@ -88,5 +89,10 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
 }
 
 function allTasksToComplete(): Observable<Task> {
-  return taskService.getTasksToComplete().pipe(flatMap((x: Task[]) => x));
+  return taskService.getTasksToComplete().pipe(
+    tap(tasks => {
+      logger.debug(`[task.scheduler] process ${tasks.length} to complete`);
+    }),
+    flatMap((x: Task[]) => x)
+  );
 }
