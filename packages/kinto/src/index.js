@@ -76,7 +76,9 @@ const init = async () => {
     );
 
   console.log("[haxxx] delete the ds_collector bucket");
-  await api.deleteBucket("ds_collector");
+  try {
+    await api.deleteBucket("ds_collector");
+  } catch {}
 
   console.log("[init kinto] addCollections");
   await addCollections();
