@@ -34,7 +34,7 @@ export const handleScheduler = (
     runScheduler$
       .pipe(
         takeLast(1),
-        mergeMap(() => synchroHistoryService.update(scheduler, end))
+        mergeMap(() => synchroHistoryService.update(scheduler, end), 1)
       )
       .subscribe({
         complete: () => completeProcess(scheduler),
