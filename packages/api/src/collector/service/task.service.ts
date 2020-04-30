@@ -30,6 +30,9 @@ class TaskService {
   }
 
   public markAsCompleted(task: Task): Observable<Task> {
+    logger.info(
+      `[TaskService] task ${task.procedure_id}-${task.dossier_id} ${task.action} completed`
+    );
     task.task_completed_date = new Date().toISOString();
     task.task_state = "completed";
     return taskRepository.update(task);
