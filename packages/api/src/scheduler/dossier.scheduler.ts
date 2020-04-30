@@ -35,15 +35,15 @@ export const dossierScheduler = {
           x.apiResult.actions = actions;
           return x.apiResult;
         }),
-        tap(apiResult =>
-          logger.info(
-            `[dossier.scheduler] add ${apiResult.actions.length} actions`
-          )
-        ),
         share()
       );
 
       const addAllTasks$ = apiResult$.pipe(
+        tap(apiResult =>
+          logger.info(
+            `[dossier.scheduler] going to add ${apiResult.actions.length} actions`
+          )
+        ),
         flatMap((x: APIResult) =>
           x.actions.map((a: SynchroAction) => ({ action: a, apiResult: x }))
         ),
