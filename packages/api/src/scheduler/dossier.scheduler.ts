@@ -1,5 +1,5 @@
 import { combineLatest, Observable, forkJoin } from "rxjs";
-import { concatMap, flatMap, map, mergeMap, tap } from "rxjs/operators";
+import { concatMap, flatMap, map, mergeMap, tap, share } from "rxjs/operators";
 import {
   apiResultService,
   dsProcedureConfigService,
@@ -39,26 +39,23 @@ export const dossierScheduler = {
           logger.info(
             `[dossier.scheduler] add ${apiResult.actions.length} actions`
           )
-        )
+        ),
+        share()
       );
 
       const addAllTasks$ = apiResult$.pipe(
         flatMap((x: APIResult) =>
           x.actions.map((a: SynchroAction) => ({ action: a, apiResult: x }))
         ),
-        mergeMap(
-          (input: { action: SynchroAction; apiResult: APIResult }) => {
-            return taskService.addTask(
-              input.action.action,
-              input.action.procedure,
-              input.action.item.id,
-              input.action.item.state,
-              input.action.item.updated_at
-            );
-          },
-          ({ apiResult }) => apiResult,
-          1
-        )
+        mergeMap(({ action }) => {
+          return taskService.addTask(
+            action.action,
+            action.procedure,
+            action.item.id,
+            action.item.state,
+            action.item.updated_at
+          );
+        }, 1)
       );
 
       const updateApiResult$ = apiResult$.pipe(
