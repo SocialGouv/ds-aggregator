@@ -64,22 +64,6 @@ const addDSConfig = async () => {
   }
 };
 const init = async () => {
-  console.log("[haxxx] delete the admin account");
-  await api
-    .deleteAdmin(configs.adminLogin, configs.adminPassword)
-    .catch(console.error);
-  const isNewUser = await api
-    .createAdmin(configs.adminLogin, configs.adminPassword)
-    .then(
-      res => Boolean(res.data),
-      () => false
-    );
-
-  console.log("[haxxx] delete the ds_collector bucket");
-  try {
-    await api.deleteBucket("ds_collector");
-  } catch {}
-
   console.log("[init kinto] addCollections");
   await addCollections();
 
