@@ -35,6 +35,11 @@ export const dossierScheduler = {
           x.apiResult.actions = actions;
           return x.apiResult;
         }),
+        tap(apiResult =>
+          logger.info(
+            `[dossier.scheduler] add ${apiResult.actions.length} actions`
+          )
+        ),
         flatMap((x: APIResult) =>
           x.actions.map((a: SynchroAction) => ({ action: a, apiResult: x }))
         ),
@@ -48,9 +53,13 @@ export const dossierScheduler = {
               input.action.item.updated_at
             );
           },
-          (input: { action: SynchroAction; apiResult: APIResult }) =>
-            input.apiResult,
+          ({ apiResult }) => apiResult,
           1
+        ),
+        tap(apiResult =>
+          logger.info(
+            `[dossier.scheduler] ${apiResult.actions.length} actions added`
+          )
         ),
         mergeMap((apiResult: APIResult) => {
           return apiResultService.update(apiResult);
@@ -111,6 +120,11 @@ function syncProcedures(): Observable<ProcedureRecord> {
 
 function allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
   return dsProcedureConfigService.all().pipe(
+    tap(procedureConfigs =>
+      logger.info(
+        `[SyncService.allDemarcheSimlifieeProcedures] process ${procedureConfigs.length} procedures`
+      )
+    ),
     flatMap((x: ProcedureConfig[]) => x),
     flatMap((x: ProcedureConfig) => x.procedures),
     concatMap(demarcheSimplifieeService.getDSProcedure),
