@@ -5,8 +5,7 @@ import {
   mergeMap,
   reduce,
   catchError,
-  tap,
-  take
+  tap
 } from "rxjs/operators";
 import {
   dossierService,
