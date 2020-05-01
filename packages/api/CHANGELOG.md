@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.5](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.4...v4.1.5) (2020-05-01)
+
+
+### Bug Fixes
+
+* **task:** drop limitation ([026be1c](https://github.com/SocialGouv/ds-aggregator/commit/026be1c))
+* **task:** drop limitation (2) ([acb840f](https://github.com/SocialGouv/ds-aggregator/commit/acb840f))
+
+
+
+
+
 ## [4.1.4](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.3...v4.1.4) (2020-04-30)
 
 
