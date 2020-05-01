@@ -28,7 +28,6 @@ export const taskScheduler = {
         allTasksToComplete(),
         dsProcedureConfigService.all()
       ).pipe(
-        take(50),
         mergeMap(
           ([task, procedures]) => processTask(task, procedures),
           undefined,
