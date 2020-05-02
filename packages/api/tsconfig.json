@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "importHelpers": true,
     "inlineSources": true,
     "lib": ["es2017"],
@@ -19,7 +20,8 @@
     "sourceMap": true,
     "sourceRoot": "/",
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "types": ["jest"]
   },
   "files": ["./src/main.ts"]
 }

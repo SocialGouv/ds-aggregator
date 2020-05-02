@@ -1,6 +1,6 @@
 //
 
-import { getConfiguration } from "../../../src/config/config";
+import { getConfiguration } from "./config";
 
 const validEnv = {
   API_PORT: "123456",
