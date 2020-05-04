@@ -13,8 +13,8 @@ export const dossierSynchroService = {
   syncDossier: (
     procedureId: number,
     dossierId: number,
-    record: DossierRecord | null,
-    procedureConfig: ProcedureConfig | null
+    record?: DossierRecord,
+    procedureConfig?: ProcedureConfig
   ) => {
     return combineLatest(
       getProcedureConfig(procedureId, procedureConfig),
@@ -28,10 +28,10 @@ export const dossierSynchroService = {
             `[SyncService.syncDossier] dossier ${procId}-${dossierId} not found`
           );
           return of(null);
-        } else if (dossierRecord == null) {
-          return dossierService.save(config.group, procId, dossier);
         }
-        return dossierService.update(dossierRecord, dossier);
+        return dossierRecord
+          ? dossierService.update(dossierRecord, dossier)
+          : dossierService.save(config.group, procId, dossier);
       }, 1),
       tap((dossier: DossierRecord | null) => {
         if (dossier) {
@@ -46,7 +46,7 @@ export const dossierSynchroService = {
 
 function getProcedureConfig(
   procedureId: number,
-  procedureConfig: ProcedureConfig | null
+  procedureConfig?: ProcedureConfig
 ) {
   return procedureConfig
     ? of(procedureConfig)

@@ -1,10 +1,6 @@
 //
 
-import {
-  asArray,
-  asNumber,
-  asTimestamp
-} from "../../../src/util/converter/converter";
+import { asArray, asNumber, asTimestamp } from "./converter";
 
 //
 

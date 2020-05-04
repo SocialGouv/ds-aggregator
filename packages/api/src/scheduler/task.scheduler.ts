@@ -11,10 +11,10 @@ import {
   dossierService,
   dsProcedureConfigService,
   ProcedureConfig,
+  statisticService,
   Task,
   taskService
 } from "../collector";
-import { statisticService } from "../collector/service/statistic.service";
 import { configuration } from "../config";
 import { dossierSynchroService } from "./dossier-synchro.service";
 import { handleScheduler } from "./scheduler.service";
@@ -22,44 +22,45 @@ import { logger } from "../util";
 
 export const taskScheduler = {
   start: () => {
-    handleScheduler(configuration.schedulerCronTask, "task", () => {
-      return combineLatest(
-        allTasksToComplete(),
-        dsProcedureConfigService.all()
-      ).pipe(
-        mergeMap(
-          ([task, procedures]) => processTask(task, procedures),
-          undefined,
-          1
-        ),
-        reduce((acc: Task[], record: Task) => {
-          acc.push(record);
-          return acc;
-        }, []),
-        exhaustMap((tasks: Task[]) => {
-          if (tasks.length > 0) {
-            return statisticService.statistic();
-          }
-          return of();
-        })
-      );
-    });
+    handleScheduler(
+      configuration.schedulerCronTask,
+      "task",
+      taskSchedulerProcess
+    );
   }
+};
+
+export const taskSchedulerProcess = () => {
+  return combineLatest(
+    allTasksToComplete(),
+    dsProcedureConfigService.all()
+  ).pipe(
+    mergeMap(([task, procedures]) => processTask(task, procedures), 1),
+    reduce((acc: Task[], record: Task) => {
+      acc.push(record);
+      return acc;
+    }, []),
+    exhaustMap((tasks: Task[]) => {
+      if (tasks.length > 0) {
+        return statisticService.statistic();
+      }
+      return of();
+    })
+  );
 };
 
 function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
   return of(taskToTreat).pipe(
     mergeMap(
       (task: Task) => {
-        const procedure =
-          procedures.find((p: ProcedureConfig) =>
-            p.procedures.includes(task.procedure_id)
-          ) || null;
+        const procedure = procedures.find((p: ProcedureConfig) =>
+          p.procedures.includes(task.procedure_id)
+        );
         if (task.action === "add_or_update") {
           return dossierSynchroService.syncDossier(
             task.procedure_id,
             task.dossier_id,
-            null,
+            undefined,
             procedure
           );
         } else {
