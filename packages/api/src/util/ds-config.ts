@@ -237,4 +237,4 @@ export const dsConfigs = [
     },
     procedures: [12332, 12345]
   }
-];
+].slice(8, 13); // last 35
