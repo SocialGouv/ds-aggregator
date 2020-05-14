@@ -26,7 +26,7 @@
     "@types/rx": "^4.1.1",
     "@types/supertest": "^2.0.9",
     "jest": "^26.0.1",
-    "nodemon": "^2.0.3",
+    "nodemon": "^2.0.4",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
     "ts-jest": "^25.5.1",
