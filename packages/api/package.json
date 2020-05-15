@@ -23,7 +23,7 @@
     "@types/node": "^11.13.2",
     "@types/node-cron": "^2.0.3",
     "@types/raven": "^2.5.3",
-    "@types/rx": "^4.1.1",
+    "@types/rx": "^4.1.2",
     "@types/supertest": "^2.0.9",
     "jest": "^26.0.1",
     "nodemon": "^2.0.4",
