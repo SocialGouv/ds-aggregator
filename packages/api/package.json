@@ -35,7 +35,7 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@koa/cors": "^3.0.0",
+    "@koa/cors": "^3.1.0",
     "@sentry/integrations": "^5.15.5",
     "@sentry/node": "^5.15.5",
     "date-fns": "^1.30.1",
