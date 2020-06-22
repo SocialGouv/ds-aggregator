@@ -47,6 +47,6 @@
     "rxjs": "^6.5.5",
     "tslib": "^2.0.0",
     "typed-rest-client": "^1.7.3",
-    "winston": "^3.3.0"
+    "winston": "^3.3.1"
   }
 }
