@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/SocialGouv/ds-aggregator/compare/v4.2.0...v4.2.1) (2020-06-25)
+
+
+### Bug Fixes
+
+* fix 38, 64 order ([#259](https://github.com/SocialGouv/ds-aggregator/issues/259)) ([25da306](https://github.com/SocialGouv/ds-aggregator/commit/25da30612293ce21f44404fdd4463d7a93cedadd))
+* **dossier:** always update the procedure ([#260](https://github.com/SocialGouv/ds-aggregator/issues/260)) ([f5fdc96](https://github.com/SocialGouv/ds-aggregator/commit/f5fdc96fd73b5e41c5c36e52219393af4a493018))
+
+
+
+
+
 # [4.2.0](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.5...v4.2.0) (2020-06-25)
 
 
