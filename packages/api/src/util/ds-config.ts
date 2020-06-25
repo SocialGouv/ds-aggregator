@@ -57,6 +57,13 @@ export const dsConfigs = [
   },
   {
     group: {
+      id: "38",
+      label: "38 - Isère"
+    },
+    procedures: [31241, 31233]
+  },
+  {
+    group: {
       id: "42",
       label: "42 - Loire"
     },
@@ -131,6 +138,13 @@ export const dsConfigs = [
       label: "63 - Puy-de-Dôme"
     },
     procedures: [17073, 17076]
+  },
+  {
+    group: {
+      id: "64",
+      label: "64 - Pyrénées-atlantiques"
+    },
+    procedures: [31242, 31243]
   },
   {
     group: {
@@ -236,19 +250,5 @@ export const dsConfigs = [
       label: "95 - Val-d'Oise"
     },
     procedures: [12332, 12345]
-  },
-  {
-    group: {
-      id: "64",
-      label: "64 - Pyrénées-atlantiques"
-    },
-    procedures: [31242, 31243]
-  },
-  {
-    group: {
-      id: "38",
-      label: "38 - Isère"
-    },
-    procedures: [31241, 31233]
   }
 ];
