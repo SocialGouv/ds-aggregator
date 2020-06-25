@@ -81,11 +81,22 @@ export const dossierScheduler = {
 function getSynchroActions(items: DSDossierItem[], apiResult: APIResult) {
   const actions: SynchroAction[] = [];
   items.forEach((fetchedItem: DSDossierItem) => {
-    actions.push({
-      action: "add_or_update",
-      item: fetchedItem,
-      procedure: apiResult.procedure
-    });
+    const loadedItem = apiResult.items.find(
+      (i: DSDossierItem) => i.id === fetchedItem.id
+    );
+    if (!loadedItem) {
+      actions.push({
+        action: "add_or_update",
+        item: fetchedItem,
+        procedure: apiResult.procedure
+      });
+    } else if (loadedItem.updated_at !== fetchedItem.updated_at) {
+      actions.push({
+        action: "add_or_update",
+        item: loadedItem,
+        procedure: apiResult.procedure
+      });
+    }
   });
 
   apiResult.items.forEach((loadedItem: DSDossierItem) => {
