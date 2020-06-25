@@ -6,7 +6,7 @@
     "license": "Apache-2.0",
     "private": true,
     "scripts": {
-        "start": "docker-compose up kinto-server init-kinto"
+        "start": "docker-compose up db cache kinto-server init-kinto"
     },
     "dependencies": {
         "btoa": "^1.2.1",

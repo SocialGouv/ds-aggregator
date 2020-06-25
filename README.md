@@ -39,25 +39,19 @@ La liste des configurations possible est listée dans `ds-config.json`.
 Ajouter les `ds_configs` renseignées dans le ficher `ds-configs.ts`
 
 ```bash
-curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/ds_configs/init
+curl -X POST http://localhost:4000/api/${.env.API_PREFIX}/ds_configs/init
 ```
 
 Lister les démarches simplifiés pour lesquelless le nombre de dossiers importés est différent du nombre de dossiers renseigné dans la démarche simplifiée
 
 ```bash
-curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/procedures/check
-```
-
-Forcer le resynchronisation complète d'un' procédure
-
-```bash
-curl -X POST http://localhost:1337/api/${.env.API_PREFIX}/procedures/${procedureId}/sync
+curl -X GET http://localhost:4000/api/${.env.API_PREFIX}/procedures/check
 ```
 
 récupération des statistiques pour un groupe
 
  ```bash
-curl -X GET http://localhost:1337/api/statistics/13
+curl -X GET http://localhost:4000/api/statistics/13
 ```
 
 Pour visualiser les statistiques dans `ds-dahsboard`, utiliser les API `/api/statitics/${groupeId}`
