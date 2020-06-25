@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.5...v4.2.0) (2020-06-25)
+
+**Note:** Version bump only for package kinto
+
+
+
+
+
 ## [4.1.5](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.4...v4.1.5) (2020-05-01)
 
 **Note:** Version bump only for package kinto

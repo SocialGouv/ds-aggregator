@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.5...v4.2.0) (2020-06-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @koa/cors to ^3.1.0 ([#217](https://github.com/SocialGouv/ds-aggregator/issues/217)) ([2829a3e](https://github.com/SocialGouv/ds-aggregator/commit/2829a3e1c32e1d497032cee7f22cc3239ca97c47))
+* **deps:** update dependency koa to ^2.12.0 ([#218](https://github.com/SocialGouv/ds-aggregator/issues/218)) ([d037dfe](https://github.com/SocialGouv/ds-aggregator/commit/d037dfeb2b1c530f3f36ab9b0677f857e5caf873))
+* **deps:** update dependency koa to ^2.12.1 ([#239](https://github.com/SocialGouv/ds-aggregator/issues/239)) ([c2eb2da](https://github.com/SocialGouv/ds-aggregator/commit/c2eb2da34fc625a8157e283e527be29e6d131168))
+* **deps:** update dependency koa to ^2.13.0 ([#246](https://github.com/SocialGouv/ds-aggregator/issues/246)) ([24d4046](https://github.com/SocialGouv/ds-aggregator/commit/24d404655e6b793d3fc059e5785db6ff6d69433a))
+* **deps:** update dependency koa-router to v9 ([#229](https://github.com/SocialGouv/ds-aggregator/issues/229)) ([921c4b4](https://github.com/SocialGouv/ds-aggregator/commit/921c4b4f61b3667e659e5d15f61f84d74cf5c930))
+* **deps:** update dependency tslib to ^1.11.2 ([#200](https://github.com/SocialGouv/ds-aggregator/issues/200)) ([b66d4c6](https://github.com/SocialGouv/ds-aggregator/commit/b66d4c6f0a2cb036c385ca37e7467b5516076ace))
+* **deps:** update dependency tslib to ^1.12.0 ([#208](https://github.com/SocialGouv/ds-aggregator/issues/208)) ([622c1cc](https://github.com/SocialGouv/ds-aggregator/commit/622c1cc8dbbc77294a4c995227c3bcc4df25197d))
+* **deps:** update dependency tslib to v2 ([#212](https://github.com/SocialGouv/ds-aggregator/issues/212)) ([8bbb3e8](https://github.com/SocialGouv/ds-aggregator/commit/8bbb3e8e6763242b9a173fd57a5b014c3528deca))
+* **deps:** update dependency winston to ^3.3.0 ([#244](https://github.com/SocialGouv/ds-aggregator/issues/244)) ([d0c251a](https://github.com/SocialGouv/ds-aggregator/commit/d0c251a18072a4506efa362745023df317a17a65))
+* **deps:** update dependency winston to ^3.3.1 ([#248](https://github.com/SocialGouv/ds-aggregator/issues/248)) ([45bd5c1](https://github.com/SocialGouv/ds-aggregator/commit/45bd5c11859df3136ca7aa5c2a9586af4b069d6b))
+* **deps:** update dependency winston to ^3.3.2 ([#250](https://github.com/SocialGouv/ds-aggregator/issues/250)) ([27efe94](https://github.com/SocialGouv/ds-aggregator/commit/27efe941b2df9b9d2523e74a6edd896341e6d6d2))
+* **deps:** update dependency winston to ^3.3.3 ([#254](https://github.com/SocialGouv/ds-aggregator/issues/254)) ([781cc4b](https://github.com/SocialGouv/ds-aggregator/commit/781cc4b22ac9851b3e82606c2c944a0b12c372c9))
+* **deps:** update sentry monorepo to ^5.16.1 ([#231](https://github.com/SocialGouv/ds-aggregator/issues/231)) ([7aac9ed](https://github.com/SocialGouv/ds-aggregator/commit/7aac9edc8f426d6fea60e59a0f7371cc17dc9de9))
+* **deps:** update sentry monorepo to ^5.17.0 ([#236](https://github.com/SocialGouv/ds-aggregator/issues/236)) ([d80cc5b](https://github.com/SocialGouv/ds-aggregator/commit/d80cc5b1d94a6e48a7f849ba1064a88e7fad8cf8))
+* **deps:** update sentry monorepo to ^5.18.0 ([#251](https://github.com/SocialGouv/ds-aggregator/issues/251)) ([03ac3c0](https://github.com/SocialGouv/ds-aggregator/commit/03ac3c096793bb9a754a9d4c4e867dcd542f6d63))
+* **dossier-sync:** retry if task not added ([#191](https://github.com/SocialGouv/ds-aggregator/issues/191)) ([7ac2617](https://github.com/SocialGouv/ds-aggregator/commit/7ac261734a1aad0b1f90546fc7342d2c9f0166ae))
+
+
+### Features
+
+* **ds:** add 64 and 38 ([#258](https://github.com/SocialGouv/ds-aggregator/issues/258)) ([e46fc6a](https://github.com/SocialGouv/ds-aggregator/commit/e46fc6aee3c3afe2a5504ccd75a1bed413339cc6))
+
+
+
+
+
 ## [4.1.5](https://github.com/SocialGouv/ds-aggregator/compare/v4.1.4...v4.1.5) (2020-05-01)
 
 
