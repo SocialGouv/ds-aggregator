@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.1](https://github.com/SocialGouv/ds-aggregator/compare/v4.3.0...v4.3.1) (2020-06-26)
+
+
+### Features
+
+* update to 13.6.6 ([1171aa4](https://github.com/SocialGouv/ds-aggregator/commit/1171aa4d77192690c35ca40ae766028bd8c2b12c))
+
+
+
+
+
 # [4.3.0](https://github.com/SocialGouv/ds-aggregator/compare/v4.2.1...v4.3.0) (2020-06-26)
 
 
