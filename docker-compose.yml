@@ -2,7 +2,6 @@
 version: "3.5"
 
 services:
-
   ds-aggregator-api:
     build:
       context: .
@@ -26,7 +25,7 @@ services:
     image: library/memcached
 
   kinto-server:
-    image: kinto/kinto-server
+    image: kinto/kinto-server:13.6.6
     links:
       - db
       - cache

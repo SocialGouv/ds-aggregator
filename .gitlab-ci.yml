@@ -38,7 +38,7 @@ variables:
   CURL_VERSION: "7.67.0"
   HELM_VERSION: "0.20.0"
   KUBECTL_VERSION: "0.7.0"
-  KINTO_VERSION: "13.6.3"
+  KINTO_VERSION: "13.6.6"
   MEMCACHED_VERSION: "1.5.12-alpine"
   POSTGRES_VERSION: "11-debian-9"
   POSTGRES_JOB_VERSION: "11-alpine"
@@ -120,7 +120,6 @@ stages:
 before_script:
   - *resolve_env
 
-
 ################################ CODE QUALITY ###############################
 
 Install:
@@ -186,7 +185,6 @@ Create namespace:
     - envsubst < ./k8s/secret/secret-dev.yml > k8s/secret/secret-dev-${PROJECT}.yml
     - kubectl apply -f k8s/secret/secret-dev-${PROJECT}.yml -n ${K8S_NAMESPACE}
 
-
 ################################ REGISTRATION ################################
 
 .register_stage:
@@ -235,7 +233,6 @@ Notify Starting Deployment:
   dependencies: []
   variables:
     REGISTRY: ${CI_REGISTRY_IMAGE}
-
 
 ############################################
 ####                API                 ####
@@ -319,7 +316,6 @@ Deploy memcached (prod):
     variables:
       - $PRODUCTION
 
-
 ############################################
 ####                KINTO               ####
 ############################################
@@ -372,7 +368,6 @@ Deploy kinto (prod):
     variables:
       - $PRODUCTION
 
-
 ################################# RELEASE ###############################
 
 Make a new release and deploy to preprod environment:
@@ -402,7 +397,6 @@ Make a new release and deploy to preprod environment:
   only:
     - master
   when: manual
-
 
 ################################# NOTIFY ###############################
 
