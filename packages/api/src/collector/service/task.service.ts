@@ -37,6 +37,13 @@ class TaskService {
     task.task_state = "completed";
     return taskRepository.update(task);
   }
+
+  public delete(task: Task): any {
+    logger.info(
+      `[TaskService] task ${task.procedure_id}-${task.dossier_id} ${task.action} completed (deleted)`
+    );
+    return taskRepository.delete(task);
+  }
 }
 
 export const taskService = new TaskService();

@@ -1,5 +1,5 @@
 import { NEVER, Observable } from "rxjs";
-import { KintoCollection } from "../../lib";
+import { KintoCollection, DeletedData } from "../../lib";
 import { Task } from "../model";
 import { kintoClientInstance } from "./kinto-client-instance";
 
@@ -12,6 +12,10 @@ class TaskRepository {
 
   public add(task: Task): Observable<Task> {
     return this.collection.add(task);
+  }
+
+  public delete(task: Task): Observable<DeletedData[]> {
+    return this.collection.deleteById(task.id || "");
   }
 
   public update(task: Task): Observable<Task> {

@@ -1,12 +1,5 @@
-import { combineLatest, Observable, of, EMPTY } from "rxjs";
-import {
-  exhaustMap,
-  flatMap,
-  mergeMap,
-  reduce,
-  catchError,
-  tap
-} from "rxjs/operators";
+import { combineLatest, Observable, of } from "rxjs";
+import { exhaustMap, flatMap, mergeMap, reduce, tap } from "rxjs/operators";
 import {
   dossierService,
   dsProcedureConfigService,
@@ -30,13 +23,13 @@ export const taskScheduler = {
         mergeMap(
           ([task, procedures]) => processTask(task, procedures),
           undefined,
-          1
+          10
         ),
-        reduce((acc: Task[], record: Task) => {
+        reduce((acc: any[], record: any) => {
           acc.push(record);
           return acc;
         }, []),
-        exhaustMap((tasks: Task[]) => {
+        exhaustMap((tasks: any[]) => {
           if (tasks.length > 0) {
             return statisticService.statistic();
           }
@@ -72,19 +65,7 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
       (task: Task) => task,
       1
     ),
-    mergeMap(
-      (task: Task) =>
-        taskService.markAsCompleted(task).pipe(
-          catchError(err => {
-            logger.error(
-              `[task.scheduler] cannot update as completed task ${task.id}`,
-              err
-            );
-            return EMPTY;
-          })
-        ),
-      1
-    )
+    mergeMap((task: Task) => taskService.delete(task), 1)
   );
 }
 
