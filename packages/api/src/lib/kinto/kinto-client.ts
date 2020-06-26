@@ -63,7 +63,7 @@ class KintoClient {
           );
       },
       deleteById: (id: string) => {
-        let resource = `${collectionName}/records/${id}`;
+        const resource = `${collectionName}/records/${id}`;
         return this.client
           .delete<KintoResult<DeletedData[]>>(resource)
           .pipe(
