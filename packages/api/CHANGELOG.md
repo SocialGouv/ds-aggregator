@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0](https://github.com/SocialGouv/ds-aggregator/compare/v4.2.1...v4.3.0) (2020-06-26)
+
+
+### Features
+
+* **task-scheduler:** delet task after processing ([6793e87](https://github.com/SocialGouv/ds-aggregator/commit/6793e87c0344724a398ec15d9370532f41c12a64))
+
+
+### Reverts
+
+* Revert "fix(dossier): always update the procedure (#260)" ([94d1979](https://github.com/SocialGouv/ds-aggregator/commit/94d1979d252f4fb4d123a51d32f811b53c8bf8e9)), closes [#260](https://github.com/SocialGouv/ds-aggregator/issues/260)
+
+
+
+
+
 ## [4.2.1](https://github.com/SocialGouv/ds-aggregator/compare/v4.2.0...v4.2.1) (2020-06-25)
 
 
