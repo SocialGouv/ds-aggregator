@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc",
     "start": "nodemon --watch 'src/**/*' -e ts --exec ts-node src/main.ts",
+    "start:prod": "yarn knex migrate:latest && node --enable-source-maps --unhandled-rejections=strict ./dist/main.js",
     "lint": "tslint -p tsconfig.json -t stylish",
     "test": "jest"
   },

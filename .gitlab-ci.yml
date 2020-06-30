@@ -203,12 +203,11 @@ Register api image:
     - Build
   needs:
     - Build
-  before_script:
-    - cp yarn.lock packages/api
   variables:
-    CONTEXT: packages/api
+    CONTEXT: .
     DOCKER_BUILD_ARGS: >-
       --shm-size 256M
+      -f ./packages/api/Dockerfile
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/api
 
 Register init kinto image:

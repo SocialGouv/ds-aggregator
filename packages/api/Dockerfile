@@ -2,15 +2,16 @@ FROM node:14.4.0-alpine
 
 WORKDIR /app
 
-COPY package.json yarn.lock /app/
+COPY ./packages/api/package.json yarn.lock /app/
 
 RUN yarn --production --frozen-lockfile --cache-folder /dev/shm/yarn
 
-COPY ./knexfile.js /app/
-COPY ./dist /app/dist
+COPY ./packages/api/knexfile.js /app/
+COPY ./packages/api/migrations /app/migrations
+COPY ./packages/api/dist /app/dist
 
 USER node
 
 ENV NODE_ENV=production
 
-CMD ["node", "dist/main.js"]
+CMD ["yarn", "start:prod"]
