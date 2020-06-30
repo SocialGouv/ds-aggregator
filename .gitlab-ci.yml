@@ -250,6 +250,11 @@ Deploy api:
   except:
     variables:
       - $PRODUCTION
+  before_script:
+    - export PG_HOST=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.PG_HOST}' | base64 --decode)
+    - export PG_USER_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_USER_ENCODED}' | base64 --decode)
+    - export PG_PASSWORD_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_PASSWORD_ENCODED}' | base64 --decode)
+
 #
 
 Deploy api (prod):
@@ -259,8 +264,8 @@ Deploy api (prod):
     CONTEXT: api
     PORT: ${API_PORT}
     VALUES_FILE: ./k8s/api/values.yml
-    API_RESOURCE_CPU_LIMIT: "500m"
-    API_RESOURCE_MEMORY_LIMIT: "256Mi"
+    API_RESOURCE_CPU_LIMIT: "2000m"
+    API_RESOURCE_MEMORY_LIMIT: "1Gi"
     API_RESOURCE_CPU_REQUEST: "5m"
     API_RESOURCE_MEMORY_REQUEST: "128Mi"
   environment:
@@ -268,6 +273,10 @@ Deploy api (prod):
   only:
     variables:
       - $PRODUCTION
+  before_script:
+    - export PG_HOST=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.PG_HOST}' | base64 --decode)
+    - export PG_USER_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_USER_ENCODED}' | base64 --decode)
+    - export PG_PASSWORD_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_PASSWORD_ENCODED}' | base64 --decode)
 
 ############################################
 ####              MEMCACHED             ####
