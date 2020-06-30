@@ -6,6 +6,7 @@ COPY package.json yarn.lock /app/
 
 RUN yarn --production --frozen-lockfile --cache-folder /dev/shm/yarn
 
+COPY ./knexfile.js /app/
 COPY ./dist /app/dist
 
 USER node
