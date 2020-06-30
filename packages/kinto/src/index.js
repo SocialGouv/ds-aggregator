@@ -17,9 +17,6 @@ const addCollections = async () => {
   res = await api.createCollection("ds_collector", "statistics");
   console.log("[init kinto] collection creation (statistics):  ", res);
 
-  res = await api.createCollection("ds_collector", "tasks");
-  console.log("[init kinto] collection creation (task):  ", res);
-
   res = await api.createCollection("ds_collector", "api_results");
   console.log("[init kinto] collection creation (api_results):  ", res);
 };
