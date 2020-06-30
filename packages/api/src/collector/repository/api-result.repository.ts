@@ -1,33 +1,34 @@
-import { Observable, of } from "rxjs";
-import { mergeMap } from "rxjs/operators";
-import { KintoCollection } from "../../lib";
+import { Observable, from } from "rxjs";
 import { APIResult } from "../model/api-result.model";
-import { kintoClientInstance } from "./kinto-client-instance";
+import { APIResultModel } from "../database/APIResultModel";
 
 class APIResultRepository {
-  private collection: KintoCollection<APIResult>;
-
-  constructor() {
-    this.collection = kintoClientInstance.collection<APIResult>("api_results");
-  }
+  constructor() {}
 
   public update(apiResult: APIResult): Observable<APIResult> {
-    return this.collection.update(apiResult.id || "0", apiResult);
+    return from(
+      APIResultModel.query().patchAndFetchById(apiResult.id || "0", apiResult)
+    );
   }
 
   public findAllByProcedure(procedureId: number): Observable<APIResult> {
-    return this.collection.search(`procedure=${procedureId}`).pipe(
-      mergeMap((apiResult: APIResult[]) => {
-        if (apiResult.length === 0) {
-          return this.collection.add({
-            actions: [],
-            items: [],
-            procedure: procedureId
-          });
-        } else {
-          return of(apiResult[0]);
-        }
-      })
+    return from(
+      APIResultModel.query()
+        .where({ procedure: procedureId })
+        .then(async (res: APIResultModel[]) => {
+          let result;
+          if (res.length === 0) {
+            const entity = {
+              actions: [],
+              items: [],
+              procedure: procedureId
+            };
+            result = await APIResultModel.query().insert(entity);
+          } else {
+            result = res[0];
+          }
+          return result;
+        })
     );
   }
 }
