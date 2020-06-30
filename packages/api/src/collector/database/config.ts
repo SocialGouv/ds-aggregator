@@ -1,4 +1,4 @@
-import Knex = require("knex");
+import * as Knex from "knex";
 import { Model } from "objection";
 
 export default () => {
