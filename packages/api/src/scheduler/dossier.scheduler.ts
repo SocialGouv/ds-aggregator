@@ -1,13 +1,5 @@
 import { combineLatest, Observable, forkJoin } from "rxjs";
-import {
-  concatMap,
-  flatMap,
-  map,
-  mergeMap,
-  tap,
-  share,
-  retry
-} from "rxjs/operators";
+import { concatMap, flatMap, map, mergeMap, tap, share } from "rxjs/operators";
 import {
   apiResultService,
   dsProcedureConfigService,
@@ -63,8 +55,7 @@ export const dossierScheduler = {
             action.item.state,
             action.item.updated_at
           );
-        }, 1),
-        retry(2)
+        }, 10)
       );
 
       const updateApiResult$ = apiResult$.pipe(
