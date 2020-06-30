@@ -4,8 +4,11 @@ import * as bodyParser from "koa-bodyparser";
 import { router } from "./routes";
 import { logger } from "./util";
 import { captureException } from "./util/logger/logger";
+import dbConnect from "./collector/database/config";
 
 const app = new Koa();
+
+dbConnect();
 
 app.use(bodyParser());
 app.use(cors());

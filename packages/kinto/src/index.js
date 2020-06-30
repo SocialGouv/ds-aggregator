@@ -20,9 +20,6 @@ const addCollections = async () => {
   res = await api.createCollection("ds_collector", "statistics");
   console.log("[init kinto] collection creation (statistics):  ", res);
 
-  res = await api.createCollection("ds_collector", "synchro_histories");
-  console.log("[init kinto] collection creation (synchro_histories):  ", res);
-
   res = await api.createCollection("ds_collector", "tasks");
   console.log("[init kinto] collection creation (task):  ", res);
 
@@ -49,13 +46,6 @@ const addDSConfig = async () => {
         dsConfig
       );
       console.log("[init kinto] add ds_configs record:  ", res);
-    }
-    {
-      const res = await api.createRecord("ds_collector", "synchro_histories", {
-        scheduler: "task",
-        last_synchro: 0
-      });
-      console.log("[init kinto] add synchro_histories record:  ", res);
     }
   } else {
     console.log(

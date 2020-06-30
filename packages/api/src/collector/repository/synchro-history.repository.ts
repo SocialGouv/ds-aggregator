@@ -1,30 +1,44 @@
-import { Observable } from "rxjs";
-import { KintoCollection } from "../../lib";
+import { Observable, from } from "rxjs";
 import { SynchroHistory } from "../model";
-import { kintoClientInstance } from "./kinto-client-instance";
+import { SynchroHistoryModel } from "../database/SynchoHistoryModel";
 
 class SynchroHistoryRepository {
-  private collection: KintoCollection<SynchroHistory>;
+  constructor() {}
 
-  constructor() {
-    this.collection = kintoClientInstance.collection<SynchroHistory>(
-      "synchro_histories"
+  public all(): Observable<SynchroHistory[]> {
+    return from(
+      SynchroHistoryModel.query().then((res: SynchroHistoryModel[]) => {
+        if (!res) {
+          return [];
+        }
+        return res.map(elm => this.databaseToModel(elm));
+      })
     );
   }
 
-  public all(): Observable<SynchroHistory[]> {
-    return this.collection.all();
-  }
-
   public add(synchroHistory: SynchroHistory): Observable<SynchroHistory> {
-    return this.collection.add(synchroHistory);
+    return from(SynchroHistoryModel.query().insert(synchroHistory));
   }
 
   public update(
     id: string,
     synchroHistory: SynchroHistory
   ): Observable<SynchroHistory> {
-    return this.collection.update(id, synchroHistory);
+    return from(
+      SynchroHistoryModel.query()
+        .patchAndFetchById(id, synchroHistory)
+        .then((res: SynchroHistoryModel) => {
+          return this.databaseToModel(res);
+        })
+    );
+  }
+
+  private databaseToModel(entity: SynchroHistoryModel): SynchroHistory {
+    return {
+      id: entity.id,
+      scheduler: entity.scheduler,
+      last_synchro: entity.last_synchro
+    };
   }
 }
 

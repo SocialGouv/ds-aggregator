@@ -4,5 +4,4 @@ export interface SynchroHistory extends IIdentifiable {
   id?: string;
   scheduler: string;
   last_synchro: number;
-  data?: any;
 }
