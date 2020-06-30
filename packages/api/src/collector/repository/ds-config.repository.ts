@@ -1,31 +1,24 @@
-import { Observable } from "rxjs";
-import { DeletedData, KintoCollection } from "../../lib";
+import { Observable, from } from "rxjs";
 import { ProcedureConfig } from "../model";
-import { kintoClientInstance } from "./kinto-client-instance";
+import { ProcedureConfigModel } from "../database/ProcedureConfigModel";
 
 class DSProcedureConfigRepository {
-  private collection: KintoCollection<ProcedureConfig>;
-
-  constructor() {
-    this.collection = kintoClientInstance.collection<ProcedureConfig>(
-      "ds_configs"
-    );
-  }
+  constructor() {}
 
   public all(): Observable<ProcedureConfig[]> {
-    return this.collection.all();
+    return from(ProcedureConfigModel.query());
   }
 
-  public search(filter: string): Observable<ProcedureConfig[]> {
-    return this.collection.search(filter);
-  }
-
-  public delete(filter?: string): Observable<DeletedData[]> {
-    return this.collection.delete(filter);
+  public findByProcedureId(procedureId: number): Observable<ProcedureConfig[]> {
+    return from(ProcedureConfigModel.query().whereRaw(`${procedureId} = ANY (procedures)`));
   }
 
   public add(config: ProcedureConfig): Observable<ProcedureConfig> {
-    return this.collection.add(config);
+    return from(ProcedureConfigModel.query().insert(config));
+  }
+
+  public delete(): Observable<Number> {
+    return from(ProcedureConfigModel.query().delete());
   }
 }
 
