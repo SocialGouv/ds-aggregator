@@ -4,8 +4,6 @@ import { Task } from "../model";
 import { TaskModel } from "../database/TaskModel";
 
 class TaskRepository {
-  constructor() {}
-
   public add(task: Task): Observable<Task> {
     return from(TaskModel.query().insert(task));
   }

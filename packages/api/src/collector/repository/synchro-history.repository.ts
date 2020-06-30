@@ -3,8 +3,6 @@ import { SynchroHistory } from "../model";
 import { SynchroHistoryModel } from "../database/SynchoHistoryModel";
 
 class SynchroHistoryRepository {
-  constructor() {}
-
   public all(): Observable<SynchroHistory[]> {
     return from(
       SynchroHistoryModel.query().then((res: SynchroHistoryModel[]) => {

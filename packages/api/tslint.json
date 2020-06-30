@@ -1,3 +1,6 @@
 {
-  "extends": ["@socialgouv/tslint-config-recommended"]
+  "extends": ["@socialgouv/tslint-config-recommended"],
+  "rules": {
+    "variable-name": { "severity": "off" }
+  }
 }

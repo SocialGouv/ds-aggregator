@@ -1,8 +1,9 @@
-const Knex = require("knex");
-const connection = require("../../../knexfile");
-const { Model } = require("objection");
+import Knex from "knex";
+import { Model } from "objection";
 
 export default () => {
-  const knexConnection = Knex(connection);
+  const knexConnection = Knex(
+    require(process.env.KNEXFILE || "../../../knexfile")
+  );
   Model.knex(knexConnection);
 };

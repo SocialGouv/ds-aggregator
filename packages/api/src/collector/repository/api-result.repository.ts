@@ -3,8 +3,6 @@ import { APIResult } from "../model/api-result.model";
 import { APIResultModel } from "../database/APIResultModel";
 
 class APIResultRepository {
-  constructor() {}
-
   public update(apiResult: APIResult): Observable<APIResult> {
     return from(
       APIResultModel.query().patchAndFetchById(apiResult.id || "0", apiResult)
