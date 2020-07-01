@@ -7,7 +7,7 @@ class TaskRepository {
     return from(TaskModel.query().insert(task));
   }
 
-  public delete(task: Task): Observable<Number> {
+  public delete(task: Task): Observable<number> {
     const taskId = task.id || "";
     return from(TaskModel.query().deleteById(taskId));
   }
