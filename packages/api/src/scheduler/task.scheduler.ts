@@ -22,8 +22,7 @@ export const taskScheduler = {
       ).pipe(
         mergeMap(
           ([task, procedures]) => processTask(task, procedures),
-          undefined,
-          10
+          undefined
         ),
         reduce((acc: any[], record: any) => {
           acc.push(record);
@@ -62,10 +61,9 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
           );
         }
       },
-      (task: Task) => task,
-      10
+      (task: Task) => task
     ),
-    mergeMap((task: Task) => taskService.delete(task), 1)
+    mergeMap((task: Task) => taskService.delete(task))
   );
 }
 
