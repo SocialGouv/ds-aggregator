@@ -8,9 +8,6 @@ const addCollections = async () => {
   let res = await api.createBucket("ds_collector");
   console.log("[init kinto] bucket creation (ds_collector):  ", res);
 
-  res = await api.createCollection("ds_collector", "dossiers");
-  console.log("[init kinto] collection creation (dossiers):  ", res);
-
   res = await api.createCollection("ds_collector", "procedures");
   console.log("[init kinto] collection creation (procedures):  ", res);
 
@@ -30,13 +27,6 @@ const init = async () => {
   if (process.env.CLEAN_DB) {
     await cleanIt();
   }
-
-  const isNewUser = await api
-    .createAdmin(configs.adminLogin, configs.adminPassword)
-    .then(
-      res => Boolean(res.data),
-      () => false
-    );
 
   if (process.env.CLEAN_DB) {
     console.log("[haxxx] delete the ds_collector bucket");

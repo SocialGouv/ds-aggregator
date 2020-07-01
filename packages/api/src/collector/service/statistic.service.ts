@@ -47,7 +47,7 @@ class StatisticService {
   }
 
   private statisticByProcedure(param: ProcedureConfig) {
-    const oneYearAgo = subMonths(new Date(), 12).getTime();
+    const oneYearAgo = subMonths(new Date(), 12);
     return dossierRepository
       .findAllByMetadataCreatedAtGTAndProcedureIn(oneYearAgo, param.procedures)
       .pipe(

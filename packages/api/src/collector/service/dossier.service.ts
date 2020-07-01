@@ -1,7 +1,6 @@
 import { Observable } from "rxjs";
 import { map, mergeMap } from "rxjs/operators";
 import { DSDossier } from "../../demarche-simplifiee";
-import { DeletedData } from "../../lib";
 import { asTimestamp } from "../../util/converter";
 import { DossierRecord } from "../model";
 import { dossierRepository } from "../repository";
@@ -9,10 +8,6 @@ import { dossierRepository } from "../repository";
 class DossierService {
   public all(): Observable<DossierRecord[]> {
     return dossierRepository.all();
-  }
-
-  public allByDsKeyIn(dsKeys: string[]): Observable<DossierRecord[]> {
-    return dossierRepository.findAllByDsKeyIn(dsKeys);
   }
 
   public findByDsKey(dsKey: string): Observable<DossierRecord | null> {
@@ -32,14 +27,11 @@ class DossierService {
   ): Observable<DossierRecord[]> {
     return dossierRepository.findAllByProcedureIn([procedureId]);
   }
-  public deleteByProcedureId(procedureId: number): Observable<DeletedData[]> {
-    return dossierRepository.deleteAllByMetadataProcedureId(procedureId);
-  }
 
   public deleteByProcedureIdAndDossierId(
     procedureId: number,
     dossierId: number
-  ): Observable<DeletedData[]> {
+  ): Observable<number> {
     return dossierRepository.deleteByDsKey(`${procedureId}-${dossierId}`);
   }
 
@@ -79,6 +71,8 @@ class DossierService {
     const wifDossier: DossierRecord = {
       ds_data: dossier,
       ds_key: `${procedureId}-${dossier.id}`,
+      created_at: new Date(asTimestamp(dossier.created_at) || 0),
+      procedure_id: procedureId as number,
       metadata: {
         group,
         procedure_id: procedureId as number,

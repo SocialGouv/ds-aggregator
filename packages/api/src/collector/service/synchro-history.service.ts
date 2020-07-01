@@ -14,7 +14,7 @@ class SynchroHistoryService {
           return of(syncHistory);
         } else {
           return synchroHistoryRepository.add({
-            last_synchro: 0,
+            last_synchro: new Date(0),
             scheduler
           });
         }
@@ -29,7 +29,7 @@ class SynchroHistoryService {
     return this.getSynchroHistory(scheduler).pipe(
       tap(
         (synchroHistory: SynchroHistory) =>
-          (synchroHistory.last_synchro = lastSynchro)
+          (synchroHistory.last_synchro = new Date(lastSynchro))
       ),
       mergeMap((synchroHistory: SynchroHistory) =>
         synchroHistoryRepository.update(synchroHistory.id || "", synchroHistory)

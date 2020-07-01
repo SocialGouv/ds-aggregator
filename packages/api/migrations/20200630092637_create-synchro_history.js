@@ -6,7 +6,7 @@ exports.up = async function(knex) {
       .defaultTo(knex.raw("uuid_generate_v4()"))
       .primary();
     table.string("scheduler").notNullable();
-    table.bigInteger("last_synchro").notNullable();
+    table.timestamp("last_synchro").notNullable();
   });
 };
 
