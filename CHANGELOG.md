@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v4.3.1...v5.0.0) (2020-07-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency koa-router to ^9.1.0 ([#265](https://github.com/SocialGouv/ds-aggregator/issues/265)) ([7e19470](https://github.com/SocialGouv/ds-aggregator/commit/7e194703e575b04415e1017c3cd25c59ad13bc0c))
+* **deps:** update sentry monorepo to ^5.18.1 ([#261](https://github.com/SocialGouv/ds-aggregator/issues/261)) ([19969e1](https://github.com/SocialGouv/ds-aggregator/commit/19969e17605d8f75c9b5b36d4e83a101797d1f22))
+
+
+### Features
+
+* kill kinto ([#264](https://github.com/SocialGouv/ds-aggregator/issues/264)) ([1c0724f](https://github.com/SocialGouv/ds-aggregator/commit/1c0724f1e2b210ace8d5fef2eabff14cca6ff582))
+* **dossier:** add search columns ([#267](https://github.com/SocialGouv/ds-aggregator/issues/267)) ([616ae0d](https://github.com/SocialGouv/ds-aggregator/commit/616ae0d839d7773617c796c374ab49c41d664db2))
+
+
+### BREAKING CHANGES
+
+* remove kinto for knex
+
+Co-authored-by: Thomas Glatt <thomas.glatt@fabrique.social.gouv.fr>
+
+
+
+
+
 ## [4.3.1](https://github.com/SocialGouv/ds-aggregator/compare/v4.3.0...v4.3.1) (2020-06-26)
 
 
