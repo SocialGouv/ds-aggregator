@@ -15,7 +15,7 @@ class ProcedureRecordModel extends Model implements ProcedureRecord {
     total_dossier: 0,
     link: "",
     state: "publiee",
-    types_de_champ: []
+    types_de_champ: [],
   };
 
   static get tableName() {

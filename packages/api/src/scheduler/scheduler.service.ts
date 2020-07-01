@@ -38,7 +38,7 @@ export const handleScheduler = (
       )
       .subscribe({
         complete: () => completeProcess(scheduler),
-        error: (err: Error) => handleError(scheduler, err)
+        error: (err: Error) => handleError(scheduler, err),
       });
   });
   logger.info(`[scheduler] ${scheduler} [${cron}] scheduled!`);

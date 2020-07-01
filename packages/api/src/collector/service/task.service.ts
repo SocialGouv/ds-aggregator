@@ -16,7 +16,7 @@ class TaskService {
       dossier_id: dossierId,
       procedure_id: procedureId,
       state,
-      updated_at: updatedAt
+      updated_at: updatedAt,
     };
     logger.info(
       `[TaskService] new task ${procedureId}-${dossierId} (${action})`

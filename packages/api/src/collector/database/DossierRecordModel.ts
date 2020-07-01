@@ -15,7 +15,7 @@ class DossierRecordModel extends Model implements DossierRecord {
     initiated_at: "",
     received_at: "",
     processed_at: "",
-    instructeurs: []
+    instructeurs: [],
   };
   ds_key: string = "";
   metadata: DossierRecordMetadata = {
@@ -23,14 +23,14 @@ class DossierRecordModel extends Model implements DossierRecord {
     procedure_id: 0,
     group: {
       id: "",
-      label: ""
+      label: "",
     },
     initiated_at: 0,
     updated_at: 0,
     received_at: 0,
     processed_at: 0,
     created_at: 0,
-    instructors_history: []
+    instructors_history: [],
   };
   procedure_id: number = 0;
   created_at: Date = new Date(0);

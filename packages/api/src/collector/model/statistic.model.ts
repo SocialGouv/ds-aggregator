@@ -57,7 +57,7 @@ export const initStatistic = (group: { id: string; label: string }) => {
     group,
     // tslint:disable-next-line: object-literal-sort-keys
     ...block,
-    monthly: {}
+    monthly: {},
   };
 };
 
@@ -66,7 +66,7 @@ export const initStatisticBlock = () => {
     count: 0,
     duration: 0,
     durations: [],
-    status: initDossierStatesCount()
+    status: initDossierStatesCount(),
   };
 };
 
@@ -77,13 +77,13 @@ const initDossierStatesCount = () => {
     initiated: initLabelCount("en construction"),
     received: initLabelCount("en instruction"),
     refused: initLabelCount("refusé"),
-    without_continuation: initLabelCount("classé sans suite")
+    without_continuation: initLabelCount("classé sans suite"),
   };
 };
 
 const initLabelCount = (label: string) => {
   return {
     count: 0,
-    label
+    label,
   };
 };

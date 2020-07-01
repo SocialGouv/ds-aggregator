@@ -4,7 +4,7 @@ import {
   DossierRecord,
   dossierService,
   dsProcedureConfigService,
-  ProcedureConfig
+  ProcedureConfig,
 } from "../collector";
 import { demarcheSimplifieeService } from "../demarche-simplifiee";
 import { logger } from "../util";
@@ -41,7 +41,7 @@ export const dossierSynchroService = {
         }
       })
     );
-  }
+  },
 };
 
 function getProcedureConfig(

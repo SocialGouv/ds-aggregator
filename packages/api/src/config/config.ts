@@ -42,18 +42,18 @@ const configByEnvironment: {
   "dev.factory": () => ({
     schedulerCronDS: "0 */10 * * * *",
     schedulerCronTask: "0 */5 * * * *",
-    sentryEnabled: false
+    sentryEnabled: false,
   }),
   "dev.local": (env: typeof process.env) => ({
     schedulerCronDS: asString(env, "SCHEDULER_CRON_DS", "0 0 * * * *"),
     schedulerCronTask: asString(env, "SCHEDULER_CRON_TASK", "0 */10 * * * *"),
-    sentryEnabled: asBoolean(env, "SENTRY_ENABLED", false)
+    sentryEnabled: asBoolean(env, "SENTRY_ENABLED", false),
   }),
   prod: () => ({
     schedulerCronDS: "0 30 * * * *",
     schedulerCronTask: "0 */10 * * * *",
-    sentryEnabled: true
-  })
+    sentryEnabled: true,
+  }),
 };
 
 export const getConfiguration = (env: typeof process.env) => {
@@ -70,6 +70,6 @@ export const getConfiguration = (env: typeof process.env) => {
     schedulerCronTask: envConfig.schedulerCronTask,
     sentryDSN: asString(env, "SENTRY_DSN", ""),
     sentryEnabled: envConfig.sentryEnabled,
-    version: asString(env, "VERSION", require("../../package.json").version)
+    version: asString(env, "VERSION", require("../../package.json").version),
   };
 };

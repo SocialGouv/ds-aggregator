@@ -3,7 +3,7 @@ import { concatMap, flatMap, reduce } from "rxjs/operators";
 import { ProcedureRecord } from "../collector/model";
 import {
   demarcheSimplifieeService,
-  DSDossierItem
+  DSDossierItem,
 } from "../demarche-simplifiee";
 import { DossierListResult } from "../demarche-simplifiee/service/ds.service";
 import { logger } from "../util";

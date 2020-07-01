@@ -8,7 +8,7 @@ class StatisticModel extends Model implements Statistic {
     label: string;
   } = {
     id: "",
-    label: ""
+    label: "",
   };
   count: number = 0;
   duration: number = 0;

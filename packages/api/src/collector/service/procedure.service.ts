@@ -14,7 +14,7 @@ class ProcedureService {
     }
     const wifProcedure: ProcedureRecord = {
       ds_data: procedure,
-      ds_key: procedure.id
+      ds_key: procedure.id,
     };
     return procedureRepository.findByDSKey(wifProcedure.ds_key).pipe(
       mergeMap((res: ProcedureRecord[]) => {

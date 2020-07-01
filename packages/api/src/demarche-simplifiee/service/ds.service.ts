@@ -32,12 +32,12 @@ class DemarcheSimplifieeService {
           ),
         (ctx, res) => ({
           dossierItems: res.dossiers,
-          procedureId: ctx.procedureId
+          procedureId: ctx.procedureId,
         })
       ),
       map((res: { procedureId: number; dossierItems: DSDossierItem[] }) => ({
         dossiers: res.dossierItems,
-        procedureId: res.procedureId
+        procedureId: res.procedureId,
       }))
     );
   }

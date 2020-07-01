@@ -59,7 +59,7 @@ class DossierService {
       processed_at: asTimestamp(dossier.processed_at),
       received_at: asTimestamp(dossier.received_at),
       state: dossier.state,
-      updated_at: asTimestamp(dossier.updated_at)
+      updated_at: asTimestamp(dossier.updated_at),
     };
     record.metadata.instructors_history = instructorsHistory;
 
@@ -89,8 +89,8 @@ class DossierService {
         initiated_at: asTimestamp(dossier.initiated_at),
         received_at: asTimestamp(dossier.received_at),
         processed_at: asTimestamp(dossier.processed_at),
-        instructors_history: dossier.instructeurs ? dossier.instructeurs : []
-      }
+        instructors_history: dossier.instructeurs ? dossier.instructeurs : [],
+      },
     };
     return dossierRepository.findByDSKey(wifDossier.ds_key).pipe(
       mergeMap((dossiers: DossierRecord[]) => {

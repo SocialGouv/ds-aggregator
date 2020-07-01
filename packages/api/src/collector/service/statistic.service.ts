@@ -6,7 +6,7 @@ import {
   map,
   mergeMap,
   switchMap,
-  tap
+  tap,
 } from "rxjs/operators";
 import { DSDossier } from "../../demarche-simplifiee";
 import { logger } from "../../util";
@@ -15,7 +15,7 @@ import {
   DossierStatesCount,
   initStatistic,
   initStatisticBlock,
-  Statistic
+  Statistic,
 } from "../model/statistic.model";
 import { dossierRepository, statisticRepository } from "../repository";
 import { dsProcedureConfigService } from "./ds-config.service";

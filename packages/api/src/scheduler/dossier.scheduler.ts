@@ -6,14 +6,14 @@ import {
   ProcedureConfig,
   ProcedureRecord,
   procedureService,
-  taskService
+  taskService,
 } from "../collector";
 import { APIResult, SynchroAction } from "../collector/model/api-result.model";
 import { configuration } from "../config";
 import {
   demarcheSimplifieeService,
   DSDossierItem,
-  DSProcedure
+  DSProcedure,
 } from "../demarche-simplifiee";
 import { syncService } from "../sync";
 import { logger } from "../util";
@@ -39,7 +39,7 @@ export const dossierScheduler = {
       );
 
       const addAllTasks$ = apiResult$.pipe(
-        tap(apiResult =>
+        tap((apiResult) =>
           logger.info(
             `[dossier.scheduler] procedure#${apiResult.procedure} - add ${apiResult.actions.length} actions`
           )
@@ -66,7 +66,7 @@ export const dossierScheduler = {
 
       return forkJoin(addAllTasks$, updateApiResult$);
     });
-  }
+  },
 };
 
 function getSynchroActions(items: DSDossierItem[], apiResult: APIResult) {
@@ -79,13 +79,13 @@ function getSynchroActions(items: DSDossierItem[], apiResult: APIResult) {
       actions.push({
         action: "add_or_update",
         item: fetchedItem,
-        procedure: apiResult.procedure
+        procedure: apiResult.procedure,
       });
     } else if (loadedItem.updated_at !== fetchedItem.updated_at) {
       actions.push({
         action: "add_or_update",
         item: loadedItem,
-        procedure: apiResult.procedure
+        procedure: apiResult.procedure,
       });
     }
   });
@@ -98,7 +98,7 @@ function getSynchroActions(items: DSDossierItem[], apiResult: APIResult) {
       actions.push({
         action: "delete",
         item: loadedItem,
-        procedure: apiResult.procedure
+        procedure: apiResult.procedure,
       });
     }
   });
@@ -120,7 +120,7 @@ function syncProcedures(): Observable<ProcedureRecord> {
 
 function allDemarcheSimlifieeProcedures(): Observable<DSProcedure> {
   return dsProcedureConfigService.all().pipe(
-    tap(procedureConfigs =>
+    tap((procedureConfigs) =>
       logger.info(
         `[SyncService.allDemarcheSimlifieeProcedures] process ${procedureConfigs.length} procedures`
       )

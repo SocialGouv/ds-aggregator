@@ -9,7 +9,7 @@ class SynchroHistoryRepository {
         if (!res) {
           return [];
         }
-        return res.map(elm => this.databaseToModel(elm));
+        return res.map((elm) => this.databaseToModel(elm));
       })
     );
   }
@@ -35,7 +35,7 @@ class SynchroHistoryRepository {
     return {
       id: entity.id,
       scheduler: entity.scheduler,
-      last_synchro: entity.last_synchro
+      last_synchro: entity.last_synchro,
     };
   }
 }
