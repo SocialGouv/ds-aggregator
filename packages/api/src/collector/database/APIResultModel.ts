@@ -35,11 +35,11 @@ class APIResultModel extends Model {
                   nom_projet: { type: "string" },
                   updated_at: { type: "string" },
                   initiated_at: { type: "string" },
-                  state: { type: "string" }
-                }
-              }
-            }
-          }
+                  state: { type: "string" },
+                },
+              },
+            },
+          },
         },
         items: {
           type: "array",
@@ -50,11 +50,11 @@ class APIResultModel extends Model {
               nom_projet: { type: "string" },
               updated_at: { type: "string" },
               initiated_at: { type: "string" },
-              state: { type: "string" }
-            }
-          }
-        }
-      }
+              state: { type: "string" },
+            },
+          },
+        },
+      },
     };
   }
 }

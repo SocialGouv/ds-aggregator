@@ -5,7 +5,7 @@ import {
   dsProcedureConfigService,
   ProcedureConfig,
   Task,
-  taskService
+  taskService,
 } from "../collector";
 import { statisticService } from "../collector/service/statistic.service";
 import { configuration } from "../config";
@@ -37,7 +37,7 @@ export const taskScheduler = {
         })
       );
     });
-  }
+  },
 };
 
 function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
@@ -71,7 +71,7 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
 
 function allTasksToComplete(): Observable<Task> {
   return taskService.getTasksToComplete().pipe(
-    tap(tasks => {
+    tap((tasks) => {
       logger.debug(`[task.scheduler] process ${tasks.length} to complete`);
     }),
     flatMap((x: Task[]) => x)

@@ -1,7 +1,7 @@
 import {
   DossierStateType,
   DSDossier,
-  DSProcedure
+  DSProcedure,
 } from "../../demarche-simplifiee";
 import { IIdentifiable } from "../../util";
 

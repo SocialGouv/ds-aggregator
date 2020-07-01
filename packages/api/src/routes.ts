@@ -8,7 +8,7 @@ import {
   ProcedureConfig,
   ProcedureRecord,
   procedureService,
-  taskService
+  taskService,
 } from "./collector";
 import { statisticService } from "./collector/service/statistic.service";
 import { configuration } from "./config";
@@ -16,7 +16,7 @@ import { logger } from "./util";
 import { dsConfigs } from "./util/ds-config";
 
 const routeOptions: Router.IRouterOptions = {
-  prefix: "/api"
+  prefix: "/api",
 };
 
 const router = new Router(routeOptions);
@@ -49,7 +49,7 @@ router.get(`/statistics/:group`, async (ctx: Koa.Context) => {
   const res = await statisticService.findByGroupId(groupId).toPromise();
   ctx.body = {
     result: res || {},
-    success: res ? true : false
+    success: res ? true : false,
   };
   ctx.status = 200;
 });
@@ -112,11 +112,11 @@ router.get(
           logger.error(
             `[check procedures] error while checking procedures`,
             err
-          )
+          ),
       });
     ctx.status = 200;
     ctx.body = {
-      message: "Result will be displayed in console"
+      message: "Result will be displayed in console",
     };
   }
 );

@@ -19,7 +19,7 @@ class APIResultRepository {
             const entity = {
               actions: [],
               items: [],
-              procedure: procedureId
+              procedure: procedureId,
             };
             result = await APIResultModel.query().insert(entity);
           } else {

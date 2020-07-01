@@ -25,10 +25,10 @@ class ProcedureConfigModel extends Model {
           type: "object",
           properties: {
             label: { type: "string" },
-            id: { type: "string" }
-          }
-        }
-      }
+            id: { type: "string" },
+          },
+        },
+      },
     };
   }
 }

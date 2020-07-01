@@ -17,7 +17,7 @@ class DossierRepository {
   public findByDSKey(dsKey: string): Observable<DossierRecord[]> {
     return from(
       DossierRecordModel.query().where({
-        ds_key: dsKey
+        ds_key: dsKey,
       })
     );
   }
@@ -49,7 +49,7 @@ class DossierRepository {
     return from(
       DossierRecordModel.query()
         .where({
-          ds_key: dsKey
+          ds_key: dsKey,
         })
         .delete()
     );

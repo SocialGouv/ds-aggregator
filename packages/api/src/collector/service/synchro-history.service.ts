@@ -15,7 +15,7 @@ class SynchroHistoryService {
         } else {
           return synchroHistoryRepository.add({
             last_synchro: new Date(0),
-            scheduler
+            scheduler,
           });
         }
       })

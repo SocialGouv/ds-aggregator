@@ -30,7 +30,7 @@ export function initializeSentry(configuration: Config) {
     dsn: sentryDSN,
     environment,
     integrations: [new RewriteFrames({ root: global.__rootdir__ })],
-    release: packageVersion
+    release: packageVersion,
   });
 }
 
