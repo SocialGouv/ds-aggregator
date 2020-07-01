@@ -1,5 +1,4 @@
 import { Observable, from } from "rxjs";
-import { DeletedData } from "../../lib";
 import { Task } from "../model";
 import { TaskModel } from "../database/TaskModel";
 
@@ -8,21 +7,9 @@ class TaskRepository {
     return from(TaskModel.query().insert(task));
   }
 
-  public delete(task: Task): Observable<DeletedData[]> {
+  public delete(task: Task): Observable<Number> {
     const taskId = task.id || "";
-    return from(
-      TaskModel.query()
-        .deleteById(taskId)
-        .then(() => {
-          return [
-            {
-              id: taskId,
-              deleted: true,
-              last_modifified: ""
-            }
-          ];
-        })
-    );
+    return from(TaskModel.query().deleteById(taskId));
   }
 
   public getTaskToComplete(): Observable<Task[]> {
