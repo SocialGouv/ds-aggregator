@@ -8,13 +8,12 @@ labels:
   app.kubernetes.io/part-of: ds-aggregator
   owner: ds-aggregator
   team: ds-aggregator
-  
-deployment:
 
+deployment:
   annotations:
     app.gitlab.com/app: ${CI_PROJECT_PATH_SLUG}
     app.gitlab.com/env: ${CI_ENVIRONMENT_SLUG}
-    
+
   port: ${PORT}
 
   resources:
@@ -49,23 +48,15 @@ deployment:
         secretKeyRef:
           name: ds-aggregator-secret
           key: API_PREFIX
-    - name: KINTO_URL
-      value: "http://kinto:8888"
-    - name: KINTO_LOGIN
-      valueFrom:
-        secretKeyRef:
-          name: ds-aggregator-secret
-          key: KINTO_LOGIN
-    - name: KINTO_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: ds-aggregator-secret
-          key: KINTO_PASSWORD
+    - name: DATABASE_URL
+      value: "postgresql://${PG_USER_ENCODED}:${PG_PASSWORD_ENCODED}@${PG_HOST}/postgres"
     - name: DS_TOKEN
       valueFrom:
         secretKeyRef:
           name: ds-aggregator-secret
           key: DS_TOKEN
+    - name: PGSSLMODE
+      value: "require"
     - name: SENTRY_DSN
       valueFrom:
         secretKeyRef:

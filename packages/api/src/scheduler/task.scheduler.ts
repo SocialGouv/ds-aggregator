@@ -63,7 +63,7 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
         }
       },
       (task: Task) => task,
-      1
+      10
     ),
     mergeMap((task: Task) => taskService.delete(task), 1)
   );

@@ -20,18 +20,6 @@ cp .env.sample .env
 yarn start
 ```
 
-l'interface d'administation de kinto est accessible à l'adresse suivante `http://localhost:8888/v1/admin`:
-- Compte `admin`: admin / passw0rd
-
-ajouter un ou plusieurs `record` dans la `collection` `ds_configs`:
-
-```json
-{
-    "procedures": [12858,12859],
-    "group": {"id": "13","label": "13 - Bouches du Rhône"}
-}
-```
-
 La liste des configurations possible est listée dans `ds-config.json`.
 
 *appeler les API de `ds-collector`*
@@ -59,21 +47,8 @@ Pour visualiser les statistiques dans `ds-dahsboard`, utiliser les API `/api/sta
 ## Lancer en local avec docker
 
 ```bash
-docker-compose up
+docker-compose up --build
 ```
-
-## Description
-
-### kinto
-
-|Collection     |Description                                            | Modèle                                    |
-|---------------|-------------------------------------------------------|-------------------------------------------|
-|`ds_configs`   | configuration des démarches simplifiées à synchoniser | `src/collector/model/config.model.ts`     |
-|`procedures`   | procédures synchronisées                              | `src/collector/model/record.model.ts`     |
-|`dossiers`     | dossiers synchronisés                                 | `src/collector/model/record.model.ts`     |
-|`tasks`        | liste des dossiers à synchroniser                     | `src/collector/model/task.model.ts`       |
-|`statistics`   | statistique par `ds_configs`                          | `src/collector/model/statistic.model.ts`  |
-
 
 ## Release policy
 

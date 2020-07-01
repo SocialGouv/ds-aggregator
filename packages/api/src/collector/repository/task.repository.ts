@@ -1,32 +1,19 @@
-import { NEVER, Observable } from "rxjs";
-import { KintoCollection, DeletedData } from "../../lib";
+import { Observable, from } from "rxjs";
 import { Task } from "../model";
-import { kintoClientInstance } from "./kinto-client-instance";
+import { TaskModel } from "../database/TaskModel";
 
 class TaskRepository {
-  private collection: KintoCollection<Task>;
-
-  constructor() {
-    this.collection = kintoClientInstance.collection<Task>("tasks");
-  }
-
   public add(task: Task): Observable<Task> {
-    return this.collection.add(task);
+    return from(TaskModel.query().insert(task));
   }
 
-  public delete(task: Task): Observable<DeletedData[]> {
-    return this.collection.deleteById(task.id || "");
-  }
-
-  public update(task: Task): Observable<Task> {
-    if (task.id == null) {
-      return NEVER;
-    }
-    return this.collection.update(task.id, task);
+  public delete(task: Task): Observable<number> {
+    const taskId = task.id || "";
+    return from(TaskModel.query().deleteById(taskId));
   }
 
   public getTaskToComplete(): Observable<Task[]> {
-    return this.collection.search("task_state=to_complete&_sort=last_modified");
+    return from(TaskModel.query());
   }
 }
 

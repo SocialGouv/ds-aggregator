@@ -1,29 +1,24 @@
-import { Observable } from "rxjs";
-import { KintoCollection } from "../../lib";
+import { Observable, from } from "rxjs";
 import { Statistic } from "../model/statistic.model";
-import { kintoClientInstance } from "./kinto-client-instance";
+import { StatisticModel } from "../database/StatisticModel";
 
 class StatisticRepository {
-  private collection: KintoCollection<Statistic>;
-
-  constructor() {
-    this.collection = kintoClientInstance.collection<Statistic>("statistics");
-  }
-
   public all(): Observable<Statistic[]> {
-    return this.collection.all();
+    return from(StatisticModel.query());
   }
 
   public add(stat: Statistic): Observable<Statistic> {
-    return this.collection.add(stat);
+    return from(StatisticModel.query().insert(stat));
   }
 
   public update(id: string, stat: Statistic): Observable<Statistic> {
-    return this.collection.update(id, stat);
+    return from(StatisticModel.query().patchAndFetchById(id, stat));
   }
 
   public findByGroupId(groupId: string): Observable<Statistic[]> {
-    return this.collection.search(`group.id="${groupId}"`);
+    return from(
+      StatisticModel.query().whereRaw(`"group" @> '{"id":"${groupId}"}'::jsonb`)
+    );
   }
 }
 

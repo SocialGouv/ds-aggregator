@@ -21,36 +21,5 @@ services:
     ports:
       - 5433:5432
 
-  cache:
-    image: library/memcached
-
-  kinto-server:
-    image: kinto/kinto-server:13.6.6
-    links:
-      - db
-      - cache
-    ports:
-      - "8888:8888"
-    environment:
-      KINTO_CACHE_BACKEND: kinto.core.cache.memcached
-      KINTO_CACHE_HOSTS: cache:11211 cache:11212
-      KINTO_STORAGE_BACKEND: kinto.core.storage.postgresql
-      KINTO_STORAGE_URL: postgresql://postgres:postgres@db/postgres
-      KINTO_PERMISSION_BACKEND: kinto.core.permission.postgresql
-      KINTO_PERMISSION_URL: postgresql://postgres:postgres@db/postgres
-
-  init-kinto:
-    build:
-      context: ./packages/kinto/
-    env_file: .env
-    links:
-      - kinto-server
-      - db
-      - cache
-    depends_on:
-      - db
-      - kinto-server
-      - cache
-
 volumes:
   ds-aggregator-pgdata:

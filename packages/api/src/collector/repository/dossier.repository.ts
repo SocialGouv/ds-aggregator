@@ -1,59 +1,58 @@
-import { Observable } from "rxjs";
-import { DeletedData } from "../../lib";
+import { Observable, from } from "rxjs";
 import { DossierRecord } from "../model";
-import { kintoClientInstance } from "./kinto-client-instance";
+import { DossierRecordModel } from "../database/DossierRecordModel";
 
 class DossierRepository {
   public add(record: DossierRecord): Observable<DossierRecord> {
-    return this.collection().add(record);
+    return from(DossierRecordModel.query().insert(record));
   }
 
   public update(
     recordId: string,
     record: DossierRecord
   ): Observable<DossierRecord> {
-    return this.collection().update(recordId, record);
+    return from(DossierRecordModel.query().patchAndFetchById(recordId, record));
   }
 
   public findByDSKey(dsKey: string): Observable<DossierRecord[]> {
-    return this.collection().search(`ds_key="${dsKey}"`);
+    return from(
+      DossierRecordModel.query().where({
+        ds_key: dsKey
+      })
+    );
   }
 
   public all(): Observable<DossierRecord[]> {
-    return this.collection().all();
+    return from(DossierRecordModel.query());
   }
 
   public findAllByProcedureIn(
     procedureIds: number[]
   ): Observable<DossierRecord[]> {
-    return this.collection().search(`in_metadata.procedure_id=${procedureIds}`);
-  }
-
-  public findAllByMetadataCreatedAtGTAndProcedureIn(
-    createdAt: number,
-    procedureIds: number[]
-  ): Observable<DossierRecord[]> {
-    return this.collection().search(
-      `gt_metadata.created_at=${createdAt}&in_metadata.procedure_id=${procedureIds}`
+    return from(
+      DossierRecordModel.query().whereIn("procedure_id", procedureIds)
     );
   }
 
-  public findAllByDsKeyIn(dsKeys: string[]): Observable<DossierRecord[]> {
-    return this.collection().search(`in_ds_key=${dsKeys}`);
+  public findAllByMetadataCreatedAtGTAndProcedureIn(
+    createdAt: Date,
+    procedureIds: number[]
+  ): Observable<DossierRecord[]> {
+    return from(
+      DossierRecordModel.query()
+        .whereIn("procedure_id", procedureIds)
+        .andWhere("created_at", ">", createdAt)
+    );
   }
 
-  public deleteAllByMetadataProcedureId(
-    procedureIds: number
-  ): Observable<DeletedData[]> {
-    return this.collection().delete(`metadata.procedure_id=${procedureIds}`);
-  }
-
-  public deleteByDsKey(dsKey: string): Observable<DeletedData[]> {
-    return this.collection().delete(`ds_key="${dsKey}"`);
-  }
-
-  private collection() {
-    return kintoClientInstance.collection<DossierRecord>("dossiers");
+  public deleteByDsKey(dsKey: string): Observable<number> {
+    return from(
+      DossierRecordModel.query()
+        .where({
+          ds_key: dsKey
+        })
+        .delete()
+    );
   }
 }
 
