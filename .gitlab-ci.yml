@@ -243,9 +243,9 @@ Deploy api:
       - $PRODUCTION
   before_script:
     - *resolve_env
-    - export PG_HOST=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.PG_HOST}' | base64 --decode)
-    - export PG_USER_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_USER_ENCODED}' | base64 --decode)
-    - export PG_PASSWORD_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_PASSWORD_ENCODED}' | base64 --decode)
+    - export PG_HOST=$(kubectl get secret azure-pg-ds-aggregator-user -n ds-aggregator-secret -ojsonpath='{.data.PG_HOST}' | base64 --decode)
+    - export PG_USER_ENCODED=$(kubectl get secret azure-pg-ds-aggregator-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_USER_ENCODED}' | base64 --decode)
+    - export PG_PASSWORD_ENCODED=$(kubectl get secret azure-pg-ds-aggregator-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_PASSWORD_ENCODED}' | base64 --decode)
 
 #
 
@@ -266,9 +266,10 @@ Deploy api (prod):
     variables:
       - $PRODUCTION
   before_script:
-    - export PG_HOST=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.PG_HOST}' | base64 --decode)
-    - export PG_USER_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_USER_ENCODED}' | base64 --decode)
-    - export PG_PASSWORD_ENCODED=$(kubectl get secret azure-pg-admin-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_PASSWORD_ENCODED}' | base64 --decode)
+    - *resolve_env
+    - export PG_HOST=$(kubectl get secret azure-pg-ds-aggregator-user -n ds-aggregator-secret -ojsonpath='{.data.PG_HOST}' | base64 --decode)
+    - export PG_USER_ENCODED=$(kubectl get secret azure-pg-ds-aggregator-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_USER_ENCODED}' | base64 --decode)
+    - export PG_PASSWORD_ENCODED=$(kubectl get secret azure-pg-ds-aggregator-user -n ds-aggregator-secret -ojsonpath='{.data.ADMIN_PG_PASSWORD_ENCODED}' | base64 --decode)
 
 ################################# RELEASE ###############################
 
