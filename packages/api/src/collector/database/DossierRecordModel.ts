@@ -4,6 +4,9 @@ import { DSDossier } from "../../demarche-simplifiee";
 
 class DossierRecordModel extends Model implements DossierRecord {
   id?: string;
+  processed_at?: Date;
+  last_modified?: Date;
+  state?: string;
   ds_data: DSDossier = {
     id: 0,
     state: "draft",
