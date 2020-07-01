@@ -47,6 +47,9 @@ class DossierService {
       record.metadata.instructors_history,
       dossier.instructeurs
     );
+    record.state = dossier.state;
+    record.processed_at = new Date(dossier.processed_at);
+    record.last_modified = new Date();
     record.ds_data = dossier;
     record.metadata = {
       ...record.metadata,
@@ -72,6 +75,9 @@ class DossierService {
       ds_data: dossier,
       ds_key: `${procedureId}-${dossier.id}`,
       created_at: new Date(asTimestamp(dossier.created_at) || 0),
+      state: dossier.state,
+      processed_at: new Date(dossier.processed_at),
+      last_modified: new Date(),
       procedure_id: procedureId as number,
       metadata: {
         group,

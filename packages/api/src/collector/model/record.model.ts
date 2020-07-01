@@ -8,6 +8,9 @@ import { IIdentifiable } from "../../util";
 export interface Record<T extends IIdentifiable> {
   id?: string;
   ds_data: T;
+  processed_at?: Date;
+  last_modified?: Date;
+  state?: string;
 }
 
 // tslint:disable-next-line: no-empty-interface
