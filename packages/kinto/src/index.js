@@ -8,9 +8,6 @@ const addCollections = async () => {
   let res = await api.createBucket("ds_collector");
   console.log("[init kinto] bucket creation (ds_collector):  ", res);
 
-  res = await api.createCollection("ds_collector", "procedures");
-  console.log("[init kinto] collection creation (procedures):  ", res);
-
   res = await api.createCollection("ds_collector", "statistics");
   console.log("[init kinto] collection creation (statistics):  ", res);
 

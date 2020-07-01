@@ -29,7 +29,7 @@ export interface DSProcedure extends IIdentifiable {
   organisation: string;
   direction: string;
   archived_at: string;
-  geographic_information: DSGeographicInformation;
+  geographic_information?: DSGeographicInformation;
   total_dossier: number;
   link: string;
   state: procedureState;
