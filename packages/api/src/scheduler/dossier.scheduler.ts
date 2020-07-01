@@ -55,13 +55,13 @@ export const dossierScheduler = {
             action.item.state,
             action.item.updated_at
           );
-        }, 10)
+        })
       );
 
       const updateApiResult$ = apiResult$.pipe(
         mergeMap((apiResult: APIResult) => {
           return apiResultService.update(apiResult);
-        }, 1)
+        })
       );
 
       return forkJoin(addAllTasks$, updateApiResult$);
