@@ -132,4 +132,7 @@ export const statisticService = new StatisticService();
 
 // compute some dossier duration in days
 const computeDuration = (dossier: DSDossier) =>
-  differenceInDays(dossier.processed_at, dossier.initiated_at);
+  differenceInDays(
+    new Date(dossier.processed_at),
+    new Date(dossier.initiated_at)
+  );
