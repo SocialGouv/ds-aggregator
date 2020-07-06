@@ -46,7 +46,7 @@
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.1.0",
     "node-cron": "^2.0.3",
-    "objection": "^2.2.0",
+    "objection": "^2.2.1",
     "pg": "^8.2.1",
     "rxjs": "^6.6.0",
     "tslib": "^2.0.0",
