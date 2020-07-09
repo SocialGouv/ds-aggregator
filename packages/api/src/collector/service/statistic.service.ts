@@ -118,7 +118,7 @@ class StatisticService {
   }
 
   private getMonthlyStatistic(stat: Statistic, date: Date) {
-    const monthKey = format(date, "YYYY-MM");
+    const monthKey = format(date, "yyyy-MM");
     let monthStat = stat.monthly[monthKey];
     if (!monthStat) {
       monthStat = initStatisticBlock();

@@ -17,7 +17,7 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.on("error", (err, ctx: Koa.Context) => {
-  logger.error(`[error] ${ctx.originalUrl} `, err);
+  logger.error(`[error] ${ctx.originalUrl}`, err);
   captureException(err);
 });
 
