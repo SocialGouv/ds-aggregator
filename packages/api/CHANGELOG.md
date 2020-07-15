@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.1](https://github.com/SocialGouv/ds-aggregator/compare/v5.1.0...v5.1.1) (2020-07-15)
+
+
+### Bug Fixes
+
+* **logger:** restore logform years format ([cf05334](https://github.com/SocialGouv/ds-aggregator/commit/cf05334fdcea3bbefd5407e2015d9a579176ed89))
+
+
+
+
+
 # [5.1.0](https://github.com/SocialGouv/ds-aggregator/compare/v5.0.0...v5.1.0) (2020-07-15)
 
 
