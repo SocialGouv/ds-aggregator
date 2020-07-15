@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.1.0](https://github.com/SocialGouv/ds-aggregator/compare/v5.0.0...v5.1.0) (2020-07-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2 ([#56](https://github.com/SocialGouv/ds-aggregator/issues/56)) ([7954260](https://github.com/SocialGouv/ds-aggregator/commit/7954260f7f88b6b12ed83a19d87874ccd3492b37))
+* replave YYYY with yyyy for date-fn ([7f8ec2d](https://github.com/SocialGouv/ds-aggregator/commit/7f8ec2df60d7fc5a42f447a3c07ef883315338ae))
+* **deps:** update dependency knex to ^0.21.2 ([#278](https://github.com/SocialGouv/ds-aggregator/issues/278)) ([e111742](https://github.com/SocialGouv/ds-aggregator/commit/e111742508aa626ceded12d61c18e8773907e656))
+* **deps:** update dependency objection to ^2.2.1 ([#273](https://github.com/SocialGouv/ds-aggregator/issues/273)) ([a45c94a](https://github.com/SocialGouv/ds-aggregator/commit/a45c94a292e8359f88fb74c8ef3b00f6e372296f))
+* **deps:** update dependency pg to ^8.2.2 ([#275](https://github.com/SocialGouv/ds-aggregator/issues/275)) ([26d65ba](https://github.com/SocialGouv/ds-aggregator/commit/26d65baa568467397f1615feb6648d2134d52c42))
+* **deps:** update dependency pg to ^8.3.0 ([#277](https://github.com/SocialGouv/ds-aggregator/issues/277)) ([a2bc96f](https://github.com/SocialGouv/ds-aggregator/commit/a2bc96f94cb2015bf0c6857d6015503be82f46e6))
+* **deps:** update dependency rxjs to ^6.6.0 ([#271](https://github.com/SocialGouv/ds-aggregator/issues/271)) ([a76c02a](https://github.com/SocialGouv/ds-aggregator/commit/a76c02ae066469c7abf0daa2c53f68780090e2db))
+* **deps:** update sentry monorepo to ^5.19.0 ([#266](https://github.com/SocialGouv/ds-aggregator/issues/266)) ([72acc3d](https://github.com/SocialGouv/ds-aggregator/commit/72acc3d0d426ea06aee69054421d87b62f734dd0))
+* **deps:** update sentry monorepo to ^5.19.1 ([#276](https://github.com/SocialGouv/ds-aggregator/issues/276)) ([4bd3133](https://github.com/SocialGouv/ds-aggregator/commit/4bd31335afe0608e7cd2e1fcee5febf3dba55d63))
+* **deps:** update sentry monorepo to ^5.19.2 ([#281](https://github.com/SocialGouv/ds-aggregator/issues/281)) ([1dde065](https://github.com/SocialGouv/ds-aggregator/commit/1dde065554acdeda1895267a6a4b049eadff5d9c))
+
+
+### Features
+
+* **dossier:** add search columns migration ([87847ba](https://github.com/SocialGouv/ds-aggregator/commit/87847bab7facec462444878ad2987d82af32c38f))
+
+
+### Performance Improvements
+
+* remove mergemap limitation ([#268](https://github.com/SocialGouv/ds-aggregator/issues/268)) ([0f1cae8](https://github.com/SocialGouv/ds-aggregator/commit/0f1cae8ca6df1a695707d3d3ad7602376b229d4a))
+
+
+### Reverts
+
+* Revert "chore(deps): update dependency socialgouv/gitlab-ci-yml to v16 (#227)" ([369fee0](https://github.com/SocialGouv/ds-aggregator/commit/369fee0464631af7ab92f69e7ac475ce6762e948)), closes [#227](https://github.com/SocialGouv/ds-aggregator/issues/227)
+
+
+
+
+
 # [5.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v4.3.1...v5.0.0) (2020-07-01)
 
 
