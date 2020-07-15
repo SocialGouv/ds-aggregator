@@ -32,7 +32,7 @@ const errorStackFormat = format((info: any) => {
 
 const alignedWithColorsAndTime = format.combine(
   format.colorize(),
-  format.timestamp({ format: "yyyy-MM-DD HH:mm:ss" }),
+  format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
   errorStackFormat(),
   format.printf((info: any) => {
     const { timestamp, level, message, stack, ...args } = info;
