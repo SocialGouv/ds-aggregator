@@ -7,6 +7,13 @@ variables:
   AUTO_DEVOPS_RELEASE_AUTO: "🔖"
   AUTO_DEVOPS_PRODUCTION_AUTO: "🚀"
 
+Release:
+  variables:
+    SEMANTIC_RELEASE_PLUGINS: |
+      @semantic-release/changelog
+      @semantic-release/exec
+      @semantic-release/git
+
 Test:
   retry: 2
   variables:
