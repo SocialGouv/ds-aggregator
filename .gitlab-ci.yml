@@ -10,3 +10,10 @@ variables:
 Test:
   variables:
     ENVIRONMENT_TYPE: dev.local
+
+Register image:
+  variables:
+    CONTEXT: .
+    DOCKER_BUILD_ARGS: >-
+      --file /packages/api/Dockerfile
+      --shm-size 256M
