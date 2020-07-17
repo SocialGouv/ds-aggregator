@@ -6,3 +6,7 @@ include:
 variables:
   AUTO_DEVOPS_RELEASE_AUTO: "🔖"
   AUTO_DEVOPS_PRODUCTION_AUTO: "🚀"
+
+Test:
+  variables:
+    ENVIRONMENT_TYPE: dev.local
