@@ -11,6 +11,12 @@ Test:
   variables:
     ENVIRONMENT_TYPE: dev.local
 
+Build:
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - packages/api/dist
+
 Register image:
   needs:
     - job: Build
