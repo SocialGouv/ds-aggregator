@@ -516,7 +516,7 @@ jsonpath@^1.0.2:
     static-eval "2.0.2"
     underscore "1.7.0"
 
-kosko@^0.9.0:
+kosko@^0.9.2:
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/kosko/-/kosko-0.9.2.tgz#724353deee1cfc5773ef0f10b357a8822173205b"
   integrity sha512-pT7LL9KEs+4YSJ8FutqvdUkhimZlxEwir+xVcQxJRERCKOPk1/AxgG9PZdOJ+MwUcDGvv/Bps57Kvt6SipVSmA==
