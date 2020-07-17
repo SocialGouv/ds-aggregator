@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.0...v6.0.1) (2020-07-17)
+
+
+### Bug Fixes
+
+* **k8s:** wrong module name ([3627519](https://github.com/SocialGouv/ds-aggregator/commit/3627519f83c46c65e7f47fbe3a89af2d4f7cc103))
+
+
+
+
+
 # [6.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v5.1.1...v6.0.0) (2020-07-17)
 
 
