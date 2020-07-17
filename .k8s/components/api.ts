@@ -13,14 +13,20 @@ ok(deployment.spec);
 ok(deployment.spec.template.spec);
 deployment.spec.template.spec.containers[0].livenessProbe = {
   httpGet: {
-    port: params.containerPort,
+    port: "http",
     path: "/api/liveness",
   },
 };
 deployment.spec.template.spec.containers[0].readinessProbe = {
   httpGet: {
-    port: params.containerPort,
+    port: "http",
     path: "/api/readiness",
+  },
+};
+deployment.spec.template.spec.containers[0].startupProbe = {
+  httpGet: {
+    port: "http",
+    path: "/api/liveness",
   },
 };
 deployment.spec.template.spec.containers[0].envFrom = [
