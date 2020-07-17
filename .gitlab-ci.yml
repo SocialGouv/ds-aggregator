@@ -12,6 +12,9 @@ Test:
     ENVIRONMENT_TYPE: dev.local
 
 Register image:
+  needs:
+    - job: Build
+      artifacts: true
   variables:
     CONTEXT: .
     DOCKER_BUILD_ARGS: >-

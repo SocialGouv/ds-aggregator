@@ -2,10 +2,11 @@
   "private": true,
   "scripts": {
     "build": "lerna run build",
+    "coverage": "lerna run test --parallel -- --coverage",
+    "k8s": "yarn --silent --cwd .k8s",
     "lint": "lerna run lint --parallel",
     "start": "lerna run start --parallel",
-    "test": "lerna run test --parallel",
-    "coverage": "lerna run test --parallel -- --coverage"
+    "test": "lerna run test --parallel"
   },
   "dependencies": {
     "lerna": "^3.22.1"
