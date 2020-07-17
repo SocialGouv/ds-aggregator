@@ -37,7 +37,7 @@
     debug "^4.1.1"
     tslib "^1.10.0"
 
-"@kosko/env@^0.5.0":
+"@kosko/env@^0.5.2":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@kosko/env/-/env-0.5.2.tgz#2609915f30057e40afa3abf7a4a9bdb281c0d58b"
   integrity sha512-L1ZCCCFdkw1IhBehqmVU81OA7qcQhBlfHK6LLJtumvWRjlPqq6qe2PkhZlSKlJPm8/IL9yjtl1G9b4kYcncUKg==
