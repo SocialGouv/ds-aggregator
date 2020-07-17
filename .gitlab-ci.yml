@@ -27,3 +27,7 @@ Register image:
       --file ./packages/api/Dockerfile
       --shm-size 256M
     IMAGE_NAME: $CI_REGISTRY_IMAGE/api
+
+Review:
+  variables:
+    KOSKO_APPEND_YAML_FROM: .k8s/environments/dev
