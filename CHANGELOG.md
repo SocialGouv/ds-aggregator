@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.5](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.4...v6.0.5) (2020-07-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @kosko/env to ^0.5.2 ([#286](https://github.com/SocialGouv/ds-aggregator/issues/286)) ([35bb7da](https://github.com/SocialGouv/ds-aggregator/commit/35bb7daa71ee31f2b89bdf776c00ef2f8d3bf425))
+
+
+
+
+
 ## [6.0.4](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.3...v6.0.4) (2020-07-17)
 
 
