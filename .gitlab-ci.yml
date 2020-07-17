@@ -8,6 +8,7 @@ variables:
   AUTO_DEVOPS_PRODUCTION_AUTO: "🚀"
 
 Test:
+  retry: 2
   variables:
     ENVIRONMENT_TYPE: dev.local
 
