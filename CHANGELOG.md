@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0](https://github.com/SocialGouv/ds-aggregator/compare/v5.1.1...v6.0.0) (2020-07-17)
+
+
+* refactor(gitlab)!: update socialgouv/gitlab-ci-yml to v17.0.0-beta (#284) ([41af3c2](https://github.com/SocialGouv/ds-aggregator/commit/41af3c271034d45b8af25b237dc297782c259bde)), closes [#284](https://github.com/SocialGouv/ds-aggregator/issues/284)
+
+
+### BREAKING CHANGES
+
+* We now deploy on the cluster prod2
+
+
+
+
+
 ## [5.1.1](https://github.com/SocialGouv/ds-aggregator/compare/v5.1.0...v5.1.1) (2020-07-15)
 
 
