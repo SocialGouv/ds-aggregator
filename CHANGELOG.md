@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.2](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.1...v6.0.2) (2020-07-17)
+
+
+### Bug Fixes
+
+* **k8s:** change startupProbe ([5c1ea5e](https://github.com/SocialGouv/ds-aggregator/commit/5c1ea5e68384c11720de07bbefe0cde5676481a1))
+* **k8s:** restore preprod gitlab generated namespace name ([2882cae](https://github.com/SocialGouv/ds-aggregator/commit/2882cae56877f6345ed710ede4a2496404f98501))
+
+
+
+
+
 ## [6.0.1](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.0...v6.0.1) (2020-07-17)
 
 
