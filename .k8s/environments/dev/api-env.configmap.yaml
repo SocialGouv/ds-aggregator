@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: api-env
+data:
+  ENVIRONMENT_TYPE: "dev.local"
+  API_PORT: "4000"
+  PGSSLMODE: "require"

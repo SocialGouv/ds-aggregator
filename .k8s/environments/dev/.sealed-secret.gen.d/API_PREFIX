@@ -1,0 +1,5 @@
+#!/bin/bash
+
+date | md5sum | head -c 16 \
+  | parallel --pipe --tee -v {} ::: \
+    "sealed_as api-env ${0} --scope cluster-wide"
