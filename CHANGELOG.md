@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.8](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.7...v6.0.8) (2020-07-20)
+
+
+### Bug Fixes
+
+* **k8s:** prod should not use dev globalenv... ([72db1de](https://github.com/SocialGouv/ds-aggregator/commit/72db1deaf2ca67f920ca9617d997398d52ff8b66))
+
+
+
+
+
 ## [6.0.7](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.6...v6.0.7) (2020-07-20)
 
 
