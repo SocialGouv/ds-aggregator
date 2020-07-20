@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.9](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.8...v6.0.9) (2020-07-20)
+
+
+### Bug Fixes
+
+* **k8s:** dev can use up to 1Gi ([4e3a7cd](https://github.com/SocialGouv/ds-aggregator/commit/4e3a7cde908afddcf04692e094024dc907202fc4))
+* **k8s:** prod can use up to 1Gi ([40b8a72](https://github.com/SocialGouv/ds-aggregator/commit/40b8a72e1269eb16a4f834e68c3272b5af06917c))
+
+
+
+
+
 ## [6.0.8](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.7...v6.0.8) (2020-07-20)
 
 
