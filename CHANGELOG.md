@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.6](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.5...v6.0.6) (2020-07-20)
+
+
+### Bug Fixes
+
+* **k8s:** change basic request limit ([756870e](https://github.com/SocialGouv/ds-aggregator/commit/756870e3f5eca8d4a3366508521777f20ff8b6b8))
+* **k8s:** change production subdomain ([1ba8f7f](https://github.com/SocialGouv/ds-aggregator/commit/1ba8f7fecbde4d543640749b06637e981c4c7157))
+* **k8s:** ensure that the sealed secret is linked to a fixed namespace in production ([#291](https://github.com/SocialGouv/ds-aggregator/issues/291)) ([f256d51](https://github.com/SocialGouv/ds-aggregator/commit/f256d51fb65d906aa6dd3d40bde45ac4b56ce0c9))
+
+
+
+
+
 ## [6.0.5](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.4...v6.0.5) (2020-07-17)
 
 
