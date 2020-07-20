@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.7](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.6...v6.0.7) (2020-07-20)
+
+
+### Bug Fixes
+
+* **k8s:** boost production api ([bae45cc](https://github.com/SocialGouv/ds-aggregator/commit/bae45cc940a227111bb3d4941f6af1797746e62c))
+
+
+
+
+
 ## [6.0.6](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.5...v6.0.6) (2020-07-20)
 
 

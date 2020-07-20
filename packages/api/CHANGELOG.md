@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.7](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.6...v6.0.7) (2020-07-20)
+
+**Note:** Version bump only for package api
+
+
+
+
+
 ## [6.0.6](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.5...v6.0.6) (2020-07-20)
 
 **Note:** Version bump only for package api
