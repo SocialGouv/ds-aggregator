@@ -23,6 +23,16 @@ const env: AppComponentEnvironment = {
   },
   name: "api",
 
+  requests: {
+    cpu: "5m",
+    memory: "128Mi",
+  },
+
+  limits: {
+    cpu: "25m",
+    memory: "256Mi",
+  },
+
   servicePort: 80,
 };
 
