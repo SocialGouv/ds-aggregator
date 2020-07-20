@@ -8,6 +8,6 @@ export default {
 
   limits: {
     cpu: "1000m",
-    memory: "256Mi",
+    memory: "1Gi",
   },
 } as Partial<GlobalEnvironment>;
