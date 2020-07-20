@@ -29,7 +29,7 @@ const env: AppComponentEnvironment = {
   },
 
   limits: {
-    cpu: "25m",
+    cpu: "50m",
     memory: "256Mi",
   },
 
