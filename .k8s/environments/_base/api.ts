@@ -30,7 +30,7 @@ const env: AppComponentEnvironment = {
 
   limits: {
     cpu: "100m",
-    memory: "256Mi",
+    memory: "1Gi",
   },
 
   servicePort: 80,
