@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.10](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.9...v6.0.10) (2020-07-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency kubernetes-models to ^0.8.1 ([#293](https://github.com/SocialGouv/ds-aggregator/issues/293)) ([172cfbc](https://github.com/SocialGouv/ds-aggregator/commit/172cfbc8125b497962395b44a43e5075b7ac9ca2))
+
+
+
+
+
 ## [6.0.9](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.8...v6.0.9) (2020-07-20)
 
 
