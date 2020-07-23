@@ -1,5 +1,12 @@
 import { combineLatest, Observable, of } from "rxjs";
-import { exhaustMap, flatMap, mergeMap, reduce, tap } from "rxjs/operators";
+import {
+  exhaustMap,
+  flatMap,
+  mergeMap,
+  reduce,
+  tap,
+  concatMap,
+} from "rxjs/operators";
 import {
   dossierService,
   dsProcedureConfigService,
@@ -20,10 +27,7 @@ export const taskScheduler = {
         allTasksToComplete(),
         dsProcedureConfigService.all()
       ).pipe(
-        mergeMap(
-          ([task, procedures]) => processTask(task, procedures),
-          undefined
-        ),
+        concatMap(([task, procedures]) => processTask(task, procedures)),
         reduce((acc: any[], record: any) => {
           acc.push(record);
           return acc;
