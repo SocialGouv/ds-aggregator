@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.12](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.11...v6.0.12) (2020-07-24)
+
+
+### Bug Fixes
+
+* **task-scheduler:** use concatMap to avoid crashing DS ([#295](https://github.com/SocialGouv/ds-aggregator/issues/295)) ([d3ab904](https://github.com/SocialGouv/ds-aggregator/commit/d3ab904342845d7d9dc3fcf8e48735ea610fb39a))
+
+
+
+
+
 ## [6.0.11](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.10...v6.0.11) (2020-07-21)
 
 
