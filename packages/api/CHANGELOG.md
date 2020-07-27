@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.14](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.13...v6.0.14) (2020-07-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency objection to ^2.2.2 ([#299](https://github.com/SocialGouv/ds-aggregator/issues/299)) ([9618074](https://github.com/SocialGouv/ds-aggregator/commit/96180746b2fbebdae11d325a726dda9cf6175987))
+
+
+
+
+
 ## [6.0.13](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.12...v6.0.13) (2020-07-24)
 
 
