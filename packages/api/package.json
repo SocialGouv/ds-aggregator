@@ -50,7 +50,7 @@
     "objection": "^2.2.2",
     "pg": "^8.3.0",
     "rxjs": "^6.6.0",
-    "tslib": "^2.0.0",
+    "tslib": "^2.0.1",
     "typed-rest-client": "^1.7.3",
     "winston": "^3.3.3"
   }
