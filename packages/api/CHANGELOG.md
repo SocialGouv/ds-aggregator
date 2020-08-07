@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.16](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.15...v6.0.16) (2020-08-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency rxjs to ^6.6.2 ([#306](https://github.com/SocialGouv/ds-aggregator/issues/306)) ([5ccaadf](https://github.com/SocialGouv/ds-aggregator/commit/5ccaadf480e098233da5a148723dbab0467d9b45))
+
+
+
+
+
 ## [6.0.15](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.14...v6.0.15) (2020-08-07)
 
 
