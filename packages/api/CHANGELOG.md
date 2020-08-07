@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.15](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.14...v6.0.15) (2020-08-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tslib to ^2.0.1 ([#314](https://github.com/SocialGouv/ds-aggregator/issues/314)) ([80e44aa](https://github.com/SocialGouv/ds-aggregator/commit/80e44aad9e7d5015cea3c063fd7558f6e4a79e65))
+
+
+
+
+
 ## [6.0.14](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.13...v6.0.14) (2020-07-27)
 
 
