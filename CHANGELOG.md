@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.19](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.18...v6.0.19) (2020-08-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency koa-router to ^9.4.0 ([#323](https://github.com/SocialGouv/ds-aggregator/issues/323)) ([6fc30fa](https://github.com/SocialGouv/ds-aggregator/commit/6fc30faba8894620444393415adf984bf76f0cfb))
+
+
+
+
+
 ## [6.0.18](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.17...v6.0.18) (2020-08-12)
 
 
