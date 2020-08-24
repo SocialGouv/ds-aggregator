@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.25](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.24...v6.0.25) (2020-08-24)
+
+
+### Bug Fixes
+
+* **deps:** update sentry monorepo to ^5.21.4 ([#338](https://github.com/SocialGouv/ds-aggregator/issues/338)) ([b30a081](https://github.com/SocialGouv/ds-aggregator/commit/b30a081fb3074a82160630de3d2a17108bb78923))
+
+
+
+
+
 ## [6.0.24](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.23...v6.0.24) (2020-08-21)
 
 
