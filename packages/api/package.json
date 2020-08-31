@@ -40,7 +40,7 @@
     "@koa/cors": "^3.1.0",
     "@sentry/integrations": "^5.22.3",
     "@sentry/node": "^5.22.3",
-    "date-fns": "^2.16.0",
+    "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
     "knex": "^0.21.5",
     "koa": "^2.13.0",
