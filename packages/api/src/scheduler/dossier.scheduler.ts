@@ -1,5 +1,5 @@
-import { combineLatest, Observable, forkJoin } from "rxjs";
-import { concatMap, flatMap, map, mergeMap, tap, share } from "rxjs/operators";
+import { combineLatest, Observable } from "rxjs";
+import { concatMap, flatMap, map, mergeMap, tap } from "rxjs/operators";
 import {
   apiResultService,
   dsProcedureConfigService,
@@ -27,7 +27,7 @@ interface SyncContext {
 export const dossierScheduler = {
   start: () => {
     handleScheduler(configuration.schedulerCronDS, "dossier-synchro", () => {
-      const apiResult$ = syncProcedures().pipe(
+      return syncProcedures().pipe(
         mergeMap((x: ProcedureRecord) => buildSyncContext(x)),
         map((x: SyncContext) => {
           const actions = getSynchroActions(x.items, x.apiResult);
@@ -35,36 +35,27 @@ export const dossierScheduler = {
           x.apiResult.actions = actions;
           return x.apiResult;
         }),
-        share()
-      );
-
-      const addAllTasks$ = apiResult$.pipe(
-        tap((apiResult) =>
-          logger.info(
-            `[dossier.scheduler] procedure#${apiResult.procedure} - add ${apiResult.actions.length} actions`
-          )
-        ),
         flatMap((x: APIResult) =>
           x.actions.map((a: SynchroAction) => ({ action: a, apiResult: x }))
         ),
-        mergeMap(({ action }) => {
-          return taskService.addTask(
-            action.action,
-            action.procedure,
-            action.item.id,
-            action.item.state,
-            action.item.updated_at
-          );
-        })
-      );
-
-      const updateApiResult$ = apiResult$.pipe(
+        mergeMap(
+          (input: { action: SynchroAction; apiResult: APIResult }) => {
+            return taskService.addTask(
+              input.action.action,
+              input.action.procedure,
+              input.action.item.id,
+              input.action.item.state,
+              input.action.item.updated_at
+            );
+          },
+          (input: { action: SynchroAction; apiResult: APIResult }) =>
+            input.apiResult,
+          5
+        ),
         mergeMap((apiResult: APIResult) => {
           return apiResultService.update(apiResult);
         })
       );
-
-      return forkJoin(addAllTasks$, updateApiResult$);
     });
   },
 };
