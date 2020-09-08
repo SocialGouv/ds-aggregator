@@ -74,7 +74,7 @@ function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
 function allTasksToComplete(): Observable<Task> {
   return taskService.getTasksToComplete().pipe(
     tap((tasks) => {
-      logger.debug(`[task.scheduler] process ${tasks.length} to complete`);
+      logger.info(`[task.scheduler] process ${tasks.length} to complete`);
     }),
     flatMap((x: Task[]) => x)
   );
