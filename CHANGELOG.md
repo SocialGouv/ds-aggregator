@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.33](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.32...v6.0.33) (2020-09-08)
+
+
+### Bug Fixes
+
+* **dossier-sync:** remove share operator ([#353](https://github.com/SocialGouv/ds-aggregator/issues/353)) ([1fcde6e](https://github.com/SocialGouv/ds-aggregator/commit/1fcde6ec0eb2ebdb48d0e256a5c263267c16c51b))
+
+
+
+
+
 ## [6.0.32](https://github.com/SocialGouv/ds-aggregator/compare/v6.0.31...v6.0.32) (2020-09-06)
 
 
