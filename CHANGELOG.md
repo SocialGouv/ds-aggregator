@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.2](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.1...v6.1.2) (2020-09-09)
+
+
+### Bug Fixes
+
+* **sync-dossier:** update processed_at property ([057d9e8](https://github.com/SocialGouv/ds-aggregator/commit/057d9e8ce94dfbd1f1c97650681243b00fed29b0))
+
+
+
+
+
 ## [6.1.1](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.0...v6.1.1) (2020-09-09)
 
 
