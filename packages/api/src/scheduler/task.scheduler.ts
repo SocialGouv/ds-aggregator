@@ -24,7 +24,7 @@ export const taskScheduler = {
   start: () => {
     handleScheduler(configuration.schedulerCronTask, "task", () => {
       return allTasksToComplete().pipe(
-        mergeMap((task) => processTask(task), 5),
+        mergeMap((task) => processTask(task), 2),
         reduce((acc: any[], record: any) => {
           acc.push(record);
           return acc;
