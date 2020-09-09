@@ -35,38 +35,7 @@ class DossierService {
     return dossierRepository.deleteByDsKey(`${procedureId}-${dossierId}`);
   }
 
-  public update(
-    record: DossierRecord,
-    dossier: DSDossier
-  ): Observable<DossierRecord> {
-    if (!record.id) {
-      throw new Error("Trying to update reord without id!!");
-    }
-
-    const instructorsHistory = buildInstructorsHistory(
-      record.metadata.instructors_history,
-      dossier.instructeurs
-    );
-    record.state = dossier.state;
-    record.processed_at = new Date(dossier.processed_at);
-    record.last_modified = new Date();
-    record.ds_data = dossier;
-    record.metadata = {
-      ...record.metadata,
-      created_at: asTimestamp(dossier.created_at) || 0,
-      initiated_at: asTimestamp(dossier.initiated_at),
-      instructors_history: dossier.instructeurs ? dossier.instructeurs : [],
-      processed_at: asTimestamp(dossier.processed_at),
-      received_at: asTimestamp(dossier.received_at),
-      state: dossier.state,
-      updated_at: asTimestamp(dossier.updated_at),
-    };
-    record.metadata.instructors_history = instructorsHistory;
-
-    return dossierRepository.update(record.id, record);
-  }
-
-  public save(
+  public saveOrUpdate(
     group: { id: string; label: string },
     procedureId: number,
     dossier: DSDossier
@@ -99,6 +68,8 @@ class DossierService {
         } else {
           const loadedRecord = dossiers[0];
           loadedRecord.ds_data = wifDossier.ds_data;
+          loadedRecord.state = wifDossier.state;
+          loadedRecord.last_modified = wifDossier.last_modified;
           loadedRecord.metadata = wifDossier.metadata;
           loadedRecord.metadata.instructors_history = buildInstructorsHistory(
             loadedRecord.metadata.instructors_history,

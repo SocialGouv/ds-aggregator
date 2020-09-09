@@ -1,11 +1,11 @@
-import { combineLatest, Observable, of } from "rxjs";
+import { Observable, of } from "rxjs";
 import {
   exhaustMap,
   flatMap,
   mergeMap,
-  reduce,
   tap,
-  concatMap,
+  reduce,
+  map,
 } from "rxjs/operators";
 import {
   dossierService,
@@ -14,20 +14,17 @@ import {
   Task,
   taskService,
 } from "../collector";
-import { statisticService } from "../collector/service/statistic.service";
 import { configuration } from "../config";
 import { dossierSynchroService } from "./dossier-synchro.service";
 import { handleScheduler } from "./scheduler.service";
 import { logger } from "../util";
+import { statisticService } from "../collector/service/statistic.service";
 
 export const taskScheduler = {
   start: () => {
     handleScheduler(configuration.schedulerCronTask, "task", () => {
-      return combineLatest(
-        allTasksToComplete(),
-        dsProcedureConfigService.all()
-      ).pipe(
-        concatMap(([task, procedures]) => processTask(task, procedures)),
+      return allTasksToComplete().pipe(
+        mergeMap((task) => processTask(task), 5),
         reduce((acc: any[], record: any) => {
           acc.push(record);
           return acc;
@@ -43,21 +40,23 @@ export const taskScheduler = {
   },
 };
 
-function processTask(taskToTreat: Task, procedures: ProcedureConfig[]) {
+function processTask(taskToTreat: Task) {
   return of(taskToTreat).pipe(
     mergeMap(
       (task: Task) => {
-        const procedure =
-          procedures.find((p: ProcedureConfig) =>
-            p.procedures.includes(task.procedure_id)
-          ) || null;
         if (task.action === "add_or_update") {
-          return dossierSynchroService.syncDossier(
-            task.procedure_id,
-            task.dossier_id,
-            null,
-            procedure
-          );
+          return dsProcedureConfigService
+            .findByProcedureId(task.procedure_id)
+            .pipe(
+              map((res: ProcedureConfig[]) => res[0]),
+              mergeMap((procedure) =>
+                dossierSynchroService.syncDossier(
+                  task.procedure_id,
+                  task.dossier_id,
+                  procedure
+                )
+              )
+            );
         } else {
           return dossierService.deleteByProcedureIdAndDossierId(
             task.procedure_id,
