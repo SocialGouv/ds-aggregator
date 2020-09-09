@@ -69,6 +69,7 @@ class DossierService {
           const loadedRecord = dossiers[0];
           loadedRecord.ds_data = wifDossier.ds_data;
           loadedRecord.state = wifDossier.state;
+          loadedRecord.processed_at = wifDossier.processed_at;
           loadedRecord.last_modified = wifDossier.last_modified;
           loadedRecord.metadata = wifDossier.metadata;
           loadedRecord.metadata.instructors_history = buildInstructorsHistory(
