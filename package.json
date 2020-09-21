@@ -3,6 +3,7 @@
   "scripts": {
     "build": "lerna run build",
     "coverage": "lerna run test --parallel -- --coverage",
+    "e2e": "lerna run e2e",
     "k8s": "yarn --silent --cwd .k8s",
     "lint": "lerna run lint --parallel",
     "start": "lerna run start --parallel",
