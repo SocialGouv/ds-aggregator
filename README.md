@@ -1,7 +1,7 @@
 # ds-aggregator
 
-[![pipeline status](https://gitlab.factory.social.gouv.fr/SocialGouv/ds-aggregator/badges/master/pipeline.svg)](https://gitlab.factory.social.gouv.fr/SocialGouv/ds-aggregator/commits/master)
-[![Build Status](https://travis-ci.com/SocialGouv/ds-aggregator.svg?branch=master)](https://travis-ci.com/SocialGouv/ds-aggregator)
+[![pipeline status](https://img.shields.io/badge/pipeline-gitlab-orange?logo=gitlab)](https://gitlab.factory.social.gouv.fr/SocialGouv/ds-aggregator/-/commits/master)
+[![Github Master CI Status](https://github.com/SocialGouv/ds-aggregator/workflows/ci/badge.svg?branch=master)](https://github.com/SocialGouv/ds-aggregator/actions/)
 [![codecov](https://codecov.io/gh/SocialGouv/ds-aggregator/branch/master/graph/badge.svg)](https://codecov.io/gh/SocialGouv/ds-aggregator)
 
 Ce dépot contient `api` qui synchronise les données de N démarches simplifiées dans une même base de données (kinto).
@@ -52,34 +52,4 @@ docker-compose up --build
 
 ## Release policy
 
-### Auto
-
-Trigger a custom build on [Travis](https://travis-ci.com/SocialGouv/ds-aggregator) (in the "More options" right menu) on the `master` branch with a custom config:
-
-```yml
-env:
-  global:
-    - RELEASE=true
-```
-
-You can change the lerna arguments though the `LERNA_ARGS` variable.
-
-```yml
-env:
-  global:
-    - LERNA_ARGS="major --force-publish --yes"
-    - RELEASE=true
-```
-
-### Manual
-
-You need an [Github token](https://github.com/settings/tokens/new) to release.
-
-```sh
-#
-# Bump, push to git and publish to npm
-$ GH_TOKEN=${GITHUB_TOKEN} yarn lerna version
-
-#
-# You might want to add a Gif to your release to make it groovy ;)
-```
+Releases are automaticly made through our [GitLab pipelines](https://gitlab.factory.social.gouv.fr/SocialGouv/ds-aggregator/pipelines) strictly following the [Semantic Versioning](http://semver.org/) specification thanks to [semantic-release](https://github.com/semantic-release/semantic-release).
