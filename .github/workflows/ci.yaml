@@ -59,6 +59,8 @@ jobs:
         run: yarn lint
 
       - name: Test
+        env:
+          ENVIRONMENT_TYPE: dev.local
         run: yarn coverage
 
       - name: Send test coverage to codecov
