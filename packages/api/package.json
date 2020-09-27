@@ -42,7 +42,7 @@
     "@sentry/node": "^5.24.2",
     "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
-    "knex": "^0.21.5",
+    "knex": "^0.21.6",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.4.0",
