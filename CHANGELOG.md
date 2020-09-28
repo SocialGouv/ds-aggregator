@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.9](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.8...v6.1.9) (2020-09-28)
+
+
+### Bug Fixes
+
+* **k8s:** update to SocialGouv/gitlab-ci-yml v17 ([#380](https://github.com/SocialGouv/ds-aggregator/issues/380)) ([6bd8e05](https://github.com/SocialGouv/ds-aggregator/commit/6bd8e05194cdf9ba0745958e9f3cd3f8b3942e7e))
+
+
+
+
+
 ## [6.1.8](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.7...v6.1.8) (2020-09-27)
 
 
