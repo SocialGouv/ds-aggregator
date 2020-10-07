@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: api-env
-  namespace: ${KUBE_NAMESPACE}
+  namespace: ds-aggregator
 data:
   ENVIRONMENT_TYPE: "prod"
   API_PORT: "4000"
