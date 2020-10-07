@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.10](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.9...v6.1.10) (2020-10-07)
+
+
+### Bug Fixes
+
+* **k8s:** force the namespace in production ([#386](https://github.com/SocialGouv/ds-aggregator/issues/386)) ([9457548](https://github.com/SocialGouv/ds-aggregator/commit/945754865193639babd409bc11b8285c4c34af78))
+
+
+
+
+
 ## [6.1.9](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.8...v6.1.9) (2020-09-28)
 
 
