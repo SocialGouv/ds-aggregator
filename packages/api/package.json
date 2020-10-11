@@ -22,7 +22,7 @@
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-router": "^7.4.1",
     "@types/koa__cors": "^3.0.2",
-    "@types/node": "^14.11.2",
+    "@types/node": "^14.11.8",
     "@types/node-cron": "^2.0.3",
     "@types/raven": "^2.5.3",
     "@types/rx": "^4.1.2",
@@ -50,7 +50,7 @@
     "objection": "^2.2.3",
     "pg": "^8.3.3",
     "rxjs": "^6.6.3",
-    "tslib": "^2.0.1",
+    "tslib": "^2.0.3",
     "typed-rest-client": "^1.7.3",
     "winston": "^3.3.3"
   }
