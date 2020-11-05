@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.2.0](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.10...v6.2.0) (2020-11-05)
+
+
+### Features
+
+* add a route to fetch introduction statistics ([#395](https://github.com/SocialGouv/ds-aggregator/issues/395)) ([ef86961](https://github.com/SocialGouv/ds-aggregator/commit/ef86961cec452d2212bbbdeca11b2d62dd84c971))
+
+
+
+
+
 ## [6.1.10](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.9...v6.1.10) (2020-10-07)
 
 **Note:** Version bump only for package api
