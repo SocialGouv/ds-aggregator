@@ -1,4 +1,5 @@
 import { Model } from "objection";
+import { ProcedureGroupType } from "../model";
 
 class ProcedureConfigModel extends Model {
   id!: string;
@@ -6,6 +7,7 @@ class ProcedureConfigModel extends Model {
   group!: {
     id: string;
     label: string;
+    type: ProcedureGroupType;
   };
 
   static get tableName() {

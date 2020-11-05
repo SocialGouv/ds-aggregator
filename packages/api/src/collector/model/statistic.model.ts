@@ -1,4 +1,5 @@
 import { IIdentifiable } from "../../util";
+import { ProcedureGroupType } from "./config.model";
 
 export interface LabelCount {
   count: number;
@@ -21,6 +22,7 @@ export interface Statistic extends IIdentifiable {
   group: {
     id: string;
     label: string;
+    type: ProcedureGroupType;
   };
   count: number;
   duration: number;
@@ -51,7 +53,11 @@ export interface Statistic extends IIdentifiable {
 
 // Répartition des dossiers par statut => data.status
 
-export const initStatistic = (group: { id: string; label: string }) => {
+export const initStatistic = (group: {
+  id: string;
+  label: string;
+  type: ProcedureGroupType;
+}) => {
   const block = initStatisticBlock();
   return {
     group,

@@ -46,7 +46,21 @@ router.post(`/${configuration.apiPrefix}/webhook`, async (ctx: Koa.Context) => {
 
 router.get(`/statistics/:group`, async (ctx: Koa.Context) => {
   const groupId = ctx.params.group;
-  const res = await statisticService.findByGroupId(groupId).toPromise();
+  const res = await statisticService
+    .findByGroup({ id: groupId, type: "autorisation" })
+    .toPromise();
+  ctx.body = {
+    result: res || {},
+    success: res ? true : false,
+  };
+  ctx.status = 200;
+});
+
+router.get(`/statistics-introduction/:group`, async (ctx: Koa.Context) => {
+  const groupId = ctx.params.group;
+  const res = await statisticService
+    .findByGroup({ id: groupId, type: "introduction" })
+    .toPromise();
   ctx.body = {
     result: res || {},
     success: res ? true : false,

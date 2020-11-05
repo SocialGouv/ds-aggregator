@@ -17,7 +17,11 @@ import {
   initStatisticBlock,
   Statistic,
 } from "../model/statistic.model";
-import { dossierRepository, statisticRepository } from "../repository";
+import {
+  dossierRepository,
+  GroupSearchParams,
+  statisticRepository,
+} from "../repository";
 import { dsProcedureConfigService } from "./ds-config.service";
 
 const DS_STATUSES_COMPLETED = ["closed", "refused", "without_continuation"];
@@ -32,6 +36,12 @@ class StatisticService {
         return null;
       })
     );
+  }
+
+  public findByGroup(group: GroupSearchParams) {
+    return statisticRepository
+      .findByGroup(group)
+      .pipe(map((res: Statistic[]) => (res.length > 0 ? res[0] : null)));
   }
 
   public statistic(): Observable<any> {
