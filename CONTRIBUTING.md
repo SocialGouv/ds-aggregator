@@ -81,3 +81,23 @@ Pour visualiser les statistiques dans `ds-dahsboard`, utiliser les API `/api/sta
 ```bash
 docker-compose up --build
 ```
+
+## Fetching data from Demarche Simplifiée API
+
+2 cron jobs are used to fetch data from the API and cache it into our database.
+
+`dossier.scheduler` will 
+- fetch the active procedures from our database
+- fetch the procedures data from demarche simplifiee
+- create in our database the procedures which don't exist
+- update the existing procedure
+- get all the "Dossier" items from the Demarche Simplifiee API
+- compare the fetched dossier items update date with the one in our db
+to check if we need to update it
+- add tasks to our database which contain the action "add_or_update" or "delete", the last update date and items infos.
+- register that we updated the items in the db at a specific time
+
+`task.scheduler` will
+- fetch the tasks from our database
+- fetch each `dossier` from demarches simplifiées api and update it in our database
+- delete each `dossier` marked as to delete

@@ -27,7 +27,8 @@ class StatisticRepository {
   public findByGroup(group: GroupSearchParams): Observable<Statistic[]> {
     return from(
       StatisticModel.query().whereRaw(
-        `"group" @> '${JSON.stringify(group)}'::jsonb`
+        `"group" @> ?::jsonb`,
+        JSON.stringify({ id: group.id, type: group.type })
       )
     );
   }
