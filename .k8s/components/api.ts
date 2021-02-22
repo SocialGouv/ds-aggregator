@@ -7,6 +7,7 @@ import { join } from "path";
 import { getHarborImagePath } from "@socialgouv/kosko-charts/utils/getHarborImagePath";
 import { addInitContainer } from "@socialgouv/kosko-charts/utils/addInitContainer";
 
+import { waitForPostgres } from "@socialgouv/kosko-charts/utils/waitForPostgres";
 import { importYamlFolder } from "@socialgouv/kosko-charts/components/yaml";
 
 const yamlManifests = importYamlFolder(
@@ -100,5 +101,8 @@ const initContainer = new Container({
   ],
 });
 addInitContainer(deployment, initContainer);
+addInitContainer(deployment, waitForPostgres({
+  secretRefName: "azure-pg-admin-user-dev",
+}));
 
 export default [...manifests, () => yamlManifests];
