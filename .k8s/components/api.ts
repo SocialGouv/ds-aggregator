@@ -10,6 +10,9 @@ import { addInitContainer } from "@socialgouv/kosko-charts/utils/addInitContaine
 import { waitForPostgres } from "@socialgouv/kosko-charts/utils/waitForPostgres";
 import { importYamlFolder } from "@socialgouv/kosko-charts/components/yaml";
 
+ok(process.env.CI_ENVIRONMENT_SLUG, "Missing CI_ENVIRONMENT_SLUG");
+const sha = process.env.CI_ENVIRONMENT_SLUG.replace(/-dev2$/g, "")
+
 const yamlManifests = importYamlFolder(
   join(__dirname, "..", `environments/${env.env}/yaml`)
 );
@@ -77,7 +80,7 @@ addInitContainer(
   waitForPostgres({
     secretRefName: process.env.CI_COMMIT_TAG
       ? "azure-pg-user"
-      : `azure-pg-user-${process.env.CI_COMMIT_REF_SLUG}`,
+      : `azure-pg-user-${sha}`,
   })
 );
 const initContainer = new Container({

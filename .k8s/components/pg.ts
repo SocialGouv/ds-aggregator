@@ -14,19 +14,20 @@ import { getDevDatabaseParameters } from "@socialgouv/kosko-charts/components/az
 
 
 export default () => {
-  ok(process.env.CI_COMMIT_REF_SLUG, "Missing CI_COMMIT_REF_SLUG");
+  ok(process.env.CI_ENVIRONMENT_SLUG, "Missing CI_ENVIRONMENT_SLUG");
   ok(process.env.CI_PROJECT_NAME, "Missing CI_PROJECT_NAME");
 
   const envParams = gitlab(process.env)
 
   if (env.env === "dev") {
-    const dbParams = getDevDatabaseParameters({suffix: process.env.CI_COMMIT_REF_SLUG})
+    const sha = process.env.CI_ENVIRONMENT_SLUG.replace(/-dev2$/g, "")
+    const dbParams = getDevDatabaseParameters({suffix: sha})
 
     const job = createDbJob(dbParams);
     updateMetadata(job, {
       annotations: envParams.annotations ?? {},
       labels: envParams.labels ?? {},
-      name: `create-db-job-${process.env.CI_COMMIT_REF_SLUG}`,
+      name: `create-db-job-${sha}`,
       namespace: envParams.namespace,
     });
 
@@ -35,7 +36,7 @@ export default () => {
       host: getPgServerHostname(process.env.CI_PROJECT_NAME, "dev"),
     });
     updateMetadata(secret, {
-      name: `azure-pg-user-${process.env.CI_COMMIT_REF_SLUG}`,
+      name: `azure-pg-user-${sha}`,
       namespace: envParams.namespace,
     });
 
