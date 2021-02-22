@@ -21,7 +21,7 @@ export default () => {
 
   if (env.env === "dev") {
     const sha = process.env.CI_ENVIRONMENT_SLUG.replace(/-dev2$/g, "")
-    const dbParams = getDevDatabaseParameters({suffix: sha})
+    const dbParams = getDevDatabaseParameters({suffix: sha.replace(/-/g, "_")})
 
     const job = createDbJob(dbParams);
     updateMetadata(job, {
