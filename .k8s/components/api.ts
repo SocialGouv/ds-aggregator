@@ -16,7 +16,6 @@ const yamlManifests = importYamlFolder(
 const manifests = create("api", {
   env,
   config: {
-    image: getHarborImagePath({ name: "ds-aggregator" }),
     containerPort: 4000,
     container: {
       envFrom: [

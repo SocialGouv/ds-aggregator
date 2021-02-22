@@ -61,7 +61,7 @@ spec:
     spec:
       containers:
         - image: >-
-            harbor.fabrique.social.gouv.fr/wif/ds-aggregator:0123456789abcdefghijklmnopqrstuvwxyz0123
+            registry.gitlab.factory.social.gouv.fr/socialgouv/ds-aggregator/api:0123456789abcdefghijklmnopqrstuvwxyz0123
           livenessProbe:
             failureThreshold: 6
             httpGet:
@@ -104,7 +104,7 @@ spec:
       initContainers:
         - name: knex-migrate
           image: >-
-            harbor.fabrique.social.gouv.fr/wif/ds-aggregator:0123456789abcdefghijklmnopqrstuvwxyz0123
+            registry.gitlab.factory.social.gouv.fr/socialgouv/ds-aggregator/api:0123456789abcdefghijklmnopqrstuvwxyz0123
           command:
             - yarn
           args:
@@ -215,5 +215,40 @@ spec:
       creationTimestamp: null
       name: api-env
     type: Opaque
+---
+apiVersion: batch/v1
+kind: Job
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      containers:
+        - command:
+            - create-db-user
+          env:
+            - name: NEW_DB_NAME
+              value: dsaggregator-master
+            - name: NEW_USER
+              value: dsaggregator-master
+            - name: NEW_PASSWORD
+              value: dsaggregator-master
+            - name: NEW_DB_EXTENSIONS
+              value: hstore pgcrypto citext uuid-ossp
+          envFrom:
+            - secretRef:
+                name: azure-pg-admin-user
+          image: >-
+            registry.gitlab.factory.social.gouv.fr/socialgouv/docker/azure-db:2.6.1
+          imagePullPolicy: IfNotPresent
+          name: create-db-user
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+      restartPolicy: Never
+  ttlSecondsAfterFinished: 86400
 "
 `;
