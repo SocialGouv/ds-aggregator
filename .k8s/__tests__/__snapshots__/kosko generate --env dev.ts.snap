@@ -102,6 +102,23 @@ spec:
             - secretRef:
                 name: api-env
       initContainers:
+        - env:
+            - name: WAIT_FOR_RETRIES
+              value: '24'
+          envFrom:
+            - secretRef:
+                name: azure-pg-user-master
+          image: >-
+            registry.gitlab.factory.social.gouv.fr/socialgouv/docker/wait-for-postgres:4.3.1
+          imagePullPolicy: Always
+          name: wait-for-postgres
+          resources:
+            limits:
+              cpu: 20m
+              memory: 32Mi
+            requests:
+              cpu: 5m
+              memory: 16Mi
         - name: knex-migrate
           image: >-
             registry.gitlab.factory.social.gouv.fr/socialgouv/ds-aggregator/api:0123456789abcdefghijklmnopqrstuvwxyz0123
@@ -202,8 +219,6 @@ spec:
   encryptedData:
     API_PREFIX: >-
       AgBQk2Bynx9f1u5cBilw3EtqXhMiERciKd0S9EvxgzQhm7t9VMRnb0CIWm6OZ+ceRYoXTnhnAKZoHdqIpbJyV2cMbS5MF+XhwqY4po8vcRRulwJizaldNePg74/SpqZxCIvidnrXkWXzAwEbSXRrSi6vPBX7700brROqtN4ltrMBsppohMpyuFbbUCmXkoXlT/32VS91PXex7U54OxEb1kZnqzJCqRIxagd4mZeAWpJH4kaxupPF2VZ6BkJkl0MLmfxwNAs/rk6zuO3Y0cu+GHwDkuXJAicOwa+zElEqJsFAgM1ANAP84vck5bJKFgJfd3H6/T5eUZSruial0gKQAXMAWu9EUIXClnOIF18n7qq2zgW3FPGfQuWf9j1ODhpMyPck/ggu5MYl1aHhjKZEh0pG12ceNeDuHgtuDoHnh2e8HQe5J1OU4lR846rmyRewcsYNEBKmTGvQec2AbQQs1m/DO9myNSMMP5PmW1gEd64xUwevIHxkL9laSS8h2MarwT6bwjvI0GUxHygg29PArNMxmxSgWy2w9rOJPYnVe32mtoobDIPGbDwUMFU/a6nU50Q4ghhY1/4QhoUwjBCQx0TaV/mIwUB2HSqNoS3PWDJlDw3TlNkJ3LMtMmVPj42tDDWh7Y2PhEypGI/St0lcFpxjNCUWhmbVKzINxdOwMDjtxWY3aTJoIbrSaa78QWuDQI4HNbUqt5OeZ8qXOVfSeQ7s
-    DATABASE_URL: >-
-      AgBt7zi4N6pN8ZbM9rNxR/EgpZhhNj1SR2Tdn2ESaIKLhUzNH3XypNHY9NQLT28Tjje9ZsL/b221hVJAROghhBvSvLvJc8q3mSbssPd8Bv2fqnKscnJFbBbcQTIewJG3YmR5fXVM9ENcC+eJkuQlmyJ+NmV/60zojMTWu62EgDry24x6hI/o8XZDYjxSsSdD1etiOUso2gOLdVzwBPxpyTB9MyS9bVU95ycdNF9JQYgYgNefU2eUov2bMF5ypCuGOw7oYBP4dIKGR/4Pyv1GCUh2nmtootDQYWcCR+sAbM68J9nOhVL+ji5UEfKHo7GLUqT4cK/R0XLLT+derp0C4xRpiT2yw4vK8T+KskIlUv0PzKtrAbSRe/XbEqqCORmIIL9GAuP34IqCBxqgOrraXAKzu5rhT0hfQcMsnE7TMR/WjJAdyeGkJ8b0CgLA9rV/j8/B+KsWTU8HG0QP8rhEjt5/w+wvoUh0Xecc9LS5jI4eKsuExneHzdOx9i9zTGhMmkh5Vkd57RmYN5c0Qh1vo19KSsDfTm1zMVhNMtBRTtjXNNH2WxArWK46GZpv4NFQcLm+sd91D8jjDEpyTCdRKvFvA4b7qtDKERQZQ/a/SAta6qtos1ABjCARPVJnmxU34ltdL5BblU8ZFGVOL0GB5zehow+MHiWsWI3VjSmy6VGm8z3CyHy2dcJY5trFeHsKcXAYY5R2MUKdhzkL7EE6/UN9pG/H8M58VqSQIzKuE9F+nbWP6Kl9z5NZbvUSesKYWtxrooaJmvPl/StSmhzCBn1YalyvxXqstXDNPdEnq05vcyUme1yEX29zAB0J3nnLlT1N4fXqHWNESSVpO0uRo+/M5h7rQrIu0FbL7TPlsJe3n/4zDZ4eDgiiY1Pc
     DS_TOKEN: >-
       AgBlQis+25xwkwcHTSmCA0WyZUCKuUMVnRhnUe9cqeAllei8knt/wYkauutrJNLt9LM+vqcea+vlxZohCLevyTGm/5YBC0bnZtVA6UA1o+DEp1k1NqGJIT0hKdC7oYm5PFUkGsS1y5F2P6fe15klqLcQHcoa1C8y/ZtkXVGNbxhmuzrJsRzZ9ri+WBD/IO1jdIfweYRq4RbnkfKw9WlE3/CirObrL9SNNlYwfpA4b2nr8c0sgqNRiLBK8wUo3u+QV3a0XRbuDUoD2C1K+9HvHZSTi5lxg5tN/h9A1Jev8NX9i6ja2ci2+kdniSTxv1oDfbloM9ozI1+z4MCQaslJ7yDrWfN8t8b21c254skErj40mx2EUJRovhOIT1N20nAIxJXBpl8LUt6JF+dHLnBoF3DIVVyO3dkBmx8YvvdhEZkQQNtkMynmWIrkuXh8RxZ2lsHqd8jVc0Ri8F/gVK3WJlC6FbJmuh0xvoxTreH5fWAr9IbBLskWGRy6bz3yZN2Uu3yMws7vodyC1ZFLXptfFcJbTu4Jo8cwb2aVw7niMqcgHq0S00jJCxoNff+w+iSrtmqCtccxMdqiUs8cf7SEAuIThYqtyIRkhIb0AX58JbBN4nX/8HQqTfdaL8NrmZnee/bfiOecOgUHA+OqEGAnctCKyrBvr5PVlBAIPg64uZBSKCb5q1dcAeYAFS+xfXVjiYwGNkcyrWEEvHBtjslGURLmw+FsZpTXMGn8THefJMG2zr3CFRO+vR9E
     SENTRY_DSN: >-
@@ -227,11 +242,11 @@ spec:
             - create-db-user
           env:
             - name: NEW_DB_NAME
-              value: dsaggregator-master
+              value: autodevops_master
             - name: NEW_USER
-              value: dsaggregator-master
+              value: user_master
             - name: NEW_PASSWORD
-              value: dsaggregator-master
+              value: password_master
             - name: NEW_DB_EXTENSIONS
               value: hstore pgcrypto citext uuid-ossp
           envFrom:
@@ -249,6 +264,48 @@ spec:
               cpu: 100m
               memory: 64Mi
       restartPolicy: Never
+    metadata:
+      annotations:
+        app.gitlab.com/app: socialgouv-ds-aggregator
+        app.gitlab.com/env: master-dev2
+        app.gitlab.com/env.name: master-dev2
+      labels:
+        application: master-dev2-ds-aggregator
+        owner: ds-aggregator
+        team: ds-aggregator
+        cert: wildcard
   ttlSecondsAfterFinished: 86400
+metadata:
+  annotations:
+    app.gitlab.com/app: socialgouv-ds-aggregator
+    app.gitlab.com/env: master-dev2
+    app.gitlab.com/env.name: master-dev2
+  labels:
+    application: master-dev2-ds-aggregator
+    owner: ds-aggregator
+    team: ds-aggregator
+    cert: wildcard
+  name: create-db-job-master
+  namespace: ds-aggregator-85-master-dev2
+---
+apiVersion: v1
+kind: Secret
+stringData:
+  DATABASE_URL: >-
+    postgresql://user_master%40dsaggregatordevserver.postgres.database.azure.com:password_master@dsaggregatordevserver.postgres.database.azure.com/autodevops_master?sslmode=require
+  DB_URI: >-
+    postgresql://user_master%40dsaggregatordevserver.postgres.database.azure.com:password_master@dsaggregatordevserver.postgres.database.azure.com/autodevops_master?sslmode=require
+  HASURA_GRAPHQL_DATABASE_URL: >-
+    postgresql://user_master%40dsaggregatordevserver.postgres.database.azure.com:password_master@dsaggregatordevserver.postgres.database.azure.com/autodevops_master?sslmode=require
+  PGDATABASE: autodevops_master
+  PGHOST: dsaggregatordevserver.postgres.database.azure.com
+  PGPASSWORD: password_master
+  PGRST_DB_URI: >-
+    postgresql://user_master%40dsaggregatordevserver.postgres.database.azure.com:password_master@dsaggregatordevserver.postgres.database.azure.com/autodevops_master?sslmode=require
+  PGSSLMODE: require
+  PGUSER: user_master@dsaggregatordevserver.postgres.database.azure.com
+metadata:
+  name: azure-pg-user-master
+  namespace: ds-aggregator-85-master-dev2
 "
 `;

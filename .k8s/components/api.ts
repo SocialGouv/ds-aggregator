@@ -72,6 +72,14 @@ ok(deployment);
 ok(deployment.spec);
 ok(deployment.spec.template.spec);
 
+addInitContainer(
+  deployment,
+  waitForPostgres({
+    secretRefName: process.env.CI_COMMIT_TAG
+      ? "azure-pg-user"
+      : `azure-pg-user-${process.env.CI_COMMIT_REF_SLUG}`,
+  })
+);
 const initContainer = new Container({
   name: "knex-migrate",
   image: deployment.spec.template.spec.containers[0].image,
@@ -101,8 +109,5 @@ const initContainer = new Container({
   ],
 });
 addInitContainer(deployment, initContainer);
-addInitContainer(deployment, waitForPostgres({
-  secretRefName: "azure-pg-admin-user-dev",
-}));
 
 export default [...manifests, () => yamlManifests];
