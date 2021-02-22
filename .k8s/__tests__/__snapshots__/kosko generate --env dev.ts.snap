@@ -1,0 +1,219 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`kosko generate --dev 1`] = `
+"---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    field.cattle.io/creatorId: gitlab
+    field.cattle.io/projectId: c-bd7z2:p-flvmk
+    git/branch: master
+    git/remote: >-
+      https://gitlab-ci-token:[MASKED]@gitlab.factory.social.gouv.fr/SocialGouv/ds-aggregator.git
+    app.gitlab.com/app: socialgouv-ds-aggregator
+    app.gitlab.com/env: master-dev2
+    app.gitlab.com/env.name: master-dev2
+  labels:
+    azure-pg-admin-user: ds-aggregator
+    application: master-dev2-ds-aggregator
+    owner: ds-aggregator
+    team: ds-aggregator
+    cert: wildcard
+  name: ds-aggregator-85-master-dev2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kapp.k14s.io/disable-default-ownership-label-rules: ''
+    kapp.k14s.io/disable-default-label-scoping-rules: ''
+    app.gitlab.com/app: socialgouv-ds-aggregator
+    app.gitlab.com/env: master-dev2
+    app.gitlab.com/env.name: master-dev2
+  labels:
+    app: api
+    application: master-dev2-ds-aggregator
+    owner: ds-aggregator
+    team: ds-aggregator
+    cert: wildcard
+  name: api
+  namespace: ds-aggregator-85-master-dev2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      annotations:
+        kapp.k14s.io/disable-default-ownership-label-rules: ''
+        kapp.k14s.io/disable-default-label-scoping-rules: ''
+        app.gitlab.com/app: socialgouv-ds-aggregator
+        app.gitlab.com/env: master-dev2
+        app.gitlab.com/env.name: master-dev2
+      labels:
+        app: api
+        application: master-dev2-ds-aggregator
+        owner: ds-aggregator
+        team: ds-aggregator
+        cert: wildcard
+    spec:
+      containers:
+        - image: >-
+            harbor.fabrique.social.gouv.fr/wif/ds-aggregator:0123456789abcdefghijklmnopqrstuvwxyz0123
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /api/liveness
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: api
+          ports:
+            - containerPort: 4000
+              name: http
+          readinessProbe:
+            failureThreshold: 15
+            httpGet:
+              path: /api/readiness
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 5m
+              memory: 128Mi
+          startupProbe:
+            failureThreshold: 12
+            httpGet:
+              path: /api/liveness
+              port: http
+            periodSeconds: 5
+          envFrom:
+            - configMapRef:
+                name: api-env
+            - secretRef:
+                name: api-env
+      initContainers:
+        - name: knex-migrate
+          image: >-
+            harbor.fabrique.social.gouv.fr/wif/ds-aggregator:0123456789abcdefghijklmnopqrstuvwxyz0123
+          command:
+            - yarn
+          args:
+            - migrate
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 256Mi
+          envFrom:
+            - secretRef:
+                name: api-env
+            - configMapRef:
+                name: api-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: api
+    application: master-dev2-ds-aggregator
+    owner: ds-aggregator
+    team: ds-aggregator
+    cert: wildcard
+  name: api
+  annotations:
+    kapp.k14s.io/disable-default-ownership-label-rules: ''
+    kapp.k14s.io/disable-default-label-scoping-rules: ''
+    app.gitlab.com/app: socialgouv-ds-aggregator
+    app.gitlab.com/env: master-dev2
+    app.gitlab.com/env.name: master-dev2
+  namespace: ds-aggregator-85-master-dev2
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 4000
+  selector:
+    app: api
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kapp.k14s.io/disable-default-ownership-label-rules: ''
+    kapp.k14s.io/disable-default-label-scoping-rules: ''
+    app.gitlab.com/app: socialgouv-ds-aggregator
+    app.gitlab.com/env: master-dev2
+    app.gitlab.com/env.name: master-dev2
+  labels:
+    app: api
+    application: master-dev2-ds-aggregator
+    owner: ds-aggregator
+    team: ds-aggregator
+    cert: wildcard
+  name: api
+  namespace: ds-aggregator-85-master-dev2
+spec:
+  rules:
+    - host: master-dev2-ds-aggregator.dev2.fabrique.social.gouv.fr
+      http:
+        paths:
+          - backend:
+              serviceName: api
+              servicePort: 80
+            path: /
+  tls:
+    - hosts:
+        - master-dev2-ds-aggregator.dev2.fabrique.social.gouv.fr
+      secretName: wildcard-crt
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-env
+  namespace: ds-aggregator-85-master-dev2
+data:
+  ENVIRONMENT_TYPE: dev.local
+  API_PORT: '4000'
+  PGSSLMODE: require
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: 'true'
+  creationTimestamp: null
+  name: api-env
+  namespace: ds-aggregator-85-master-dev2
+spec:
+  encryptedData:
+    API_PREFIX: >-
+      AgBQk2Bynx9f1u5cBilw3EtqXhMiERciKd0S9EvxgzQhm7t9VMRnb0CIWm6OZ+ceRYoXTnhnAKZoHdqIpbJyV2cMbS5MF+XhwqY4po8vcRRulwJizaldNePg74/SpqZxCIvidnrXkWXzAwEbSXRrSi6vPBX7700brROqtN4ltrMBsppohMpyuFbbUCmXkoXlT/32VS91PXex7U54OxEb1kZnqzJCqRIxagd4mZeAWpJH4kaxupPF2VZ6BkJkl0MLmfxwNAs/rk6zuO3Y0cu+GHwDkuXJAicOwa+zElEqJsFAgM1ANAP84vck5bJKFgJfd3H6/T5eUZSruial0gKQAXMAWu9EUIXClnOIF18n7qq2zgW3FPGfQuWf9j1ODhpMyPck/ggu5MYl1aHhjKZEh0pG12ceNeDuHgtuDoHnh2e8HQe5J1OU4lR846rmyRewcsYNEBKmTGvQec2AbQQs1m/DO9myNSMMP5PmW1gEd64xUwevIHxkL9laSS8h2MarwT6bwjvI0GUxHygg29PArNMxmxSgWy2w9rOJPYnVe32mtoobDIPGbDwUMFU/a6nU50Q4ghhY1/4QhoUwjBCQx0TaV/mIwUB2HSqNoS3PWDJlDw3TlNkJ3LMtMmVPj42tDDWh7Y2PhEypGI/St0lcFpxjNCUWhmbVKzINxdOwMDjtxWY3aTJoIbrSaa78QWuDQI4HNbUqt5OeZ8qXOVfSeQ7s
+    DATABASE_URL: >-
+      AgBt7zi4N6pN8ZbM9rNxR/EgpZhhNj1SR2Tdn2ESaIKLhUzNH3XypNHY9NQLT28Tjje9ZsL/b221hVJAROghhBvSvLvJc8q3mSbssPd8Bv2fqnKscnJFbBbcQTIewJG3YmR5fXVM9ENcC+eJkuQlmyJ+NmV/60zojMTWu62EgDry24x6hI/o8XZDYjxSsSdD1etiOUso2gOLdVzwBPxpyTB9MyS9bVU95ycdNF9JQYgYgNefU2eUov2bMF5ypCuGOw7oYBP4dIKGR/4Pyv1GCUh2nmtootDQYWcCR+sAbM68J9nOhVL+ji5UEfKHo7GLUqT4cK/R0XLLT+derp0C4xRpiT2yw4vK8T+KskIlUv0PzKtrAbSRe/XbEqqCORmIIL9GAuP34IqCBxqgOrraXAKzu5rhT0hfQcMsnE7TMR/WjJAdyeGkJ8b0CgLA9rV/j8/B+KsWTU8HG0QP8rhEjt5/w+wvoUh0Xecc9LS5jI4eKsuExneHzdOx9i9zTGhMmkh5Vkd57RmYN5c0Qh1vo19KSsDfTm1zMVhNMtBRTtjXNNH2WxArWK46GZpv4NFQcLm+sd91D8jjDEpyTCdRKvFvA4b7qtDKERQZQ/a/SAta6qtos1ABjCARPVJnmxU34ltdL5BblU8ZFGVOL0GB5zehow+MHiWsWI3VjSmy6VGm8z3CyHy2dcJY5trFeHsKcXAYY5R2MUKdhzkL7EE6/UN9pG/H8M58VqSQIzKuE9F+nbWP6Kl9z5NZbvUSesKYWtxrooaJmvPl/StSmhzCBn1YalyvxXqstXDNPdEnq05vcyUme1yEX29zAB0J3nnLlT1N4fXqHWNESSVpO0uRo+/M5h7rQrIu0FbL7TPlsJe3n/4zDZ4eDgiiY1Pc
+    DS_TOKEN: >-
+      AgBlQis+25xwkwcHTSmCA0WyZUCKuUMVnRhnUe9cqeAllei8knt/wYkauutrJNLt9LM+vqcea+vlxZohCLevyTGm/5YBC0bnZtVA6UA1o+DEp1k1NqGJIT0hKdC7oYm5PFUkGsS1y5F2P6fe15klqLcQHcoa1C8y/ZtkXVGNbxhmuzrJsRzZ9ri+WBD/IO1jdIfweYRq4RbnkfKw9WlE3/CirObrL9SNNlYwfpA4b2nr8c0sgqNRiLBK8wUo3u+QV3a0XRbuDUoD2C1K+9HvHZSTi5lxg5tN/h9A1Jev8NX9i6ja2ci2+kdniSTxv1oDfbloM9ozI1+z4MCQaslJ7yDrWfN8t8b21c254skErj40mx2EUJRovhOIT1N20nAIxJXBpl8LUt6JF+dHLnBoF3DIVVyO3dkBmx8YvvdhEZkQQNtkMynmWIrkuXh8RxZ2lsHqd8jVc0Ri8F/gVK3WJlC6FbJmuh0xvoxTreH5fWAr9IbBLskWGRy6bz3yZN2Uu3yMws7vodyC1ZFLXptfFcJbTu4Jo8cwb2aVw7niMqcgHq0S00jJCxoNff+w+iSrtmqCtccxMdqiUs8cf7SEAuIThYqtyIRkhIb0AX58JbBN4nX/8HQqTfdaL8NrmZnee/bfiOecOgUHA+OqEGAnctCKyrBvr5PVlBAIPg64uZBSKCb5q1dcAeYAFS+xfXVjiYwGNkcyrWEEvHBtjslGURLmw+FsZpTXMGn8THefJMG2zr3CFRO+vR9E
+    SENTRY_DSN: >-
+      AgAC/hOuccwCF+FsG08yc/cEYWeaGmEzzJa/ulIzDaR3AB5pBU4HT4WGx0stQY18MdhZMWZhFF0tNmsDhGLpVAFRhHxz5u4jpa/KF631IH5raFeebC1uItps5ouIl5rS3d37KhiuWLDHoFtSPEk6+nU03uAvja6E7vCZU3VcespeGGQ/j81mKktloB1kZiEFp/FdXTZnS3WzD7LEBVRF4huRoFIjAH4Vw0fxEet+HKnb7bP5MP4pX6NeXH9DDiI08JZBMntppop+GKuOskBfH1JIrH7sstb7KsAMN4DNsqW4297RufMIXwDKNMs4kcDaeS1azS7nx2CLtz+1EozO9IPFlyjOQEulvj3aVoURzP1ca/Xp7n0Zy6gM25uPEVA68NLsQSgnkh65x9fkYrl4Syf1k+msomuiLnroqBNdp67lpuliD57rVs/KXOY02FyQWT4U61lNmu1+C38ggVHzAi8UeSn1Ga13PuZ40VSNnfPO/VRNq1NYy0ioRJNREJTfyqVRrv3Gixscn4uSe51j8Qoh0T57SAp1ZjokUP5xk312oQlXVbdAQRKjmyFRRCFEPyI6nqPA1DUq2iaqx49HvZ7dcvFl8EeMSa6K6bauzQBqFkY7UGxF4o5DSZQ0E7bsv1dfXTuf6D3GKSrRqs2Lk+zf/ZvUJAGd+TY5aJMvbSXH3WNhQ87JaB6bUjAVi+r4fIHOrv9mcpg2BcwrvosZ6C4fG+bObVzM0ssvPfMiAOmrzyz2//7Oy+SJdSpGHjJjq6ERwT9LR4vExjvqfhhla+wkzRsZB9lfk3jyUA==
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: 'true'
+      creationTimestamp: null
+      name: api-env
+    type: Opaque
+"
+`;
