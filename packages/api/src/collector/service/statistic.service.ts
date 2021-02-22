@@ -94,18 +94,18 @@ class StatisticService {
   }
 
   private saveOrUpdate(stat: Statistic): Observable<Statistic> {
-    return statisticRepository.findByGroupId(stat.group.id).pipe(
+    return statisticRepository.findByGroup(stat.group).pipe(
       mergeMap((res: Statistic[]) => {
         if (res.length === 0) {
           logger.debug(
-            `[StatisticService.saveOrUpdate] no record for structure ${stat.group.id}`
+            `[StatisticService.saveOrUpdate] no record for structure ${stat.group}`
           );
           return statisticRepository.add(stat);
         } else {
           const record: Statistic = res[0];
           Object.assign(record, stat);
           logger.debug(
-            `[StatisticService.saveOrUpdate] record found for structure ${stat.group.id} id#${record.id}`
+            `[StatisticService.saveOrUpdate] record found for structure ${stat.group} id#${record.id}`
           );
           return statisticRepository.update(record.id || "", record);
         }

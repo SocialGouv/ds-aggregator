@@ -60,6 +60,13 @@ export interface DSDossierItem extends IIdentifiable {
   state: DossierStateType;
 }
 
+export interface DSDossierChamp extends IIdentifiable {
+  value: string | null;
+  type_de_champ: {
+    libelle: string;
+  };
+}
+
 export interface DSDossier extends IIdentifiable {
   id: number;
   state: DossierStateType;
@@ -69,4 +76,5 @@ export interface DSDossier extends IIdentifiable {
   received_at: string;
   processed_at: string;
   instructeurs: string[];
+  champs: DSDossierChamp[];
 }

@@ -16,6 +16,7 @@ class DossierRecordModel extends Model implements DossierRecord {
     received_at: "",
     processed_at: "",
     instructeurs: [],
+    champs: [],
   };
   ds_key: string = "";
   metadata: DossierRecordMetadata = {
