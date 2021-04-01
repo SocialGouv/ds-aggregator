@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.4](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.3...v6.2.4) (2021-04-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency lerna to v4 ([#409](https://github.com/SocialGouv/ds-aggregator/issues/409)) ([b985950](https://github.com/SocialGouv/ds-aggregator/commit/b9859501f283bd413a30094f090d2242eb6e8d37))
+
+
+
+
+
 ## [6.2.3](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.2...v6.2.3) (2021-04-01)
 
 
