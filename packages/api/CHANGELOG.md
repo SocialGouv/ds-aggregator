@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.5](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.4...v6.2.5) (2021-04-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency node-cron to v3 ([#410](https://github.com/SocialGouv/ds-aggregator/issues/410)) ([3cd9698](https://github.com/SocialGouv/ds-aggregator/commit/3cd96989e94208a08194411631fd43e808aa9a89))
+
+
+
+
+
 ## [6.2.4](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.3...v6.2.4) (2021-04-01)
 
 **Note:** Version bump only for package api
