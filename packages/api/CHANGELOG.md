@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.5](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.4...v6.2.5) (2021-04-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency node-cron to v3 ([#410](https://github.com/SocialGouv/ds-aggregator/issues/410)) ([3cd9698](https://github.com/SocialGouv/ds-aggregator/commit/3cd96989e94208a08194411631fd43e808aa9a89))
+
+
+
+
+
+## [6.2.4](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.3...v6.2.4) (2021-04-01)
+
+**Note:** Version bump only for package api
+
+
+
+
+
+## [6.2.3](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.2...v6.2.3) (2021-04-01)
+
+
+### Bug Fixes
+
+* **deps:** update sentry monorepo to v6 ([#412](https://github.com/SocialGouv/ds-aggregator/issues/412)) ([57e1d6d](https://github.com/SocialGouv/ds-aggregator/commit/57e1d6d66f2201987e72b45a5587ca6719d5b85a))
+
+
+
+
+
+## [6.2.2](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.1...v6.2.2) (2021-03-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency koa-router to v10 ([#407](https://github.com/SocialGouv/ds-aggregator/issues/407)) ([07a5517](https://github.com/SocialGouv/ds-aggregator/commit/07a551751448efeccdaa6186f0ae676a93f70f53))
+
+
+
+
+
+## [6.2.1](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.0...v6.2.1) (2021-02-22)
+
+
+### Bug Fixes
+
+* database synchronizing ([#396](https://github.com/SocialGouv/ds-aggregator/issues/396)) ([7961a29](https://github.com/SocialGouv/ds-aggregator/commit/7961a297aad871bbea35b05b6df82f8c699fe5fd))
+
+
+
+
+
 # [6.2.0](https://github.com/SocialGouv/ds-aggregator/compare/v6.1.10...v6.2.0) (2020-11-05)
 
 
