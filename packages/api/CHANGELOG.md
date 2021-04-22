@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.6](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.5...v6.2.6) (2021-04-22)
+
+
+### Reverts
+
+* Revert "chore(deps): update all non-major dependencies (minor)" (#415) ([2f0c07b](https://github.com/SocialGouv/ds-aggregator/commit/2f0c07ba0b0a5943f740d5eda83c23ec549d8475)), closes [#415](https://github.com/SocialGouv/ds-aggregator/issues/415)
+
+
+
+
+
 ## [6.2.5](https://github.com/SocialGouv/ds-aggregator/compare/v6.2.4...v6.2.5) (2021-04-01)
 
 
