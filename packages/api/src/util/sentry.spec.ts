@@ -2,17 +2,13 @@
 
 import * as Sentry from "@sentry/node";
 
-import {
-  initializeSentry,
-  notifyMessage,
-  notifyException
-} from "../../../src/util/sentry";
-import { Config } from "../../../src/config";
+import { initializeSentry, notifyMessage, notifyException } from "./sentry";
+import { Config } from "../config";
 import { resolve } from "path";
 
 //
 
-jest.mock("../../../src/util/logger");
+jest.mock("./logger");
 
 jest.mock("@sentry/node", () => ({
   captureMessage: jest.fn(),
@@ -59,7 +55,7 @@ test("should initialize sentry in production mode", () => {
     })
   );
 
-  expect(global.__rootdir__).toBe(resolve(__dirname, "../../.."));
+  expect(global.__rootdir__).toBe(resolve(__dirname, "../.."));
 });
 
 test("should initialize sentry in pre-production mode", () => {
