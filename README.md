@@ -1,3 +1,22 @@
+:skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull:
+
+<br>
+<br>
+
+<h3 align=center>DEPRECATED</h3>
+
+<br>
+<br>
+
+:skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull::skull:
+
+<br>
+<br>
+<br>
+<br>
+
+---
+
 # ds-aggregator
 
 [![pipeline status](https://img.shields.io/badge/pipeline-gitlab-orange?logo=gitlab)](https://gitlab.factory.social.gouv.fr/SocialGouv/ds-aggregator/-/commits/master)
