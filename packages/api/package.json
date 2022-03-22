@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "build": "tsc",
+    "e2e": "jest -c e2e/jest.config.js",
     "start": "nodemon --watch 'src/**/*' -e ts --exec ts-node src/main.ts",
     "start:prod": "node --enable-source-maps --unhandled-rejections=strict ./dist/main.js",
     "migrate": "yarn knex migrate:latest",
